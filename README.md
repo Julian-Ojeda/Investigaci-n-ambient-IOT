@@ -25,8 +25,8 @@ Investigación de mercado sobre posibles aplicaciones de RFID en siete rubros, s
 ## Cómo usarlas
 
 - **Computadora:** ← → o barra espaciadora para avanzar, `O` o `Esc` para la vista general, `F` para pantalla completa.
-- **Celular:** deslizá a los costados para avanzar; si una diapositiva tiene más contenido, deslizá hacia abajo.
-- Tocá cualquier círculo o miniatura para ir directo a ese tema.
+- **Celular:** se abre en modo lectura, un documento con scroll vertical. La barra de arriba muestra la sección actual y el botón **Índice** salta a cualquier tema.
+- En la computadora, tocá cualquier círculo o miniatura para ir directo a ese tema.
 - La URL guarda la diapositiva actual (`#12`), así que se puede compartir el enlace a una diapositiva puntual.
 
 El estilo y el motor de zoom son compartidos: [`assets/deck.css`](assets/deck.css) y [`assets/deck.js`](assets/deck.js). No hace falta instalar nada; alcanza con abrir `index.html` en el navegador.

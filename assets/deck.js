@@ -11,6 +11,71 @@ document.querySelectorAll('.tbl').forEach(t => {
   const heads = [...t.querySelectorAll('.hd > div')].map(h => h.textContent.trim());
   t.querySelectorAll('.row:not(.hd)').forEach(r => [...r.children].forEach((c, i) => c.dataset.l = heads[i]));
 });
+
+// En el celular, el lienzo con zoom se reemplaza por un documento con scroll vertical e índice
+const phone = matchMedia('(max-width: 760px), (max-height: 500px) and (pointer: coarse)');
+phone.addEventListener('change', () => location.reload());
+if (phone.matches) { readingMode(); return; }
+
+function readingMode() {
+  root.classList.add('reading');
+  const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const make = (tag, cls, html) => { const e = document.createElement(tag); e.className = cls; e.innerHTML = html; return e; };
+  const info = secs.map((sec, i) => ({
+    id: 's' + (i + 1),
+    name: sec.dataset.name,
+    num: sec.querySelector('.c-num')?.textContent || '',
+    sub: sec.querySelector('.c-sub').textContent,
+    first: slides.find(s => s.dataset.sec === sec.dataset.sec),
+    n: slides.filter(s => s.dataset.sec === sec.dataset.sec).length,
+  }));
+  const toc = () => '<ol>' + info.map(s => `<li><a href="#${s.id}">`
+    + (s.num ? `<span class="r-n">${s.num}</span>` : '')
+    + `<span class="r-t"><b>${esc(s.name)}</b><small>${esc(s.sub)}</small></span><span class="r-c">${s.n}</span></a></li>`).join('') + '</ol>';
+
+  // Encabezado de cada sección antes de su primera diapositiva
+  info.forEach(s => s.first.before(make('header', 'r-sec',
+    (s.num ? `<span class="r-n">${s.num}</span>` : '') + `<h2>${esc(s.name)}</h2><p>${esc(s.sub)}</p>`)));
+  info.forEach(s => { s.head = s.first.previousElementSibling; s.head.id = s.id; });
+
+  ov.after(make('nav', 'r-toc', `<p class="r-toc-h">Contenido</p>${toc()}`));
+  slides[slides.length - 1].after(make('footer', 'r-end',
+    '<p>Fin de la presentación</p><a href="#ov">Volver arriba</a><a href="./">Todas las presentaciones</a>'));
+
+  const bar = make('div', 'r-bar',
+    '<a class="r-home" href="./" aria-label="Todas las presentaciones"><svg class="ico"><use href="#i-home"/></svg></a>'
+    + '<span id="rSec">Inicio</span>'
+    + '<button type="button" id="rTocBtn" aria-haspopup="dialog"><svg class="ico"><use href="#i-ov"/></svg>Índice</button>');
+  const sheet = make('div', 'r-sheet',
+    `<div class="r-panel" role="dialog" aria-modal="true" aria-label="Índice"><div class="r-panel-h"><b>Índice</b>`
+    + `<button type="button" class="r-close" aria-label="Cerrar">✕</button></div>${toc()}</div>`);
+  sheet.hidden = true;
+  body.prepend(bar);
+  body.append(sheet);
+
+  const open = () => { sheet.hidden = false; sheet.querySelector('.r-close').focus(); };
+  const close = () => { sheet.hidden = true; };
+  bar.querySelector('#rTocBtn').addEventListener('click', open);
+  sheet.addEventListener('click', e => { if (e.target === sheet || e.target.closest('.r-close, a')) close(); });
+  addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+  // La barra muestra la sección que se está leyendo y el avance
+  const rSec = bar.querySelector('#rSec');
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    let name = 'Inicio';
+    info.forEach(s => { if (s.head.getBoundingClientRect().top < 90) name = s.name; });
+    rSec.textContent = name;
+    const max = root.scrollHeight - innerHeight;
+    root.style.setProperty('--p', (max > 0 ? scrollY / max * 100 : 0).toFixed(2) + '%');
+  };
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  update();
+  const target = location.hash && document.getElementById(location.hash.slice(1));
+  if (target) target.scrollIntoView();
+}
+
 const ROT = [0];
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
