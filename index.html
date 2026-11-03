@@ -1,0 +1,1281 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IoT Pixels y Ambient IoT</title>
+<meta name="description" content="Presentación: qué son los IoT Pixels, comparación con RFID, oportunidades de RFID por rubro, proveedores de Ambient IoT y contactos.">
+<meta name="theme-color" content="#070b16">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #070b16; --ink: #e9eef8; --soft: #c6d0e3; --muted: #93a0ba; --line: rgb(255 255 255 / .09);
+    --card: #0d1528; --card2: #15203b;
+    --rfid: #7aa7ff; --pixel: #2dd4bf; --mix: #fbbf24;
+    --c: #2dd4bf;
+    --pad: clamp(10px, 2.4vmin, 30px);
+    --barH: 56px;
+    --padB: calc(var(--pad) + var(--barH) + 12px + env(safe-area-inset-bottom));
+  }
+  .s1 { --c: #2dd4bf; } .s2 { --c: #38bdf8; } .s3 { --c: #c084fc; } .s4 { --c: #fbbf24; } .s5 { --c: #fb7185; }
+  .s6 { --c: #fb923c; } .s7 { --c: #a3e635; } .s8 { --c: #4ade80; } .s9 { --c: #818cf8; } .s10 { --c: #f0abfc; }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+  body { color: var(--ink); background: radial-gradient(120% 90% at 50% 40%, #13214a 0%, #0a1024 45%, #05080f 100%) var(--bg);
+    font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  button { font: inherit; color: inherit; }
+  a { color: var(--c); text-underline-offset: .18em; }
+  strong { color: #fff; font-weight: 700; }
+
+  /* ---------- Lienzo ---------- */
+  #stage { position: fixed; inset: 0; overflow: hidden; touch-action: pan-y; }
+  #grid { position: absolute; left: 50%; top: 50%; width: var(--G); height: var(--G); pointer-events: none;
+    --a1: 0; --a2: .12; --a3: .12;
+    background-image:
+      radial-gradient(circle, rgb(255 255 255 / var(--a1)) 1.2px, transparent 1.8px),
+      radial-gradient(circle, rgb(255 255 255 / var(--a2)) 1.2px, transparent 1.8px),
+      radial-gradient(circle, rgb(255 255 255 / var(--a3)) 1.2px, transparent 1.8px); }
+  #world { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-origin: 0 0; }
+  .frame { position: absolute; left: 0; top: 0; width: var(--W); height: var(--H); transform-origin: 50% 50%; }
+
+  /* ---------- Vista general ---------- */
+  .ov { pointer-events: none; }
+  .route { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .route path { fill: none; stroke: rgb(255 255 255 / .16); stroke-width: 2; stroke-dasharray: 2 9; stroke-linecap: round; }
+  .ov-title { position: absolute; left: 50%; top: 46%; transform: translate(-50%, -50%); width: min(50vw, 860px); text-align: center; }
+  .eyebrow { margin: 0; font-size: clamp(11px, .95vw, 15px); font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--pixel); }
+  .ov h1 { margin: .28em 0 .32em; font-size: clamp(30px, 3.5vw, 78px); line-height: 1.02; letter-spacing: -.035em; font-weight: 800; text-wrap: balance; }
+  .ov h1 .y { font-weight: 400; color: var(--muted); }
+  .ov h1 .g { background: linear-gradient(90deg, #2dd4bf, #38bdf8 50%, #a78bfa); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .ov-sub { margin: 0 auto; max-width: 32em; font-size: clamp(14px, 1.2vw, 22px); line-height: 1.45; color: var(--soft); text-wrap: balance; }
+  .ov-hint { margin: 1.3em 0 0; font-size: clamp(12px, .95vw, 16px); color: var(--muted); }
+  .ov-hint.end { display: none; font-size: clamp(20px, 2.1vw, 38px); font-weight: 800; color: #fff; }
+  body.at-end .ov-hint.start { display: none; }
+  body.at-end .ov-hint.end { display: block; }
+  .portrait .ov-title { top: calc(env(safe-area-inset-top) + 4.5vh); transform: translateX(-50%); width: calc(100% - 36px); }
+  .portrait .ov h1 { font-size: clamp(30px, 9.6vw, 52px); }
+  .portrait .ov-sub { font-size: clamp(13.5px, 3.7vw, 18px); }
+  .portrait .ov-hint.start { display: none; }
+
+  /* ---------- Círculos de sección ---------- */
+  .sec { pointer-events: none; }
+  .circle { pointer-events: auto; position: absolute; left: 50%; top: 50%; width: var(--D); height: var(--D); transform: translate(-50%, -50%);
+    border: 0; border-radius: 50%; padding: 11cqmin 10cqmin 0; cursor: zoom-in; container-type: size;
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    background: radial-gradient(circle at 30% 22%, color-mix(in srgb, var(--c) 52%, #0b1224) 0%, color-mix(in srgb, var(--c) 20%, #0b1224) 55%, #0a1122 100%);
+    box-shadow: inset 0 0 0 1.2cqmin color-mix(in srgb, var(--c) 65%, transparent), 0 5cqmin 14cqmin -3cqmin rgb(0 0 0 / .65);
+    transition: filter .25s; }
+  .circle:hover { filter: brightness(1.15); }
+  .circle:focus-visible { outline: 1cqmin solid #fff; outline-offset: 1.5cqmin; }
+  .sec.active .circle { cursor: default; filter: none; }
+  .c-num { display: block; font-size: 13cqmin; font-weight: 800; line-height: 1; color: var(--c); }
+  .c-title { display: block; margin-top: 2cqmin; font-size: 10cqmin; font-weight: 800; line-height: 1.05; letter-spacing: -.03em; }
+  .c-sub { display: block; margin-top: 2.5cqmin; max-width: 66cqmin; font-size: 3.6cqmin; line-height: 1.35; color: var(--soft); }
+
+  /* ---------- Diapositivas ---------- */
+  .slide:not(.active) { cursor: zoom-in; }
+  .card { position: absolute; inset: var(--pad) var(--pad) var(--padB); overflow: hidden;
+    border-radius: clamp(18px, 2.6vmin, 34px); border: 1px solid var(--line);
+    background:
+      radial-gradient(70% 60% at 100% 0%, color-mix(in srgb, var(--c) 16%, transparent), transparent 70%),
+      linear-gradient(155deg, var(--card2), var(--card) 60%);
+    box-shadow: 0 30px 70px -30px rgb(0 0 0 / .75); }
+  .card::before { content: ""; position: absolute; inset: 0 0 auto; height: 5px; background: var(--c); z-index: 2; }
+  .card::after { content: attr(data-n); position: absolute; right: .04em; bottom: -.2em; z-index: 0; pointer-events: none;
+    font-size: clamp(120px, 28vmin, 380px); font-weight: 800; line-height: 1; letter-spacing: -.05em; color: var(--c); opacity: .07; }
+  .scroll { position: absolute; inset: 0; z-index: 1; overflow: hidden auto; overscroll-behavior: contain; display: flex; flex-direction: column;
+    padding: clamp(24px, 5.2vmin, 68px) clamp(18px, 5.5vw, 90px);
+    font-size: clamp(15px, calc(.55vw + .8vh + 4px), 24px); line-height: 1.5;
+    scrollbar-width: thin; scrollbar-color: rgb(255 255 255 / .2) transparent; }
+  .slide:not(.active) .scroll { overflow: hidden; }
+  .in { margin: auto 0; width: 100%; max-width: 1280px; align-self: center; }
+  .more { position: absolute; left: 50%; bottom: 14px; z-index: 3; transform: translate(-50%, 6px); pointer-events: none;
+    padding: .5em 1em; border-radius: 999px; font-size: 12.5px; font-weight: 700; color: #071019; background: var(--c);
+    box-shadow: 0 6px 20px rgb(0 0 0 / .5); opacity: 0; transition: opacity .3s, transform .3s; }
+  .card.has-more .more { opacity: 1; transform: translate(-50%, 0); }
+
+  .kicker { display: flex; align-items: center; gap: .6em; margin: 0 0 .8em; font-size: .76em; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--c); }
+  .kicker::before { content: ""; width: 1.8em; height: 2px; background: currentColor; }
+  h2 { margin: 0 0 .55em; font-size: clamp(26px, calc(1.9vw + 1.9vh), 64px); line-height: 1.08; letter-spacing: -.025em; font-weight: 800; text-wrap: balance; }
+  h2 em { font-style: normal; color: var(--c); }
+  h3 { margin: 0 0 .35em; font-size: 1.08em; line-height: 1.25; }
+  p { margin: 0 0 .8em; }
+  .lead { max-width: 44em; margin-bottom: 1.1em; font-size: 1.2em; line-height: 1.45; color: var(--soft); }
+  .muted { color: var(--muted); font-size: .86em; }
+  .gap { margin-top: 1.2em; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: .5em; margin: .4em 0 0; padding: 0; list-style: none; }
+  .chips li { padding: .42em .95em; border-radius: 999px; font-size: .88em; font-weight: 600;
+    background: color-mix(in srgb, var(--c) 13%, transparent); border: 1px solid color-mix(in srgb, var(--c) 35%, transparent); }
+
+  .grid { display: grid; grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr)); gap: clamp(10px, 1.6vmin, 22px); }
+  .box { padding: clamp(14px, 2.2vmin, 28px); border-radius: clamp(12px, 1.6vmin, 20px); background: rgb(255 255 255 / .04); border: 1px solid var(--line); }
+  .box h3 { color: var(--c); }
+  .box p:last-child, .box ul:last-child { margin-bottom: 0; }
+  .ico { width: 1.25em; height: 1.25em; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+  .badge { display: grid; place-items: center; width: 2.5em; height: 2.5em; margin-bottom: .7em; border-radius: .8em; color: var(--c);
+    background: color-mix(in srgb, var(--c) 15%, transparent); }
+
+  ul.list { margin: .3em 0 0; padding: 0; list-style: none; }
+  ul.list li { position: relative; padding-left: 1.4em; margin: .45em 0; }
+  ul.list li::before { content: ""; position: absolute; left: .2em; top: .62em; width: .45em; height: .45em; border-radius: 50%; background: var(--c); }
+  ul.check li::before { content: "✓"; width: auto; height: auto; top: 0; left: 0; background: none; color: var(--c); font-weight: 800; }
+
+  .note { margin: 1.1em 0 0; padding: .85em 1.1em; border-radius: .7em; font-size: .92em; border-left: 4px solid var(--mix); background: rgb(251 191 36 / .08); }
+  .note b { color: var(--mix); }
+
+  /* Flujo de funcionamiento */
+  .flow { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1.1em; margin: .6em 0 0; padding: 0; list-style: none; }
+  .flow li { position: relative; padding: 1.1em 1em; border-radius: 1em; background: rgb(255 255 255 / .04); border: 1px solid var(--line); font-size: .92em; }
+  .flow li:not(:last-child)::after { content: "→"; position: absolute; right: -1em; top: 1.55em; width: 1em; text-align: center; color: var(--c); font-weight: 800; }
+  .flow .step { display: block; font-size: .72em; font-weight: 800; letter-spacing: .12em; color: var(--muted); margin-bottom: .2em; }
+  .flow h3 { color: #fff; }
+  .flow p { margin: 0; color: var(--soft); }
+
+  /* Mosaico de sensores */
+  .tiles { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .8em; margin: .4em 0 0; padding: 0; list-style: none; }
+  .tiles li { display: flex; flex-direction: column; align-items: center; gap: .55em; padding: 1em .4em; border-radius: 1em; text-align: center; font-weight: 600; font-size: .9em;
+    background: color-mix(in srgb, var(--c) 8%, transparent); border: 1px solid color-mix(in srgb, var(--c) 22%, transparent); }
+  .tiles .ico { width: 1.9em; height: 1.9em; color: var(--c); }
+
+  /* Comparación RFID vs Pixel */
+  .cmp { display: grid; gap: .55em; }
+  .cmp .row { display: grid; grid-template-columns: minmax(8em, .75fr) 2fr 2fr; gap: .55em; }
+  .cmp .row > div { padding: .75em 1em; border-radius: .7em; background: rgb(255 255 255 / .04); }
+  .cmp .a { box-shadow: inset 3px 0 0 var(--rfid); }
+  .cmp .b { box-shadow: inset 3px 0 0 var(--pixel); }
+  .cmp .lbl { background: transparent !important; padding-left: 0 !important; font-weight: 700; color: #fff; }
+  .cmp .hd > div { padding-block: .3em; background: transparent; box-shadow: none; font-size: .8em; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+  .cmp .hd .a { color: var(--rfid); } .cmp .hd .b { color: var(--pixel); }
+
+  /* Dos preguntas */
+  .vs { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1.2em; align-items: stretch; margin: .4em 0 1.2em; }
+  .vs .box { display: flex; flex-direction: column; justify-content: center; }
+  .vs .who { font-size: .78em; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .5em; }
+  .vs .q { margin: 0; font-size: clamp(20px, calc(1.1vw + 1.3vh), 40px); line-height: 1.2; font-weight: 700; color: #fff; }
+  .vs .sep { align-self: center; font-weight: 800; color: var(--muted); }
+  .vs .rf { border-color: rgb(122 167 255 / .35); } .vs .rf .who { color: var(--rfid); }
+  .vs .px { border-color: rgb(45 212 191 / .35); } .vs .px .who { color: var(--pixel); }
+
+  /* Etiquetas de tecnología */
+  .tag { display: inline-block; padding: .2em .7em; border-radius: 999px; font-size: .76em; font-weight: 700; white-space: nowrap; }
+  .t-rfid { background: rgb(122 167 255 / .16); color: var(--rfid); }
+  .t-pixel { background: rgb(45 212 191 / .16); color: var(--pixel); }
+  .t-mix { background: rgb(251 191 36 / .15); color: var(--mix); }
+  .ind .box header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .4em .8em; margin-bottom: .45em; }
+  .ind .box h3 { margin: 0; color: #fff; }
+  .ind .box p { margin: 0; color: var(--soft); font-size: .94em; }
+  .rule .box { border-width: 2px; }
+  .rule .big { margin: .2em 0 0; font-size: 1.3em; line-height: 1.35; font-weight: 600; color: #fff; }
+  .rule .rf { border-color: rgb(122 167 255 / .4); } .rule .px { border-color: rgb(45 212 191 / .4); }
+
+  /* Cifras */
+  .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(10px, 1.6vmin, 22px); margin: .2em 0 1.2em; }
+  .stat b { display: block; font-size: clamp(30px, calc(1.6vw + 2vh), 72px); line-height: 1; font-weight: 800; letter-spacing: -.03em; color: var(--c); }
+  .stat span { display: block; margin-top: .45em; font-size: .9em; color: var(--soft); }
+
+  /* Ranking */
+  .rank { display: flex; gap: 1.1em; align-items: flex-start; padding: 1.1em 0; border-top: 1px solid var(--line); }
+  .rank:first-of-type { border-top: 0; padding-top: .2em; }
+  .num { flex: none; display: grid; place-items: center; width: 2.3em; height: 2.3em; border-radius: 50%; font-size: 1.25em; font-weight: 800; color: #0a0f1e; background: var(--c); }
+  .rank h3 { font-size: 1.25em; margin-bottom: .3em; }
+  .rank h3 small { font-size: .7em; font-weight: 500; color: var(--muted); }
+  .rank p { margin: 0; color: var(--soft); }
+  .rank .of { display: block; margin-top: .45em; color: var(--ink); }
+
+  /* Contactos */
+  .contact h3 { font-size: 1.35em; color: #fff; }
+  .contact ul { margin: .6em 0 0; padding: 0; list-style: none; }
+  .contact li { display: flex; gap: .65em; align-items: flex-start; margin: .5em 0; font-size: .93em; overflow-wrap: anywhere; }
+  .contact .ico { margin-top: .15em; color: var(--c); }
+  .pill { display: inline-block; margin-left: .3em; padding: .05em .55em; border-radius: 999px; font-size: .75em; font-weight: 700; color: #0a0f1e; background: var(--c); }
+
+  /* Tablas de activos (en celular se vuelven tarjetas) */
+  .tbl { font-size: .9em; }
+  .tbl .row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1.35fr); gap: 1.2em; padding: .55em 0; border-bottom: 1px solid var(--line); }
+  .tbl .row > div:first-child { font-weight: 700; color: #fff; }
+  .tbl .row > div:not(:first-child) { color: var(--soft); }
+  .tbl .hd { padding-top: 0; border-bottom: 2px solid color-mix(in srgb, var(--c) 55%, transparent); }
+  .tbl .hd > div { font-size: .78em; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--c) !important; }
+
+  /* Prioridades, casos y preguntas */
+  .k { display: block; margin-bottom: .3em; font-size: .72em; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--c); }
+  .prio header { display: flex; align-items: center; gap: .7em; margin-bottom: .7em; }
+  .prio .num { width: 1.9em; height: 1.9em; font-size: 1em; }
+  .prio h3 { margin: 0; font-size: 1.15em; color: #fff; }
+  .prio dl { display: grid; grid-template-columns: auto 1fr; gap: .4em .9em; margin: 0; font-size: .9em; }
+  .prio dt { font-weight: 600; color: var(--muted); }
+  .prio dd { margin: 0; }
+  .case h3 { margin-bottom: .1em; }
+  .case h3 a { color: #fff; text-decoration-color: var(--c); }
+  .case .loc { display: block; margin-bottom: .45em; font-size: .78em; color: var(--muted); }
+  .case p { font-size: .92em; color: var(--soft); }
+  .box.hl { border-color: color-mix(in srgb, var(--c) 50%, transparent); background: color-mix(in srgb, var(--c) 8%, transparent); }
+  .qs .qn { display: block; font-size: 2.6em; font-weight: 800; line-height: 1; color: var(--c); }
+  .qs .q { margin: .35em 0 .5em; font-size: 1.3em; font-weight: 700; line-height: 1.3; color: #fff; }
+  .qs p:last-child { color: var(--soft); }
+
+  /* Fuentes */
+  .sources { columns: 3 15em; column-gap: 2.2em; margin: .2em 0 0; padding-left: 1.3em; font-size: .82em; }
+  .sources li { break-inside: avoid; margin: 0 0 .45em; overflow-wrap: anywhere; }
+  .srcgroups { columns: 3 15em; column-gap: 2.2em; font-size: .82em; }
+  .srcgroups section { break-inside: avoid; margin-bottom: 1em; }
+  .srcgroups h3 { margin: 0 0 .3em; font-size: 1em; color: var(--c); }
+  .srcgroups ul { margin: 0; padding-left: 1.2em; }
+  .srcgroups li { margin: 0 0 .35em; overflow-wrap: anywhere; }
+
+  /* ---------- Barra de control ---------- */
+  .progress { position: fixed; left: 0; top: 0; z-index: 6; width: 100%; height: 3px; pointer-events: none; }
+  .progress i { display: block; height: 100%; width: var(--p, 0%); background: var(--c); transition: width .6s, background-color .6s; }
+  .bar { position: fixed; z-index: 6; right: max(16px, env(safe-area-inset-right)); bottom: calc(14px + env(safe-area-inset-bottom));
+    display: flex; align-items: center; gap: 2px; height: var(--barH); padding: 6px; border-radius: 999px;
+    background: rgb(11 17 34 / .9); border: 1px solid var(--line); box-shadow: 0 14px 40px -10px rgb(0 0 0 / .7); }
+  .bar button { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: transparent; cursor: pointer; transition: background-color .2s, opacity .2s; }
+  .bar button[hidden] { display: none; }
+  .bar button:hover:not(:disabled) { background: rgb(255 255 255 / .08); }
+  .bar button:focus-visible { outline: 2px solid var(--c); outline-offset: 1px; }
+  .bar button:disabled { opacity: .3; cursor: default; }
+  .bar #next { background: var(--c); color: #071019; transition: background-color .6s; }
+  .bar #next:hover:not(:disabled) { filter: brightness(1.1); background: var(--c); }
+  body.peek #ovBtn { background: rgb(255 255 255 / .14); }
+  .bar .ico { width: 22px; height: 22px; }
+  .where { display: flex; flex-direction: column; justify-content: center; min-width: 9.5em; max-width: 17em; padding: 0 .7em; line-height: 1.25; }
+  #secName { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #count { font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .toast { position: fixed; z-index: 7; left: max(16px, env(safe-area-inset-left)); bottom: calc(22px + env(safe-area-inset-bottom)); max-width: calc(100% - 32px);
+    padding: .65em 1.1em; border-radius: 999px; border: 1px solid var(--line); background: rgb(11 17 34 / .92);
+    font-size: 13px; color: var(--soft); text-align: center; transition: opacity .6s; pointer-events: none; }
+  .toast.hide { opacity: 0; }
+  noscript { position: fixed; inset: auto 16px 16px; z-index: 9; padding: 1em; border-radius: 12px; background: #fbbf24; color: #111; }
+
+  /* ---------- Celular ---------- */
+  @media (max-width: 760px) {
+    :root { --barH: 54px; }
+    .bar { left: max(10px, env(safe-area-inset-left)); right: max(10px, env(safe-area-inset-right)); bottom: calc(10px + env(safe-area-inset-bottom)); }
+    .where { flex: 1; min-width: 0; max-width: none; }
+    .toast { left: 50%; transform: translateX(-50%); width: max-content; top: calc(12px + env(safe-area-inset-top)); bottom: auto; border-radius: 14px; }
+    .scroll { line-height: 1.45; }
+    .grid, .stats { --cols: 1; grid-template-columns: 1fr; }
+    .stats { gap: 10px; }
+    .stat { display: flex; align-items: baseline; gap: .7em; }
+    .stat b { font-size: 2em; min-width: 3.2em; }
+    .stat span { margin: 0; }
+    .flow { grid-template-columns: 1fr; gap: .9em; }
+    .flow li { display: grid; grid-template-columns: auto 1fr; column-gap: .9em; padding: .8em .9em; }
+    .flow li .badge { grid-row: span 3; margin: 0; }
+    .flow li:not(:last-child)::after { content: "↓"; right: auto; left: 1.75em; top: auto; bottom: -1.2em; }
+    .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .55em; }
+    .tiles li { padding: .75em .3em; font-size: .82em; }
+    .cmp .row { grid-template-columns: 1fr 1fr; gap: .4em; }
+    .cmp .lbl { grid-column: 1 / -1; padding: .6em 0 0 !important; }
+    .cmp .hd .lbl { display: none; }
+    .cmp .row > div { padding: .6em .7em; font-size: .9em; }
+    .cmp .hd > div { padding-block: 0; font-size: .72em; }
+    .vs { grid-template-columns: 1fr; gap: .6em; }
+    .vs .sep { justify-self: center; }
+    .rank { gap: .8em; }
+    .num { font-size: 1.05em; }
+    .tbl .hd { display: none; }
+    .tbl .row { display: block; margin-bottom: .5em; padding: .7em .85em; border: 1px solid var(--line); border-radius: .7em; background: rgb(255 255 255 / .03); }
+    .tbl .row > div + div { margin-top: .35em; }
+    .tbl .row > div[data-l]:not(:first-child)::before { content: attr(data-l); display: block; font-size: .72em; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+    .prio dl { grid-template-columns: 1fr; gap: 0; }
+    .prio dt { margin-top: .45em; font-size: .75em; letter-spacing: .06em; text-transform: uppercase; }
+    .card::after { font-size: 42vmin; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
+  <symbol id="i-chip" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v4M15 1v4M9 19v4M15 19v4M1 9h4M1 15h4M19 9h4M19 15h4"/></symbol>
+  <symbol id="i-bt" viewBox="0 0 24 24"><path d="m6.5 6.5 11 11L12 23V1l5.5 5.5-11 11"/></symbol>
+  <symbol id="i-gw" viewBox="0 0 24 24"><rect x="2" y="14" width="20" height="7" rx="2"/><path d="M6 17.5h.01M10 17.5h.01M12 14V9"/><path d="M8.5 7.5a5 5 0 0 1 7 0M6 5a8.5 8.5 0 0 1 12 0"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></symbol>
+  <symbol id="i-temp" viewBox="0 0 24 24"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></symbol>
+  <symbol id="i-fill" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M5 12h14M5 16h14"/></symbol>
+  <symbol id="i-move" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 2.7 17.7 8.4a8 8 0 1 1-11.3 0z"/></symbol>
+  <symbol id="i-near" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.5M7.8 16.2a6 6 0 0 1 0-8.5M19.1 4.9a10 10 0 0 1 0 14.2M4.9 19.1a10 10 0 0 1 0-14.2"/></symbol>
+  <symbol id="i-net" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-ov" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="4.5" cy="6" r="1.6"/><circle cx="19.5" cy="6" r="1.6"/><circle cx="4.5" cy="18" r="1.6"/><circle cx="19.5" cy="18" r="1.6"/></symbol>
+  <symbol id="i-fs" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></symbol>
+</svg>
+
+<div class="progress"><i></i></div>
+
+<main id="stage">
+<div id="grid"></div>
+<div id="world">
+
+<!-- Vista general -->
+<div class="frame ov" id="ov">
+  <svg class="route" aria-hidden="true"><path id="route"/></svg>
+  <div class="ov-title">
+    <p class="eyebrow">Investigación · Noviembre 2026</p>
+    <h1>IoT Pixels <span class="y">y</span> <span class="g">Ambient IoT</span></h1>
+    <p class="ov-sub">Qué son, cómo se comparan con RFID, en qué rubros conviene cada uno y quién los provee.</p>
+    <p class="ov-hint start">Tocá un tema o avanzá con → para empezar</p>
+    <p class="ov-hint end">¡Gracias! · ¿Preguntas?</p>
+  </div>
+</div>
+
+<!-- Círculos de cada sección -->
+<div class="frame sec s1" data-sec="1" data-name="Qué son los IoT Pixels"><button class="circle" aria-label="Ir a la sección 1: Qué son los IoT Pixels"><span class="c-num">01</span><span class="c-title">Qué son</span><span class="c-sub">Etiquetas sin batería del tamaño de una estampilla</span></button></div>
+<div class="frame sec s2" data-sec="2" data-name="La tecnología: Ambient IoT"><button class="circle" aria-label="Ir a la sección 2: La tecnología"><span class="c-num">02</span><span class="c-title">Ambient IoT</span><span class="c-sub">Cómo se llama la tecnología y quién la estandariza</span></button></div>
+<div class="frame sec s3" data-sec="3" data-name="Comparación con RFID"><button class="circle" aria-label="Ir a la sección 3: Comparación con RFID"><span class="c-num">03</span><span class="c-title">vs RFID</span><span class="c-sub">Frente a frente con el RFID pasivo UHF</span></button></div>
+<div class="frame sec s4" data-sec="4" data-name="Qué conviene por industria"><button class="circle" aria-label="Ir a la sección 4: Qué conviene por industria"><span class="c-num">04</span><span class="c-title">Por industria</span><span class="c-sub">Qué tecnología conviene en cada sector</span></button></div>
+<div class="frame sec s5" data-sec="5" data-name="RFID por rubro: dónde entrar"><button class="circle" aria-label="Ir a la sección 5: RFID por rubro, dónde entrar"><span class="c-num">05</span><span class="c-title">Dónde entrar</span><span class="c-sub">Prioridades para llevar RFID a otros rubros</span></button></div>
+<div class="frame sec s6" data-sec="6" data-name="RFID: 7 rubros en detalle"><button class="circle" aria-label="Ir a la sección 6: 7 rubros en detalle"><span class="c-num">06</span><span class="c-title">7 rubros</span><span class="c-sub">Activos, casos y riesgos de cada sector</span></button></div>
+<div class="frame sec s7" data-sec="7" data-name="El proveedor: Wiliot"><button class="circle" aria-label="Ir a la sección 7: El proveedor, Wiliot"><span class="c-num">07</span><span class="c-title">Wiliot</span><span class="c-sub">La empresa detrás de los IoT Pixels</span></button></div>
+<div class="frame sec s8" data-sec="8" data-name="Top 5 proveedores"><button class="circle" aria-label="Ir a la sección 8: Top 5 proveedores"><span class="c-num">08</span><span class="c-title">Top 5</span><span class="c-sub">Los proveedores de Ambient IoT más sólidos</span></button></div>
+<div class="frame sec s9" data-sec="9" data-name="Contactos corporativos"><button class="circle" aria-label="Ir a la sección 9: Contactos corporativos"><span class="c-num">09</span><span class="c-title">Contactos</span><span class="c-sub">A quién llamar y dónde escribir</span></button></div>
+<div class="frame sec s10" data-sec="10" data-name="Fuentes"><button class="circle" aria-label="Ir a la sección 10: Fuentes"><span class="c-num">10</span><span class="c-title">Fuentes</span><span class="c-sub">51 fuentes consultadas</span></button></div>
+
+<!-- ===== 1. Qué son ===== -->
+<article class="frame slide s1" data-sec="1"><div class="card" data-n="01"><div class="scroll"><div class="in">
+  <p class="kicker">01 · Qué son los IoT Pixels</p>
+  <h2>Pequeñas computadoras <em>sin batería</em></h2>
+  <p class="lead">Los <strong>IoT Pixels</strong> son un producto de <strong>Wiliot</strong>, empresa israelí de "ambient IoT". Son etiquetas del tamaño de una estampilla que funcionan como pequeñas computadoras sin batería; se pegan o integran en productos, cajas o pallets para saber <strong>dónde están</strong> y <strong>en qué condiciones</strong>.</p>
+  <ul class="chips">
+    <li>Producto de Wiliot</li><li>Tamaño estampilla</li><li>Sin batería</li><li>En productos, cajas o pallets</li>
+  </ul>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s1" data-sec="1"><div class="card" data-n="01"><div class="scroll"><div class="in">
+  <p class="kicker">01 · Qué son los IoT Pixels</p>
+  <h2>Cómo <em>funcionan</em></h2>
+  <ol class="flow">
+    <li><span class="badge"><svg class="ico"><use href="#i-zap"/></svg></span><span class="step">PASO 1</span><h3>Energía por radio</h3><p>Un <em>bridge</em> o <em>energizer</em> les transmite energía por ondas de radio, a distancia.</p></li>
+    <li><span class="badge"><svg class="ico"><use href="#i-chip"/></svg></span><span class="step">PASO 2</span><h3>Cosecha</h3><p>El Pixel se alimenta cosechando las ondas de radio del ambiente: no usa batería.</p></li>
+    <li><span class="badge"><svg class="ico"><use href="#i-bt"/></svg></span><span class="step">PASO 3</span><h3>Señal Bluetooth</h3><p>Transmite una señal Bluetooth estándar, tipo beacon.</p></li>
+    <li><span class="badge"><svg class="ico"><use href="#i-gw"/></svg></span><span class="step">PASO 4</span><h3>Gateway</h3><p>Un gateway recibe la señal y la envía a la nube de Wiliot.</p></li>
+    <li><span class="badge"><svg class="ico"><use href="#i-cloud"/></svg></span><span class="step">PASO 5</span><h3>Plataforma con IA</h3><p>La Wiliot Intelligence Platform convierte los datos en visibilidad continua e inteligencia operativa.</p></li>
+  </ol>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s1" data-sec="1"><div class="card" data-n="01"><div class="scroll"><div class="in">
+  <p class="kicker">01 · Qué son los IoT Pixels</p>
+  <h2>Qué pueden <em>medir</em></h2>
+  <ul class="tiles">
+    <li><svg class="ico"><use href="#i-temp"/></svg>Temperatura</li>
+    <li><svg class="ico"><use href="#i-fill"/></svg>Nivel de llenado</li>
+    <li><svg class="ico"><use href="#i-move"/></svg>Movimiento</li>
+    <li><svg class="ico"><use href="#i-pin"/></svg>Ubicación</li>
+    <li><svg class="ico"><use href="#i-drop"/></svg>Humedad</li>
+    <li><svg class="ico"><use href="#i-near"/></svg>Proximidad</li>
+  </ul>
+  <h3 class="gap">Ventajas</h3>
+  <ul class="list check">
+    <li><strong>Sin batería:</strong> ventajas en tamaño, costo y mantenimiento.</li>
+    <li>Vida útil prácticamente ilimitada; se pueden <strong>embeber en los productos</strong>.</li>
+    <li>Infraestructura de lectura mínima y de bajo costo.</li>
+  </ul>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s1" data-sec="1"><div class="card" data-n="01"><div class="scroll"><div class="in">
+  <p class="kicker">01 · Qué son los IoT Pixels</p>
+  <h2>Variantes y <em>evolución</em></h2>
+  <div class="grid" style="--cols:3">
+    <div class="box"><h3>Battery-Free</h3><p>La principal. Tamaño estampilla, <strong>~10 m</strong> de alcance.</p></div>
+    <div class="box"><h3>Battery-Assisted</h3><p>Tamaño tarjeta, con batería impresa. No necesita bridges y cuesta <strong>menos de US$2</strong>.</p></div>
+    <div class="box"><h3>Gen3 · enero 2026</h3><p>Más alcance, <strong>dual band</strong> y menor costo.</p></div>
+  </div>
+  <p class="gap">Fabricantes de las etiquetas: <strong>Avery Dennison</strong>, <strong>Identiv</strong> y <strong>Tageos</strong>.</p>
+  <div class="note"><b>Ojo:</b> "IoT Pixel" a veces se usa para otras cosas (como el PIXO Pixel, un display LED con ESP32). En contexto profesional casi siempre se refiere a Wiliot.</div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<!-- ===== 2. Ambient IoT ===== -->
+<article class="frame slide s2" data-sec="2"><div class="card" data-n="02"><div class="scroll"><div class="in">
+  <p class="kicker">02 · La tecnología</p>
+  <h2>La tecnología se llama <em>Ambient IoT</em></h2>
+  <p class="lead">A-IoT, o "IoT ambiental". <strong>"IoT Pixel"</strong> es el nombre comercial del producto de Wiliot.</p>
+  <div class="grid">
+    <div class="box"><span class="badge"><svg class="ico"><use href="#i-zap"/></svg></span><h3>RF energy harvesting</h3><p>La etiqueta obtiene energía de las ondas de radio del entorno en lugar de usar batería ("battery-free").</p></div>
+    <div class="box"><span class="badge"><svg class="ico"><use href="#i-bt"/></svg></span><h3>Bluetooth Low Energy</h3><p>Protocolo con el que transmite los datos a gateways, access points o celulares.</p></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s2" data-sec="2"><div class="card" data-n="02"><div class="scroll"><div class="in">
+  <p class="kicker">02 · La tecnología</p>
+  <h2>No es exclusivo de <em>Wiliot</em></h2>
+  <p class="lead">Ambient IoT se está estandarizando y ya tiene una alianza de industria.</p>
+  <div class="grid" style="--cols:3">
+    <div class="box"><h3>3GPP</h3><p>Dentro de 5G Advanced, reutilizando las redes móviles.</p></div>
+    <div class="box"><h3>Bluetooth SIG</h3><p>El organismo que define el estándar Bluetooth.</p></div>
+    <div class="box"><h3>Ambient IoT Alliance</h3><p>Fundada en 2025 por:</p>
+      <ul class="chips"><li>Intel</li><li>Qualcomm</li><li>Infineon</li><li>PepsiCo</li><li>Atmosic</li><li>VusionGroup</li><li>Wiliot</li></ul></div>
+  </div>
+  <p class="muted gap">Tip de búsqueda: "Ambient IoT" es el término que más bibliografía devuelve.</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<!-- ===== 3. vs RFID ===== -->
+<article class="frame slide s3" data-sec="3"><div class="card" data-n="03"><div class="scroll"><div class="in">
+  <p class="kicker">03 · Comparación con RFID</p>
+  <h2>Qué es cada una</h2>
+  <p class="muted">Se compara con <strong>RFID pasivo UHF</strong>, el competidor directo en retail y logística.</p>
+  <div class="cmp">
+    <div class="row hd"><div class="lbl"></div><div class="a">RFID pasivo (UHF)</div><div class="b">IoT Pixel (Wiliot)</div></div>
+    <div class="row"><div class="lbl">Qué es</div><div class="a">Etiqueta con chip y antena que devuelve un ID cuando un lector la "ilumina"</div><div class="b">Etiqueta con chip, sensores y antena que transmite datos por Bluetooth</div></div>
+    <div class="row"><div class="lbl">Energía</div><div class="a">La del lector, solo durante la lectura</div><div class="b">Cosecha ondas de radio del entorno; versión con batería opcional</div></div>
+    <div class="row"><div class="lbl">Protocolo</div><div class="a">EPC Gen2 / ISO 18000-63 (~860–960 MHz)</div><div class="b">Bluetooth Low Energy (2,4 GHz)</div></div>
+    <div class="row"><div class="lbl">Datos</div><div class="a">Principalmente un identificador</div><div class="b">ID + sensado: temperatura, ubicación, movimiento, humedad, nivel</div></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s3" data-sec="3"><div class="card" data-n="03"><div class="scroll"><div class="in">
+  <p class="kicker">03 · Comparación con RFID</p>
+  <h2>Lectura, alcance y <em>costos</em></h2>
+  <div class="cmp">
+    <div class="row hd"><div class="lbl"></div><div class="a">RFID pasivo (UHF)</div><div class="b">IoT Pixel (Wiliot)</div></div>
+    <div class="row"><div class="lbl">Modo de lectura</div><div class="a">Por eventos: portal o escaneo</div><div class="b">Continuo, sin escanear</div></div>
+    <div class="row"><div class="lbl">Alcance</div><div class="a">Pocos metros hasta ~10 m</div><div class="b">~10 m</div></div>
+    <div class="row"><div class="lbl">Costo etiqueta</div><div class="a">US$0,08–0,30</div><div class="b">Desde ~US$0,10 en alto volumen; con batería US$1–2</div></div>
+    <div class="row"><div class="lbl">Infraestructura</div><div class="a">Lectores dedicados: ~US$1.000 de mano, ~US$10.000 fijos</div><div class="b">Bridges/gateways BLE de menos de US$50 o equipos existentes</div></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s3" data-sec="3"><div class="card" data-n="03"><div class="scroll"><div class="in">
+  <p class="kicker">03 · Comparación con RFID</p>
+  <h2>Escala, madurez y <em>entorno</em></h2>
+  <div class="cmp">
+    <div class="row hd"><div class="lbl"></div><div class="a">RFID pasivo (UHF)</div><div class="b">IoT Pixel (Wiliot)</div></div>
+    <div class="row"><div class="lbl">Lectura masiva</div><div class="a">Su fuerte: miles de tags por minuto</div><div class="b">Más lenta; pensada para monitoreo continuo</div></div>
+    <div class="row"><div class="lbl">Madurez</div><div class="a">~30 años, estándares globales</div><div class="b">Tecnología joven, mayormente un solo proveedor</div></div>
+    <div class="row"><div class="lbl">Metal y líquidos</div><div class="a">Mal desempeño: el metal refleja la señal y los líquidos la absorben. Existen etiquetas especiales "on-metal", más caras y voluminosas</div><div class="b">Mal desempeño por la misma razón; funcionan mejor sobre cartón o papel</div></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s3" data-sec="3"><div class="card" data-n="03"><div class="scroll"><div class="in">
+  <p class="kicker">03 · Comparación con RFID</p>
+  <h2>La diferencia <em>de fondo</em></h2>
+  <div class="vs">
+    <div class="box rf"><span class="who">RFID responde</span><p class="q">"¿Pasó este objeto por acá?"</p></div>
+    <span class="sep">vs</span>
+    <div class="box px"><span class="who">IoT Pixel responde</span><p class="q">"¿Dónde está este objeto ahora y en qué condiciones?"</p></div>
+  </div>
+  <p class="lead">Las etiquetas cuestan parecido; la diferencia está en el <strong>costo total del sistema</strong> (infraestructura).</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s3" data-sec="3"><div class="card" data-n="03"><div class="scroll"><div class="in">
+  <p class="kicker">03 · Comparación con RFID</p>
+  <h2>Limitaciones de los <em>IoT Pixels</em></h2>
+  <ul class="list">
+    <li>Funcionan mejor sobre cartón o papel; metal y líquidos son un desafío (igual que para RFID).</li>
+    <li>Dependencia de la nube y plataforma de Wiliot (riesgo de <strong>lock-in</strong>).</li>
+    <li>Ecosistema mucho más chico que el de RFID.</li>
+  </ul>
+  <div class="note"><b>Tendencia:</b> más que reemplazarse, se espera que convivan. Wiliot ya ofrece etiquetas "dual band" y Avery Dennison, gigante del RFID, invirtió US$75 millones más en Wiliot en 2026.</div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<!-- ===== 4. Por industria ===== -->
+<article class="frame slide s4" data-sec="4"><div class="card" data-n="04"><div class="scroll"><div class="in">
+  <p class="kicker">04 · Qué conviene por industria</p>
+  <h2>La regla <em>general</em></h2>
+  <div class="grid rule">
+    <div class="box rf"><span class="tag t-rfid">RFID</span><p class="big">para identificar muchos objetos rápido en puntos de paso.</p></div>
+    <div class="box px"><span class="tag t-pixel">IoT Pixel</span><p class="big">para conocer estado y ubicación de forma continua y barata.</p></div>
+  </div>
+  <p class="muted gap">En las próximas diapositivas: <span class="tag t-rfid">RFID</span> <span class="tag t-pixel">IoT Pixel</span> <span class="tag t-mix">Mixto</span></p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s4" data-sec="4"><div class="card" data-n="04"><div class="scroll"><div class="in">
+  <p class="kicker">04 · Por industria · 1 de 3</p>
+  <h2>Moda, alimentos, farma y <em>logística</em></h2>
+  <div class="grid ind">
+    <div class="box"><header><h3>Moda / indumentaria</h3><span class="tag t-rfid">RFID</span></header><p>Inventario de prendas: cientos de lecturas en segundos. No requiere sensado.</p></div>
+    <div class="box"><header><h3>Alimentos frescos y cadena de frío</h3><span class="tag t-pixel">IoT Pixel</span></header><p>Importa la temperatura durante todo el trayecto; reduce mermas.</p></div>
+    <div class="box"><header><h3>Farmacéutica / vacunas</h3><span><span class="tag t-pixel">IoT Pixel</span> <span class="tag t-mix">o mixto</span></span></header><p>Monitoreo térmico continuo; RFID para serialización de lotes.</p></div>
+    <div class="box"><header><h3>Logística / centros de distribución</h3><span class="tag t-mix">Mixto</span></header><p>RFID en andenes; Pixels para visibilidad de pallets dentro y fuera del depósito.</p></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s4" data-sec="4"><div class="card" data-n="04"><div class="scroll"><div class="in">
+  <p class="kicker">04 · Por industria · 2 de 3</p>
+  <h2>Retornables, retail, automotriz y <em>aeronáutico</em></h2>
+  <div class="grid ind">
+    <div class="box"><header><h3>Envases y activos retornables</h3><span class="tag t-pixel">IoT Pixel</span></header><p>Se pierden y circulan entre empresas; saber dónde están sin escanear.</p></div>
+    <div class="box"><header><h3>Supermercados / retail masivo</h3><span class="tag t-mix">Mixto → Pixel</span></header><p>RFID para inventario; Pixels para frescos y reposición en tiempo real.</p></div>
+    <div class="box"><header><h3>Automotriz / manufactura</h3><span class="tag t-rfid">RFID</span></header><p>Piezas en línea de producción con puntos de control. Ojo: sobre piezas metálicas ninguna de las dos funciona bien; con RFID hay que usar etiquetas especiales "on-metal".</p></div>
+    <div class="box"><header><h3>Aeronáutico</h3><span class="tag t-rfid">RFID</span></header><p>Estándares adoptados y lectura en puntos fijos.</p></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s4" data-sec="4"><div class="card" data-n="04"><div class="scroll"><div class="in">
+  <p class="kicker">04 · Por industria · 3 de 3</p>
+  <h2>Salud, agro, accesos y <em>consumo</em></h2>
+  <div class="grid ind">
+    <div class="box"><header><h3>Salud / hospitales</h3><span class="tag t-mix">Mixto</span></header><p>RFID para instrumental y acceso; Pixels/BLE para equipos móviles y condiciones.</p></div>
+    <div class="box"><header><h3>Agro / ganadería</h3><span class="tag t-rfid">RFID (LF)</span></header><p>Identificación animal estandarizada; estándar en trazabilidad bovina en Argentina.</p></div>
+    <div class="box"><header><h3>Accesos, peajes, bibliotecas</h3><span class="tag t-rfid">RFID</span></header><p>Identificación en un punto con infraestructura consolidada.</p></div>
+    <div class="box"><header><h3>Bienes de consumo conectados</h3><span class="tag t-pixel">IoT Pixel</span></header><p>Productos que interactúan con el celular del cliente por Bluetooth.</p></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s4" data-sec="4"><div class="card" data-n="04"><div class="scroll"><div class="in">
+  <p class="kicker">04 · Qué conviene por industria</p>
+  <h2>¿Cuál <em>conviene</em>?</h2>
+  <div class="grid">
+    <div class="box"><h3><span class="tag t-rfid">RFID</span> si…</h3><ul class="list check">
+      <li>El objetivo es contar o identificar, no medir.</li>
+      <li>Hay puntos de paso claros.</li>
+      <li>Se necesita lectura masiva rápida.</li>
+      <li>La industria ya tiene estándares RFID.</li></ul></div>
+    <div class="box"><h3><span class="tag t-pixel">IoT Pixel</span> si…</h3><ul class="list check">
+      <li>Importan las condiciones del producto.</li>
+      <li>Los objetos salen de lugares controlados.</li>
+      <li>Querés eliminar el escaneo manual.</li>
+      <li>El producto es perecedero o el activo es valioso.</li></ul></div>
+  </div>
+  <p class="muted gap">Análisis general basado en el uso típico de cada tecnología. En Argentina/LatAm, RFID tiene mucho más ecosistema local; los IoT Pixels todavía tienen poca adopción.</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<!-- ===== 5. RFID por rubro: dónde entrar ===== -->
+<article class="frame slide s5" data-sec="5"><div class="card" data-n="05"><div class="scroll"><div class="in">
+  <p class="kicker">05 · RFID por rubro</p>
+  <h2>Frigoríficos y salud: <em>las mejores entradas</em></h2>
+  <div class="grid">
+    <div class="box hl"><span class="k">Prioridad 1</span><h3>Frigoríficos</h3><p>Tiene una <strong>obligación legal vigente desde el 1 de julio de 2026</strong>.</p></div>
+    <div class="box hl"><span class="k">Prioridad 2</span><h3>Salud</h3><p>Reutiliza casi tal cual lo que ya se ofrece en <strong>hotelería</strong>: ropa blanca, uniformes y lavandería.</p></div>
+  </div>
+  <p class="muted gap">El orden es un criterio propio, basado en regulación, cercanía con la oferta actual y evidencia pública. No se calculó tamaño de mercado ni costos. La mayoría de las cifras vienen de proveedores, prensa del sector o casos viejos: sirven como hipótesis para un piloto, no como promesa comercial.</p>
+  <div class="note"><b>Pregunta abierta:</b> ¿la plataforma trabaja solo en UHF? Si es así, en frigoríficos haría falta sumar lectura de baja frecuencia para las caravanas.</div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s5" data-sec="5"><div class="card" data-n="05"><div class="scroll"><div class="in">
+  <p class="kicker">05 · RFID por rubro</p>
+  <h2>Prioridades <em>1 a 4</em></h2>
+  <div class="grid prio">
+    <div class="box"><header><span class="num">1</span><h3>Frigoríficos</h3></header><dl>
+      <dt>Entrada</dt><dd>Cajones, ganchos y stock en cámara</dd>
+      <dt>Por qué ahora</dt><dd>La lectura de caravanas en faena ya es obligatoria</dd>
+      <dt>Riesgo</dt><dd>Ganchos: los tags se dañan o se caen</dd></dl></div>
+    <div class="box"><header><span class="num">2</span><h3>Salud</h3></header><dl>
+      <dt>Entrada</dt><dd>Textiles, luego equipos médicos e instrumental</dd>
+      <dt>Por qué ahora</dt><dd>Es el producto actual, con caso local</dd>
+      <dt>Riesgo</dt><dd>Ya hay competidores locales en textiles</dd></dl></div>
+    <div class="box"><header><span class="num">3</span><h3>Laboratorio</h3></header><dl>
+      <dt>Entrada</dt><dd>Muestras en tránsito y equipos calibrados</dd>
+      <dt>Por qué ahora</dt><dd>Una muestra perdida puede ser irreemplazable</dd>
+      <dt>Riesgo</dt><dd>Validación regulatoria y tamaño del tubo</dd></dl></div>
+    <div class="box"><header><span class="num">4</span><h3>Transportes</h3></header><dl>
+      <dt>Entrada</dt><dd>Pallets, cajones y neumáticos</dd>
+      <dt>Por qué ahora</dt><dd>La pérdida de retornables tiene costo directo</dd>
+      <dt>Riesgo</dt><dd>Sin contratos, el dato no recupera nada</dd></dl></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s5" data-sec="5"><div class="card" data-n="05"><div class="scroll"><div class="in">
+  <p class="kicker">05 · RFID por rubro</p>
+  <h2>Prioridades <em>5 a 7</em></h2>
+  <div class="grid prio" style="--cols:3">
+    <div class="box"><header><span class="num">5</span><h3>Minería</h3></header><dl>
+      <dt>Entrada</dt><dd>Pañol de herramientas, EPP y campamento</dd>
+      <dt>Por qué ahora</dt><dd>Ola de proyectos de cobre y litio</dd>
+      <dt>Riesgo</dt><dd>En cielo abierto, GPS y LoRa compiten para ubicar personas</dd></dl></div>
+    <div class="box"><header><span class="num">6</span><h3>Terminales portuarias</h3></header><dl>
+      <dt>Entrada</dt><dd>Gate, flota interna y combustible</dd>
+      <dt>Por qué ahora</dt><dd>Exolgan amplía la terminal y automatiza gates</dd>
+      <dt>Riesgo</dt><dd>Venta larga e integración con el sistema de la terminal</dd></dl></div>
+    <div class="box"><header><span class="num">7</span><h3>Financiero</h3></header><dl>
+      <dt>Entrada</dt><dd>Inventario de IT y custodia de valores</dd>
+      <dt>Por qué ahora</dt><dd>Auditoría y control de bienes</dd>
+      <dt>Riesgo</dt><dd>Pocos clientes y casos muy reservados</dd></dl></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s5" data-sec="5"><div class="card" data-n="05"><div class="scroll"><div class="in">
+  <p class="kicker">05 · RFID por rubro</p>
+  <h2>Qué cambia respecto de <em>hotelería</em></h2>
+  <p>La plataforma de eventos, alertas y analítica se reutiliza, pero <strong>el tag y el lector cambian según el entorno</strong>.</p>
+  <div class="tbl">
+    <div class="row hd"><div>Entorno</div><div>Rubros</div><div>Qué probar antes de cotizar</div></div>
+    <div class="row"><div>Metal</div><div>Financiero, puertos, minería, instrumental</div><div>Tags para metal, distancia de lectura y fijación</div></div>
+    <div class="row"><div>Líquidos</div><div>Laboratorio, sangre, medicación</div><div>HF o UHF específico, con pruebas en el envase real</div></div>
+    <div class="row"><div>Frío y escarcha</div><div>Frigoríficos, biobancos</div><div>Adhesivo, temperatura de operación y lectores aptos</div></div>
+    <div class="row"><div>Lavado y esterilización</div><div>Salud, cajones, ropa</div><div>Ciclos reales, químicos, autoclave y vida útil</div></div>
+    <div class="row"><div>Exterior y grandes distancias</div><div>Puertos, minería, transporte</div><div>Antenas fijas para puntos de paso, combinadas con GPS</div></div>
+    <div class="row"><div>Zona con riesgo de explosión</div><div>Minería subterránea, ciertos procesos</div><div>Equipos certificados para esa clasificación</div></div>
+  </div>
+  <p class="muted gap">Guía general para definir pruebas, no un resultado de los casos citados.</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s5" data-sec="5"><div class="card" data-n="05"><div class="scroll"><div class="in">
+  <p class="kicker">05 · RFID por rubro</p>
+  <h2>Dos preguntas para <em>calificar un piloto</em></h2>
+  <div class="grid qs">
+    <div class="box"><span class="qn">1</span><p class="q">¿El activo pasa siempre por un punto de lectura identificable?</p><p>Si no pasa, RFID pasivo dará un registro incompleto.</p></div>
+    <div class="box"><span class="qn">2</span><p class="q">¿Alguien responde por el activo o por la pérdida?</p><p>Si nadie responde, la alerta no se convierte en ahorro.</p></div>
+  </div>
+  <p class="muted gap">Sirven en cualquier rubro.</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<!-- ===== 6. 7 rubros en detalle ===== -->
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 1 · Frigoríficos</p>
+  <h2>Frigoríficos: <em>la norma ya obliga</em></h2>
+  <p class="lead">Desde el <strong>1 de julio de 2026</strong>, las plantas deben leer la caravana electrónica en la línea de faena y asociarla al número de garrón. La oportunidad es seguir esa identidad después de la lectura obligatoria: cuarteo, cámara, cajones y despacho.</p>
+  <h3>Qué exige la norma</h3>
+  <ul class="list">
+    <li>La <a href="https://bichosdecampo.com/que-no-se-corte-se-comenzo-a-exigir-a-los-frigorificos-la-trazabilidad-en-la-faena-vacuna-para-prolongar-la-cadena-iniciada-pr-los-criadores-con-la-caravana-electronica-puesta-a-los-terneros/">Resolución 40/2026</a> pide leer con equipos electrónicos en una zona intermedia de la línea, una vez asignado el garrón. La carga manual queda para casos excepcionales.</li>
+    <li>Pide registrar el dato en el Sistema Integral de Faena, y recuperar, desactivar y destruir las caravanas dentro de la planta.</li>
+    <li>Este vínculo prepara el terreno para extender la identificación al cuarteo y al troceo.</li>
+  </ul>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 1 · Frigoríficos</p>
+  <h2>Frigoríficos: <em>qué se controla</em></h2>
+  <div class="tbl">
+    <div class="row hd"><div>Activo</div><div>Qué se controla</div><div>Problema que resuelve</div></div>
+    <div class="row"><div>Caravanas</div><div>Lectura en faena, vínculo con garrón, recupero y destrucción</div><div>Cumplimiento y carga manual en el Sistema Integral de Faena</div></div>
+    <div class="row"><div>Ganchos y rieles</div><div>Qué res va en cada gancho y por dónde pasó</div><div>Pérdida de identidad entre puestos</div></div>
+    <div class="row"><div>Medias reses en cámara</div><div>Inventario, tiempo de oreo y orden de salida</div><div>Conteos en frío y mermas no detectadas</div></div>
+    <div class="row"><div>Cajones y bandejas</div><div>Lote o cortes por recipiente, lavado y retorno</div><div>Mezcla de lotes y pérdida de cajones</div></div>
+    <div class="row"><div>Pallets y despacho</div><div>Carga correcta por cliente y camión</div><div>Errores de despacho y retiros de mercado lentos</div></div>
+    <div class="row"><div>Cuchillos, chairas y EPP</div><div>Asignación, higiene y reposición</div><div>Elementos sin control en áreas sanitarias</div></div>
+    <div class="row"><div>Ropa de planta</div><div>Lavado y separación de áreas</div><div>Riesgo sanitario y pérdidas</div></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 1 · Frigoríficos</p>
+  <h2>Frigoríficos: <em>evidencia y primer paso</em></h2>
+  <ul class="list">
+    <li><a href="https://pepperl-fuchs.com/usa/en/28859.htm">Un gran procesador europeo</a> usa 600 sistemas de identificación y 30.000 transpondedores en una planta de hasta 90.000 cerdos por semana. Cubre ganchos, racks y cajas, entre -30 °C y +140 °C. Es un caso de proveedor.</li>
+    <li><a href="https://www.rfidjournal.com/?p=68457">Reynolds</a>, distribuidor británico de alimentos frescos, ahorró unas £150.000 en un año con cajones reutilizables y recuperó la inversión en menos de tres meses. Sirve como analogía, no como caso de frigorífico.</li>
+    <li>Una <a href="https://ampc.com.au/media/0ackqgrr/ampc_2021-1191_snapshot.pdf">revisión australiana de AMPC</a> encontró que la mayoría de las plantas consultadas tuvo dificultades con RFID en ganchos, porque el chip se daña o se cae.</li>
+  </ul>
+  <div class="note"><b>A tener en cuenta:</b> la <a href="https://www.argentina.gob.ar/normativa/nacional/norma-281264/texto">norma técnica de 2017</a> fijaba las caravanas en 134,2 kHz, con lectura fija de hasta 70 cm. No se pudo confirmar si la <a href="https://news.agrofy.com.ar/noticia/214613/se-reglamento-uso-caravana-electronica-2026-como-se-debe-aplicar-e-informar-senasa">Resolución 841/2025</a> cambió esos requisitos. Si es igual, la línea necesita baja frecuencia aunque el resto del sistema sea UHF.</div>
+  <div class="box hl gap"><span class="k">Primer paso sugerido</span>Empezar en cajones y cámara, donde hay menos riesgo que en ganchos, y probar ganchos en un tramo chico de línea.</div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 2 · Salud</p>
+  <h2>Salud: <em>de la hotelería al hospital</em></h2>
+  <p>Los textiles funcionan igual que en hotelería y ya hay un caso en Buenos Aires. Desde ahí se puede crecer hacia equipos médicos e instrumental, donde el ahorro por activo es mayor.</p>
+  <div class="tbl">
+    <div class="row hd"><div>Activo</div><div>Qué se controla</div><div>Problema que resuelve</div></div>
+    <div class="row"><div>Sábanas, ambos y uniformes</div><div>Entrega por persona, lavado, retorno y salidas del edificio</div><div>Compras de más, acopio en lockers, lavado casero no autorizado</div></div>
+    <div class="row"><div>Bombas de infusión, monitores, camas</div><div>Última ubicación, uso y mantenimiento</div><div>Tiempo buscando, alquileres, mantenimiento vencido</div></div>
+    <div class="row"><div>Instrumental y cajas quirúrgicas</div><div>Armado, esterilización, vencimiento y paso por quirófano</div><div>Cirugías demoradas, cajas incompletas</div></div>
+    <div class="row"><div>Endoscopios</div><div>Uso, reprocesamiento y mantenimiento</div><div>Equipos subutilizados y trazabilidad de lavado</div></div>
+    <div class="row"><div>Implantes y consumibles caros</div><div>Stock, consignación y consumo por cirugía</div><div>Vencimientos, disputas con proveedores, costeo impreciso</div></div>
+    <div class="row"><div>Sangre y medicación crítica</div><div>Custodia y condiciones</div><div>Errores de identificación</div></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 2 · Salud</p>
+  <h2>Salud: <em>casos</em></h2>
+  <div class="grid">
+    <div class="box case"><h3><a href="https://www.rfidjournal.com/?p=154248">Sanatorio Finochietto</a></h3><span class="loc">Buenos Aires</span><p>Controla unas 80.000 prendas con UHF, incluida la lavandería externa. Bajó compras redundantes y pérdidas, y detecta salidas no autorizadas. El proveedor es Telectronica: es referencia y también competencia.</p></div>
+    <div class="box case"><h3><a href="https://www.rfidjournal.com/?p=221662">Centro Hospitalar de Entre Douro e Vouga</a></h3><span class="loc">Portugal</span><p>Redujo 15% el lavado y bajó a menos de la mitad una compra anual de uniformes de unos €150.000. Espera recuperar la inversión en dos años o menos.</p></div>
+    <div class="box case"><h3><a href="https://www.gs1uk.org/sites/default/files/Session_4._Dr_Malcolm_Phillips_Improving_patient_safety_and_financial_efficiency_with_RFID_in_NHS_Lothian.pdf">NHS Lothian</a></h3><span class="loc">Escocia</span><p>Encontrar tres bombas entre 310 pasó de dos semanas a menos de una hora. Retiró 10 endoscopios sin uso y ahorró unas £97.000 recurrentes en mantenimiento.</p></div>
+    <div class="box case"><h3><a href="https://www.rfidjournal.com/?p=71704">Rigshospitalet y Shimane</a></h3><span class="loc">Dinamarca y Japón</span><p>El primero estimó 31.000 horas anuales ahorrables en quirófano. El segundo bajó la gestión de instrumental por operación de 150 a 50 minutos.</p></div>
+  </div>
+  <div class="note"><b>A tener en cuenta:</b> Lothian eligió lectores por sala o sector, no ubicación exacta, para contener el costo. Su hospital piloto usó 75 lectores y 150 antenas. También reportó que reetiquetar llevó mucho tiempo y que la superficie y la orientación afectan la lectura.</div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 3 · Laboratorio</p>
+  <h2>Laboratorio: <em>no perder muestras</em></h2>
+  <p>El mayor valor está en no perder ni confundir muestras y en demostrar el estado de cada equipo durante una auditoría. Abarca análisis clínicos y laboratorio farmacéutico.</p>
+  <div class="tbl">
+    <div class="row hd"><div>Activo</div><div>Qué se controla</div><div>Problema que resuelve</div></div>
+    <div class="row"><div>Muestras y tubos</div><div>Recorrido desde la extracción hasta la mesa de trabajo, con alerta si no llegan a tiempo</div><div>Muestras perdidas, mal rotuladas o detectadas tarde</div></div>
+    <div class="row"><div>Conservadoras de transporte</div><div>Salida, llegada y custodia</div><div>Traslados sin registro entre sedes</div></div>
+    <div class="row"><div>Viales en freezer</div><div>Posición exacta sin abrir ni descongelar</div><div>Búsquedas largas, etiquetas con escarcha, riesgo para la muestra</div></div>
+    <div class="row"><div>Instrumentos analíticos</div><div>Ubicación, movimientos, servicio y calibración</div><div>Equipos no ubicados y documentación dispersa</div></div>
+    <div class="row"><div>Pipetas y patrones</div><div>Vencimiento de calibración</div><div>Uso de un instrumento fuera de calificación</div></div>
+    <div class="row"><div>Indumentaria de áreas limpias</div><div>Asignación y circuito de lavado</div><div>Contaminación cruzada</div></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 3 · Laboratorio</p>
+  <h2>Laboratorio: <em>casos y contexto</em></h2>
+  <div class="grid">
+    <div class="box case"><h3><a href="https://news.mayocliniclabs.com/2021/03/29/enhanced-technology-safeguards-patient-specimens/">Mayo Clinic</a></h3><span class="loc">Estados Unidos</span><p>Redujo 93% las muestras mal rotuladas o sin rótulo en su piloto, de 765 a 47. Con el sistema UHF de 2019 pasó de 24 a 6 eventos en seis meses y recuperó tres muestras perdidas.</p></div>
+    <div class="box case"><h3><a href="https://www3.hidglobal.com/sites/default/files/resource_files/cc-idt-cryogatt-cs-en.pdf">NIBSC y Bristol Royal Infirmary</a></h3><span class="loc">Reino Unido · según su proveedor</span><p>El NIBSC tiene unos 200.000 viales, etiquetó algunos cientos en la prueba y encontró una búsqueda de 2 a 5 veces más rápida. Bristol detectó hasta 100 bandejas con espacio libre que no estaba viendo.</p></div>
+    <div class="box case"><h3><a href="https://www.pharmtech.com/view/use-rfid-asset-management-systems-monitoring-analytical-instrumentation">PharmTech</a></h3><span class="loc">Instrumental analítico · 2010</span><p>Mover o quitar componentes de un equipo puede anular su calificación; con RFID se pueden registrar y alertar esos movimientos. Los autores trabajaban para un proveedor.</p></div>
+    <div class="box case"><h3><a href="https://paho.org/sites/default/files/Panel-D-1.pdf">ANMAT</a></h3><span class="loc">Argentina</span><p>Admite RFID como soporte en la trazabilidad de medicamentos, junto con el datamatrix. Abre una conversación con laboratorios, aunque el costo por unidad vuelve poco probable usarlo en cada caja común (inferencia propia).</p></div>
+  </div>
+  <div class="note"><b>A tener en cuenta:</b> en frío extremo el caso citado usa HF y lectores especiales, no UHF estándar. Conviene empezar por conservadoras y equipos, que no exigen etiquetar tubo por tubo.</div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 4 · Transportes</p>
+  <h2>Transportes: <em>recuperar retornables</em></h2>
+  <p>El negocio más claro es recuperar lo que circula entre clientes y depósitos. El RFID muestra dónde se perdió cada unidad, y <strong>un contrato convierte ese dato en dinero recuperado</strong>.</p>
+  <div class="tbl">
+    <div class="row hd"><div>Activo</div><div>Qué se controla</div><div>Problema que resuelve</div></div>
+    <div class="row"><div>Pallets, cajones y jaulas</div><div>Salida, entrega y retorno por cliente</div><div>Pérdidas y disputas por envases</div></div>
+    <div class="row"><div>Carga y bultos</div><div>Carga y descarga por puerta o camión</div><div>Errores de despacho y faltantes</div></div>
+    <div class="row"><div>Neumáticos</div><div>Instalación, rotación, presión e inspección</div><div>Reventones, desgaste y garantías</div></div>
+    <div class="row"><div>Semirremolques</div><div>Ingreso y salida de bases</div><div>Unidades inmovilizadas o no ubicadas</div></div>
+    <div class="row"><div>Herramientas y kits del vehículo</div><div>Entrega y control al volver</div><div>Faltantes y falta de responsable</div></div>
+    <div class="row"><div>Combustible</div><div>Unidad autorizada y litros cargados</div><div>Robos y desvíos</div></div>
+    <div class="row"><div>Equipaje y unidades aéreas</div><div>Puntos de pase y aeronave</div><div>Equipaje mal dirigido</div></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 4 · Transportes</p>
+  <h2>Transportes: <em>casos y contexto</em></h2>
+  <div class="grid">
+    <div class="box case"><h3><a href="https://palletenterprise.com/?p=6101">Rehrig Pacific</a></h3><span class="loc">Cajones de bebidas</span><p>Etiquetó 300.000 cajones en siete plantas y reportó 25% menos compras de reposición. La misma nota cita pérdidas anuales de 15-20% en pallets y tapas del sector automotor.</p></div>
+    <div class="box case"><h3><a href="https://www.rfidjournal.com/?p=68457">Reynolds</a></h3><span class="loc">Reino Unido</span><p>Identifica qué cliente no devuelve cada cajón. Pudo exigir tasas de retorno cercanas al 100% en sus acuerdos.</p></div>
+    <div class="box case"><h3><a href="https://www.rfidjournal.com/?p=83568">Lee Ting San</a></h3><span class="loc">Malasia</span><p>Tenía un reventón cada dos meses y no registró ninguno durante una prueba. La muestra fue de solo tres camiones y 42 neumáticos.</p></div>
+    <div class="box case"><h3><a href="https://www.phocuswire.com/Can-artificial-intelligence-make-baggage-tracking-better">Aeropuerto de Hong Kong</a></h3><span class="loc">Equipaje</span><p>Reportó lectura de casi 99% con RFID, contra cerca de 80% con código de barras.</p></div>
+  </div>
+  <p class="gap"><strong>Contexto local:</strong> las autopistas de AUSA <a href="https://eleconomista.com.ar/autos/ahora-0-km-salen-concesionario-telepase-n92844/amp">operan sin barreras</a> y TelePASE es su único medio de pago desde 2026. El tag de peaje ya es conocido en el transporte, pero eso no implica que se pueda leer con el sistema propio: hay que verificarlo.</p>
+  <div class="note"><b>A tener en cuenta:</b> como advierte la <a href="https://palletenterprise.com/?p=6101">misma nota de pallets</a>, sin acuerdos que definan quién paga una pérdida, la tecnología no frena la fuga. En ruta, GPS y telemetría resuelven mejor la ubicación continua. RFID sirve en bases, muelles y puntos de paso.</div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 5 · Minería</p>
+  <h2>Minería: <em>pañol, EPP y campamento</em></h2>
+  <p>La mejor entrada es controlar lo que entra y sale de puntos definidos. Los casos publicados más citados son subterráneos; en operaciones a cielo abierto o en salares hay que validar si aplican.</p>
+  <div class="tbl">
+    <div class="row hd"><div>Activo</div><div>Qué se controla</div><div>Problema que resuelve</div></div>
+    <div class="row"><div>Herramientas de pañol</div><div>Retiro y devolución por persona, sin encargado permanente</div><div>Pérdidas y pañoles sin atención 24 horas</div></div>
+    <div class="row"><div>EPP y equipos de rescate</div><div>Entrega, vencimiento e inspección</div><div>Elementos vencidos o sin control</div></div>
+    <div class="row"><div>Personas y vehículos</div><div>Acceso a zonas y conteo ante emergencias</div><div>Demora para saber quién está adentro</div></div>
+    <div class="row"><div>Dientes de pala</div><div>Desprendimiento antes de llegar a la chancadora</div><div>Daños y material descartado</div></div>
+    <div class="row"><div>Repuestos críticos y neumáticos</div><div>Stock, instalación y vida útil</div><div>Paradas por falta de repuesto</div></div>
+    <div class="row"><div>Ropa, ropa de cama y equipos de campamento</div><div>Lavado, asignación y reposición</div><div>Pérdidas en sitios remotos</div></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 5 · Minería</p>
+  <h2>Minería: <em>casos y contexto</em></h2>
+  <div class="grid">
+    <div class="box case"><h3><a href="https://www3-realm.cisco.com/web/strategy/materials-mining/downloads/c36-goldcorp-cs.pdf">Goldcorp Éléonore</a></h3><span class="loc">Canadá</span><p>Tags activos sobre Wi-Fi en todo el personal subterráneo y en 80 máquinas. Ubicar a las personas pasó de 45-50 minutos a instantáneo. La ventilación a demanda bajó el aire requerido de 1,2 millones a unos 650.000 CFM, aunque es resultado de red y automatización completas, no solo de RFID.</p></div>
+    <div class="box case"><h3><a href="https://im-mining.com/?p=26816">ToolHound</a></h3><span class="loc">Mina de diamantes, Canadá</span><p>Instaló un pañol automático con tags para metal y lectura al pasar por un portal.</p></div>
+    <div class="box case"><h3><a href="https://patents.justia.com/patent/8890672">Patente de Harnischfeger</a></h3><span class="loc">Dientes de pala</span><p>Perder un diente obliga a retirar en promedio diez camiones de material, y el diente puede dañar la chancadora. Es un problema real, pero la cifra no está auditada.</p></div>
+    <div class="box case"><h3><a href="https://mase.lmneuquen.com/mineria/argentina-uno-uno-los-proyectos-mineros-que-ya-estan-construccion-n1246226">Contexto local</a></h3><span class="loc">Argentina</span><p>CAEM proyecta exportaciones por más de USD 9.000 millones en 2026, y el RIGI acumulaba 16 proyectos mineros por unos USD 30.000 millones a mediados de año.</p></div>
+  </div>
+  <div class="note"><b>A tener en cuenta:</b> en áreas abiertas, RFID pasivo solo registra pasos por puntos fijos, así que no reemplaza a GPS o redes de largo alcance. El seguimiento de personas requiere acordar privacidad con los trabajadores. La idea de campamento es una extensión de la oferta textil, sin caso publicado.</div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 6 · Terminales portuarias</p>
+  <h2>Puertos: <em>flota, combustible y gate</em></h2>
+  <p>El gate es el uso más probado, pero compite con OCR y exige integrarse con el sistema operativo de la terminal. Una entrada más accesible es controlar flota interna, combustible y equipos, sin tocar el flujo crítico del contenedor.</p>
+  <div class="tbl">
+    <div class="row hd"><div>Activo</div><div>Qué se controla</div><div>Problema que resuelve</div></div>
+    <div class="row"><div>Camiones</div><div>Identificación en gate, patio y grúa</div><div>Colas, errores de carga y transacciones lentas</div></div>
+    <div class="row"><div>Contenedores en patio</div><div>Posición al apilar y retirar</div><div>Posiciones mal cargadas y tiempo de búsqueda</div></div>
+    <div class="row"><div>Autoelevadores, tractores y grúas</div><div>Ubicación y uso</div><div>Falta de visibilidad en áreas grandes</div></div>
+    <div class="row"><div>Combustible</div><div>Solo equipos autorizados y consumo por unidad</div><div>Robos, desvíos y registros incompletos</div></div>
+    <div class="row"><div>Reefers</div><div>Temperatura, ubicación y alarmas</div><div>Mercadería dañada por fallas de frío</div></div>
+    <div class="row"><div>Precintos electrónicos</div><div>Integridad del contenedor</div><div>Manipulación y controles manuales</div></div>
+    <div class="row"><div>Personal y contratistas</div><div>Acceso y conteo en emergencias</div><div>Control de ingreso y evacuación</div></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 6 · Terminales portuarias</p>
+  <h2>Puertos: <em>casos y contexto local</em></h2>
+  <div class="grid">
+    <div class="box"><h3>Datos públicos</h3><ul class="list">
+      <li><a href="https://www.rfidjournal.com/?p=75247">Hazira</a>, India: menos de 30 minutos por camión, cerca de la mitad que terminales similares, con unos 70 lectores UHF. Estimó ahorrar unos USD 112.000 anuales en mano de obra.</li>
+      <li><a href="https://cache.techmahindra.com/static/img/pdf/rfid-for-Ports_PoV.pdf">Tech Mahindra</a> estima bajar la verificación en gate de 10-15 minutos a menos de medio minuto. Es una proyección de un proveedor, no una medición.</li>
+      <li>El mismo documento indica que India exige precinto RFID en cada contenedor de exportación. Conviene verificar la vigencia antes de citarlo.</li></ul></div>
+    <div class="box"><h3>Contexto local</h3><ul class="list">
+      <li><a href="https://www.seatrade-maritime.com/ports-logistics/exolgan-terminal-in-argentina-to-nearly-double-capacity">Exolgan</a> invierte USD 280 millones; entre sus objetivos figura automatizar el gate, con 10 a 25 puestos este año. Ya había <a href="https://www.globalpsa.com/?p=6113">ganado un premio por automatizar el gate</a>, así que puede tener un proveedor definido.</li>
+      <li>La <a href="https://www.boletinoficial.gob.ar/detalleAviso/primera/203625/20190319">Resolución AGP 37/2019</a> obligó a usar TelePASE a los camiones que entran al Puerto Buenos Aires. No se pudo abrir el texto completo ni confirmar su vigencia.</li>
+      <li>Queda por averiguar si un lector propio puede usar esos tags o si hay que colocar uno nuevo.</li></ul></div>
+  </div>
+  <div class="note"><b>A tener en cuenta:</b> los contenedores de terceros rara vez llevan un tag propio, así que el modelo citado usa tags temporales o magnéticos. El metal y las distancias de lectura exigen pruebas en sitio: Hazira leía a unos 3 metros en gates y grúas de patio, y hasta 8 metros en grúas de muelle.</div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 7 · Financiero</p>
+  <h2>Financiero: <em>inventario de IT</em></h2>
+  <p>El caso más sólido es el inventario de equipos IT: acelera auditorías y evita activos fantasma. El control de efectivo y documentos tiene valor, pero depende de muy pocos clientes y de procesos reservados.</p>
+  <div class="tbl">
+    <div class="row hd"><div>Activo</div><div>Qué se controla</div><div>Problema que resuelve</div></div>
+    <div class="row"><div>Servidores y equipos de red</div><div>Inventario por pasillo y salidas por puerta</div><div>Conteos manuales lentos, activos no ubicados</div></div>
+    <div class="row"><div>Notebooks</div><div>Asignación y salida del edificio</div><div>Equipos con datos sensibles fuera de control</div></div>
+    <div class="row"><div>Cintas y discos de respaldo</div><div>Salida autorizada y traslado</div><div>Exposición de datos de clientes</div></div>
+    <div class="row"><div>Bolsas, cajas y cofres de valores</div><div>Cadena de custodia e integridad del precinto</div><div>Faltantes y conciliación manual</div></div>
+    <div class="row"><div>Pagarés, garantías y legajos</div><div>Ubicación en bóveda y retiro</div><div>Documentos mal archivados</div></div>
+    <div class="row"><div>Mobiliario y activos de sucursal</div><div>Inventario contable</div><div>Diferencias con el registro de bienes</div></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 7 · Financiero</p>
+  <h2>Financiero: <em>casos y alertas</em></h2>
+  <div class="grid" style="--cols:3">
+    <div class="box case"><h3><a href="https://www.rfidjournal.com/?p=82046">Bank of America</a></h3><span class="loc">2008</span><p>Usaba lectores sobre carros y portales en 14 de sus 38 data centers. Reportó leer una fila de servidores en 10 segundos.</p></div>
+    <div class="box case"><h3><a href="https://www.rfidjournal.com/?p=76828">RFID Journal</a></h3><span class="loc">Relevamiento de 2012</span><p>Los proveedores estimaban inventarios de IT 10 veces más rápidos que a mano.</p></div>
+    <div class="box case"><h3>Bancos en Asia</h3><span class="loc">Misma nota</span><p>Un banco chino usa tags en cerraduras de cajas de efectivo, que se destruyen al abrirlas. Un banco indio probó unos 20.000 tags en fajos y otro cliente tiene casi 500.000 documentos en bóveda.</p></div>
+  </div>
+  <div class="note"><b>A tener en cuenta:</b> el tag va en caja, bolsa o precinto, no en cada billete. En servidores hacen falta tags para metal. Los bancos casi no publican resultados y el seguimiento de documentos avanzó poco. Toda la evidencia encontrada es vieja o anónima.</div>
+  <div class="note"><b>Pregunta abierta:</b> no se verificaron requisitos del BCRA ni de transportadoras de caudales en Argentina. Hay que revisarlos antes de ofrecer custodia de valores.</div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<!-- ===== 5. Wiliot ===== -->
+<article class="frame slide s7" data-sec="7"><div class="card" data-n="07"><div class="scroll"><div class="in">
+  <p class="kicker">07 · El proveedor</p>
+  <h2>Quién es <em>Wiliot</em></h2>
+  <div class="stats">
+    <div class="stat"><b>2017</b><span>Fundada en Israel</span></div>
+    <div class="stat"><b>US$200M</b><span>Ronda de 2021 con SoftBank</span></div>
+    <div class="stat"><b>SaaS</b><span>Su negocio central es el software</span></div>
+  </div>
+  <ul class="list">
+    <li>Fundadores: Tal Tamir, Yaron Elboim y Alon Yehezkely (egresados del Technion).</li>
+    <li>Sede e I+D en Israel; desarrollo de negocios en California y Alemania; oficinas en Ucrania, Australia y Taiwán.</li>
+    <li>Se define como empresa de infraestructura de <strong>"Physical AI"</strong>.</li>
+    <li>Inversores: SoftBank, Amazon, Avery Dennison, Samsung, Qualcomm, PepsiCo, entre otros.</li>
+  </ul>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s7" data-sec="7"><div class="card" data-n="07"><div class="scroll"><div class="in">
+  <p class="kicker">07 · El proveedor</p>
+  <h2>Cliente emblema: <em>Walmart</em></h2>
+  <div class="stats">
+    <div class="stat"><b>~90M</b><span>etiquetas previstas para fines de 2026</span></div>
+    <div class="stat"><b>4.600</b><span>tiendas</span></div>
+    <div class="stat"><b>+40</b><span>centros de distribución</span></div>
+  </div>
+  <p class="lead">Es el mayor despliegue de Ambient IoT del mercado.</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s7" data-sec="7"><div class="card" data-n="07"><div class="scroll"><div class="in">
+  <p class="kicker">07 · El proveedor</p>
+  <h2>El <em>ecosistema</em></h2>
+  <div class="grid" style="--cols:3">
+    <div class="box"><h3>Fabricantes de etiquetas</h3><p>Avery Dennison, Identiv, Tageos.</p></div>
+    <div class="box"><h3>Hardware de lectura</h3><p>Minew, Juniper Mist, MikroTik.</p></div>
+    <div class="box"><h3>Integradores</h3><p>Programa "Works with Wiliot": SATO, VisionID, Tactical Edge, Blyott y otros.</p></div>
+  </div>
+  <div class="note"><b>En Argentina:</b> no se encontró distribuidor o integrador oficial. Opciones: contactar a Wiliot para que asigne un partner, o consultar a las filiales locales de Avery Dennison o SATO. Cuidado con "Williot" (doble L), una marca de ropa española sin relación.</div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<!-- ===== 6. Top 5 ===== -->
+<article class="frame slide s8" data-sec="8"><div class="card" data-n="08"><div class="scroll"><div class="in">
+  <p class="kicker">08 · Top 5 proveedores de Ambient IoT</p>
+  <h2>Los <em>líderes</em></h2>
+  <p class="muted">Ordenados por escala de despliegues reales, respaldo financiero y trayectoria. Es una valoración propia, no un ranking oficial.</p>
+  <div class="rank"><div class="num">1</div><div>
+    <h3>Wiliot <small>· Israel / EE.UU.</small></h3>
+    <p>El líder indiscutido. Mayor despliegue del mercado (Walmart), miembro fundador de la Ambient IoT Alliance, fabricación respaldada por Avery Dennison, Identiv y Tageos.<span class="of"><strong>Ofrece:</strong> solución completa (etiquetas, hardware y plataforma).</span></p>
+  </div></div>
+  <div class="rank"><div class="num">2</div><div>
+    <h3>Atmosic Technologies <small>· EE.UU.</small></h3>
+    <p>US$161,5M recaudados en 4 rondas (la última, US$40M en marzo 2025). Miembro fundador de la Ambient IoT Alliance.<span class="of"><strong>Ofrece:</strong> chips Bluetooth de ultra bajo consumo y cosecha de energía; requiere fabricante o integrador.</span></p>
+  </div></div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s8" data-sec="8"><div class="card" data-n="08"><div class="scroll"><div class="in">
+  <p class="kicker">08 · Top 5 proveedores de Ambient IoT</p>
+  <h2>Puestos <em>3 y 4</em></h2>
+  <div class="rank"><div class="num">3</div><div>
+    <h3>Everactive <small>· EE.UU.</small></h3>
+    <p>El más veterano (2012, universidades de Michigan y Virginia). Líder en monitoreo de condición industrial; clientes como Anheuser-Busch y Hershey.<span class="of"><strong>Ofrece:</strong> sensores y plataforma para mantenimiento industrial. <em>Ojo:</em> última ronda de solo US$10,9M (2024); verificar situación financiera.</span></p>
+  </div></div>
+  <div class="rank"><div class="num">4</div><div>
+    <h3>Energous <small>· EE.UU. · NASDAQ: WATT</small></h3>
+    <p>Empresa cotizante (transparencia financiera). Su etiqueta e-Sense ofrece plataforma completa: sensores sin batería, transmisores de energía RF y software en la nube, para ubicación y temperatura en retail y logística.<span class="of"><em>Ojo:</em> escala mucho menor que Wiliot y empresa chica.</span></p>
+  </div></div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s8" data-sec="8"><div class="card" data-n="08"><div class="scroll"><div class="in">
+  <p class="kicker">08 · Top 5 proveedores de Ambient IoT</p>
+  <h2>Puesto 5 y <em>conclusión</em></h2>
+  <div class="rank"><div class="num">5</div><div>
+    <h3>Dracula Technologies + Paragon ID <small>· Francia</small></h3>
+    <p>Otro enfoque: energía de la <strong>luz</strong> (fotovoltaica orgánica). Etiquetas BLE sin batería pasando a producción masiva. Útil en ambientes iluminados, no en cajas cerradas o depósitos oscuros. Menor trayectoria.</p>
+  </div></div>
+  <div class="note"><b>Conclusión:</b> para supply chain hoy, Wiliot es la opción más probada; la única alternativa "completa" comparable es Energous. Ninguno tiene presencia directa en Argentina.</div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<!-- ===== 7. Contactos ===== -->
+<article class="frame slide s9" data-sec="9"><div class="card" data-n="09"><div class="scroll"><div class="in">
+  <p class="kicker">09 · Contactos corporativos</p>
+  <h2>A quién <em>contactar</em></h2>
+  <div class="grid" style="--cols:3">
+    <div class="box contact"><h3>Wiliot</h3><ul>
+      <li><svg class="ico"><use href="#i-net"/></svg><span><a href="https://www.wiliot.com/contact">wiliot.com/contact</a><span class="pill">recomendado</span></span></li>
+      <li><svg class="ico"><use href="#i-phone"/></svg><a href="tel:+18582054786">+1 (858) 205-4786</a></li>
+      <li><svg class="ico"><use href="#i-pin"/></svg><span>13500 Evening Creek Dr, Suite 120, San Diego, CA</span></li></ul></div>
+    <div class="box contact"><h3>Energous</h3><ul>
+      <li><svg class="ico"><use href="#i-net"/></svg><a href="https://energous.com">energous.com</a></li>
+      <li><svg class="ico"><use href="#i-phone"/></svg><a href="tel:+14089630200">+1 (408) 963-0200</a></li>
+      <li><svg class="ico"><use href="#i-mail"/></svg><span><a href="mailto:PR@energous.com">PR@energous.com</a> (prensa)</span></li>
+      <li><svg class="ico"><use href="#i-pin"/></svg><span>3590 N 1st St., Suite 210, San Jose, CA</span></li></ul></div>
+    <div class="box contact"><h3>Atmosic</h3><ul>
+      <li><svg class="ico"><use href="#i-net"/></svg><a href="https://atmosic.com">atmosic.com</a></li>
+      <li><svg class="ico"><use href="#i-phone"/></svg><a href="tel:+14087240741">+1 (408) 724-0741</a></li>
+      <li><svg class="ico"><use href="#i-pin"/></svg><span>2105 S Bascom Ave, Campbell, CA</span></li></ul></div>
+  </div>
+  <p class="muted gap">Los teléfonos provienen de directorios empresariales y pueden estar desactualizados; confirmar en la web oficial. Horario del Pacífico (5 h menos que Argentina en noviembre).</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<!-- ===== 8. Fuentes ===== -->
+<article class="frame slide s10" data-sec="10"><div class="card" data-n="10"><div class="scroll"><div class="in">
+  <p class="kicker">10 · Fuentes</p>
+  <h2>Fuentes: <em>IoT Pixels y Ambient IoT</em></h2>
+  <ol class="sources">
+    <li><a href="https://www.wiliot.com/product/iot-pixels">Wiliot – IoT Pixels</a></li>
+    <li><a href="https://wiliot.com/llms.txt">Wiliot – Plataforma</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Wiliot">Wikipedia – Wiliot</a></li>
+    <li><a href="https://iotm2mcouncil.org/iot-library/news/iot-newsdesk/wiliot-takes-iot-pixel-to-third-generation/">IoT M2M Council – Gen3</a></li>
+    <li><a href="https://www.sdcexec.com/home/news/22957782/wiliot-wiliot-unveils-iot-pixel">SDCExec – Wiliot Unveils IoT Pixel</a></li>
+    <li><a href="https://help.mikrotik.com/docs/spaces/ROS/pages/367919113/Wiliot">MikroTik – Wiliot</a></li>
+    <li><a href="https://www.eenewseurope.com/en/iot-starter-kit-available-to-revolutionize-supply-chain/">eeNews Europe – Starter kit</a></li>
+    <li><a href="https://www.businesswire.com/news/home/20220518005155/en/">Business Wire – Battery-Assisted IoT Pixel</a></li>
+    <li><a href="https://www.fiercesensors.com/iot-wireless/wiliot-aims-to-boost-iot-via-lower-costs-smart-pixels-sensing-as-a-service">Fierce Sensors</a></li>
+    <li><a href="https://www.frost.com/?p=73446">Frost &amp; Sullivan</a></li>
+    <li><a href="https://panqingrui.github.io/homepage/blog/2026/passive-tags-rfid-future/">The Future of Passive Tags – RFID vs A-IoT</a></li>
+    <li><a href="https://www.ynetnews.com/tech-and-digital/article/sk8hq12dze">Ynet News</a></li>
+    <li><a href="https://stockanalysis.com/private/wiliot/">StockAnalysis – Wiliot</a></li>
+    <li><a href="https://foodindustryexecutive.com/?p=16972">Food Industry Executive – Works with Wiliot</a></li>
+    <li><a href="https://convergedigest.com/ambient-iot-alliance-targets-battery-free-wireless-connectivity/?amp=1">Converge Digest – Ambient IoT Alliance</a></li>
+    <li><a href="https://www.cbinsights.com/compare/atmosic-vs-psikick">CB Insights – Atmosic vs Everactive</a></li>
+    <li><a href="https://startupintros.com/orgs/atmosic-technologies">StartupIntros – Atmosic</a></li>
+    <li><a href="https://ir.energous.com/news-releases/news-release-details/energous-introduces-battery-free-e-sense-tag-establishing-first">Energous – e-Sense</a></li>
+    <li><a href="https://www.pulse.bot/hardware/news/paragon-id-dracula-technologies-to-scale-light-powered-ble-tags-ef8acc76-bcd3-4f84-a3a2-4fe85d7f1779/">Paragon ID y Dracula Technologies</a></li>
+    <li><a href="https://www.zoominfo.com/c/wiliot/425705037">ZoomInfo – Wiliot</a></li>
+    <li><a href="https://www.neverbounce.com/company/energous/358818028">NeverBounce – Energous</a></li>
+    <li><a href="https://www.datanyze.com/people/Dylan-Ko/1885027536">Datanyze – Atmosic</a></li>
+  </ol>
+  <p class="muted gap">Investigación compilada el 3 de noviembre de 2026.</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s10" data-sec="10"><div class="card" data-n="10"><div class="scroll"><div class="in">
+  <p class="kicker">10 · Fuentes</p>
+  <h2>Fuentes: <em>RFID por rubro</em></h2>
+  <p class="muted">Del informe "RFID por rubro: usos, activos y problemáticas" (3 de noviembre de 2026). Todas fueron abiertas salvo la Resolución AGP 37/2019, que el sitio no permitió leer por completo.</p>
+  <div class="srcgroups">
+    <section><h3>Argentina</h3><ul>
+      <li><a href="https://bichosdecampo.com/que-no-se-corte-se-comenzo-a-exigir-a-los-frigorificos-la-trazabilidad-en-la-faena-vacuna-para-prolongar-la-cadena-iniciada-pr-los-criadores-con-la-caravana-electronica-puesta-a-los-terneros/">Bichos de Campo: obligación en frigoríficos y Resolución 40/2026</a></li>
+      <li><a href="https://www.argentina.gob.ar/normativa/nacional/norma-281264/texto">SENASA: Resolución 678-E/2017</a></li>
+      <li><a href="https://news.agrofy.com.ar/noticia/214613/se-reglamento-uso-caravana-electronica-2026-como-se-debe-aplicar-e-informar-senasa">Agrofy: Resolución 841/2025</a></li>
+      <li><a href="https://paho.org/sites/default/files/Panel-D-1.pdf">ANMAT en OPS: trazabilidad de medicamentos</a></li>
+      <li><a href="https://www.rfidjournal.com/?p=154248">RFID Journal: Sanatorio Finochietto</a></li>
+      <li><a href="https://mase.lmneuquen.com/mineria/argentina-uno-uno-los-proyectos-mineros-que-ya-estan-construccion-n1246226">LM Neuquén: proyectos mineros</a></li>
+      <li><a href="https://www.seatrade-maritime.com/ports-logistics/exolgan-terminal-in-argentina-to-nearly-double-capacity">Seatrade: ampliación de Exolgan</a></li>
+      <li><a href="https://www.globalpsa.com/?p=6113">PSA: Puerto del Futuro de Exolgan</a></li>
+      <li><a href="https://www.boletinoficial.gob.ar/detalleAviso/primera/203625/20190319">Boletín Oficial: Resolución AGP 37/2019</a></li>
+      <li><a href="https://eleconomista.com.ar/autos/ahora-0-km-salen-concesionario-telepase-n92844/amp">El Economista: TelePASE y Free Flow</a></li></ul></section>
+    <section><h3>Laboratorio y salud</h3><ul>
+      <li><a href="https://news.mayocliniclabs.com/2021/03/29/enhanced-technology-safeguards-patient-specimens/">Mayo Clinic Laboratories</a></li>
+      <li><a href="https://www3.hidglobal.com/sites/default/files/resource_files/cc-idt-cryogatt-cs-en.pdf">HID y Cryogatt: criopreservación</a></li>
+      <li><a href="https://www.pharmtech.com/view/use-rfid-asset-management-systems-monitoring-analytical-instrumentation">PharmTech: instrumental analítico</a></li>
+      <li><a href="https://www.rfidjournal.com/?p=221662">RFID Journal: hospital de Portugal</a></li>
+      <li><a href="https://www.gs1uk.org/sites/default/files/Session_4._Dr_Malcolm_Phillips_Improving_patient_safety_and_financial_efficiency_with_RFID_in_NHS_Lothian.pdf">NHS Lothian y GS1 UK</a></li>
+      <li><a href="https://www.rfidjournal.com/?p=71704">RFID Journal: instrumental quirúrgico</a></li></ul></section>
+    <section><h3>Financiero</h3><ul>
+      <li><a href="https://www.rfidjournal.com/?p=82046">RFID Journal: Bank of America</a></li>
+      <li><a href="https://www.rfidjournal.com/?p=76828">RFID Journal: usos en bancos</a></li></ul></section>
+    <section><h3>Minería y puertos</h3><ul>
+      <li><a href="https://www3-realm.cisco.com/web/strategy/materials-mining/downloads/c36-goldcorp-cs.pdf">Cisco: Goldcorp Éléonore</a></li>
+      <li><a href="https://im-mining.com/?p=26816">International Mining: pañol con RFID</a></li>
+      <li><a href="https://patents.justia.com/patent/8890672">Patente US 8.890.672</a></li>
+      <li><a href="https://www.rfidjournal.com/?p=75247">RFID Journal: Hazira</a></li>
+      <li><a href="https://cache.techmahindra.com/static/img/pdf/rfid-for-Ports_PoV.pdf">Tech Mahindra: RFID en puertos</a></li></ul></section>
+    <section><h3>Frigoríficos y transportes</h3><ul>
+      <li><a href="https://pepperl-fuchs.com/usa/en/28859.htm">Pepperl+Fuchs: planta cárnica</a></li>
+      <li><a href="https://ampc.com.au/media/0ackqgrr/ampc_2021-1191_snapshot.pdf">AMPC: revisión de RFID en la industria cárnica</a></li>
+      <li><a href="https://www.rfidjournal.com/?p=68457">RFID Journal: cajones de Reynolds</a></li>
+      <li><a href="https://palletenterprise.com/?p=6101">Pallet Enterprise: control de retornables</a></li>
+      <li><a href="https://www.rfidjournal.com/?p=83568">RFID Journal: neumáticos de Lee Ting San</a></li>
+      <li><a href="https://www.phocuswire.com/Can-artificial-intelligence-make-baggage-tracking-better">PhocusWire: equipaje en Hong Kong</a></li></ul></section>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+</div>
+</main>
+
+<nav class="bar" aria-label="Navegación de la presentación">
+  <button id="ovBtn" aria-label="Vista general (O)" title="Vista general (O)"><svg class="ico"><use href="#i-ov"/></svg></button>
+  <button id="prev" aria-label="Anterior (←)" title="Anterior (←)"><svg class="ico"><use href="#i-left"/></svg></button>
+  <div class="where" aria-live="polite"><span id="secName">Inicio</span><span id="count">1 / 1</span></div>
+  <button id="next" aria-label="Siguiente (→)" title="Siguiente (→)"><svg class="ico"><use href="#i-right"/></svg></button>
+  <button id="fs" aria-label="Pantalla completa (F)" title="Pantalla completa (F)"><svg class="ico"><use href="#i-fs"/></svg></button>
+</nav>
+<div class="toast" id="toast"></div>
+<noscript>Esta presentación necesita JavaScript para funcionar.</noscript>
+
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const root = document.documentElement, body = document.body;
+  const stage = $('#stage'), world = $('#world'), grid = $('#grid'), ov = $('#ov'), route = $('#route');
+  const secs = [...document.querySelectorAll('.sec')];
+  const slides = [...document.querySelectorAll('.slide')];
+  const frames = [ov, ...secs, ...slides];
+
+  // Copia el encabezado de cada columna a sus celdas para la vista de celular
+  document.querySelectorAll('.tbl').forEach(t => {
+    const heads = [...t.querySelectorAll('.hd > div')].map(h => h.textContent.trim());
+    t.querySelectorAll('.row:not(.hd)').forEach(r => [...r.children].forEach((c, i) => c.dataset.l = heads[i]));
+  });
+  const ROT = [-6, 4, -3, 5, -4, 3, -5, 4, -3, 5];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Recorrido: vista general → cada círculo y sus diapositivas → vista general
+  const bySec = secs.map(sec => slides.filter(s => s.dataset.sec === sec.dataset.sec));
+  const stops = [ov];
+  secs.forEach((sec, i) => stops.push(sec, ...bySec[i]));
+  stops.push(ov);
+  const last = stops.length - 1;
+
+  let W, H, cur = 0, peek = false, raf = 0;
+  let cam = { x: 0, y: 0, w: 1, r: 0 };
+
+  // Cada marco mide lo mismo que la pantalla y se ubica en el lienzo con posición, escala y giro
+  function place(f, x, y, s, r) {
+    f._g = { x, y, s, r };
+    f.style.transform = `translate(${x - W / 2}px,${y - H / 2}px) rotate(${r}deg) scale(${s})`;
+  }
+
+  function layout() {
+    W = stage.clientWidth; H = stage.clientHeight;
+    const portrait = W / H < 0.9, D = 0.9 * Math.min(W, H);
+    body.classList.toggle('portrait', portrait);
+    root.style.setProperty('--W', W + 'px');
+    root.style.setProperty('--H', H + 'px');
+    root.style.setProperty('--D', D + 'px');
+    root.style.setProperty('--G', Math.ceil(2 * Math.hypot(W, H)) + 'px');
+    place(ov, W / 2, H / 2, 1, 0);
+
+    // Horizontal: los temas en una elipse alrededor del título. Vertical: un panal de filas de 3 y 2.
+    const N = secs.length, pts = [];
+    let d;
+    if (portrait) {
+      const rows = [];
+      for (let left = N; left > 0; left -= rows[rows.length - 1]) rows.push(Math.min(left, rows.length % 2 ? 2 : 3));
+      const top = 0.3 * H, rowH = (0.87 * H - top) / rows.length;
+      rows.forEach((c, r) => {
+        for (let j = 0; j < c; j++) pts.push([W / 2 + (j - (c - 1) / 2) * 0.32 * W, top + rowH * (r + 0.5)]);
+      });
+      d = Math.min(0.29 * W, 0.9 * Math.hypot(0.16 * W, rowH));
+    } else {
+      for (let i = 0; i < N; i++) {
+        const a = (-90 - 180 / N + 360 / N * i) * Math.PI / 180;
+        pts.push([W / 2 + 0.385 * W * Math.cos(a), 0.47 * H + 0.35 * H * Math.sin(a)]);
+      }
+      d = Math.min(0.16 * W, 0.25 * H) * Math.min(1, 8.5 / N);
+    }
+    secs.forEach((sec, i) => {
+      const [cx, cy] = pts[i], rot = ROT[i % ROT.length], th = rot * Math.PI / 180, R = d / 2;
+      place(sec, cx, cy, d / D, rot);
+
+      // Miniaturas de las diapositivas en la mitad inferior del círculo
+      const list = bySec[i], n = list.length, gx = 0.14 * W, gy = 0.14 * H;
+      let best = { s: 0 };
+      for (let c = 1; c <= n; c++) {
+        const r = Math.ceil(n / c);
+        const s = Math.min(1.4 * R / (c * W + (c - 1) * gx), 0.54 * R / (r * H + (r - 1) * gy));
+        if (s > best.s) best = { c, r, s };
+      }
+      const { c: cols, r: rows, s } = best;
+      list.forEach((sl, k) => {
+        const row = Math.floor(k / cols), inRow = Math.min(cols, n - row * cols), col = k - row * cols;
+        const ox = (col - (inRow - 1) / 2) * (W + gx) * s;
+        const oy = 0.31 * R + (row - (rows - 1) / 2) * (H + gy) * s;
+        place(sl, cx + ox * Math.cos(th) - oy * Math.sin(th), cy + ox * Math.sin(th) + oy * Math.cos(th), s, rot);
+      });
+    });
+
+    // Camino punteado que une los temas (cerrado en horizontal, en zigzag en vertical)
+    const P = portrait ? pts : [...pts, pts[0]], at = j => P[Math.max(0, Math.min(P.length - 1, j))];
+    let path = `M${P[0]}`;
+    for (let j = 0; j < P.length - 1; j++) {
+      const p0 = portrait ? at(j - 1) : P[(j - 1 + pts.length) % pts.length], p1 = P[j], p2 = P[j + 1];
+      const p3 = portrait ? at(j + 2) : P[(j + 2) % pts.length];
+      path += ` C${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2}`;
+    }
+    route.setAttribute('d', path);
+  }
+
+  const camFor = f => ({ x: f._g.x, y: f._g.y, w: W * f._g.s, r: f._g.r });
+
+  function apply(c) {
+    const k = W / c.w, t = -c.r * Math.PI / 180, a = Math.cos(t) * k, b = Math.sin(t) * k;
+    world.style.transform = `matrix(${a},${b},${-b},${a},${W / 2 - a * c.x + b * c.y},${H / 2 - b * c.x - a * c.y})`;
+    // Grilla de puntos "infinita": tres capas que se funden según el nivel de zoom
+    const L = Math.log2(k), fr = L - Math.floor(L), base = 34 * 2 ** fr;
+    const G = Math.ceil(2 * Math.hypot(W, H)), sizes = [base, base * 2, base * 4];
+    grid.style.backgroundSize = sizes.map(s => `${s}px ${s}px`).join(',');
+    grid.style.backgroundPosition = sizes.map(s => `${G / 2 - c.x * k - s / 2}px ${G / 2 - c.y * k - s / 2}px`).join(',');
+    grid.style.setProperty('--a1', (fr * 0.12).toFixed(3));
+    grid.style.setProperty('--a3', ((1 - fr) * 0.12).toFixed(3));
+    grid.style.transform = `translate(-50%,-50%) rotate(${-c.r}deg)`;
+  }
+
+  // Trayectoria de zoom suave (van Wijk y Nuij): se aleja, se desplaza y se vuelve a acercar
+  function zoomPath([ux0, uy0, w0], [ux1, uy1, w1]) {
+    const rho = Math.SQRT2, dx = ux1 - ux0, dy = uy1 - uy0, d2 = dx * dx + dy * dy;
+    let S, fn;
+    if (d2 < 1e-12) {
+      S = Math.log(w1 / w0) / rho;
+      fn = t => [ux0 + t * dx, uy0 + t * dy, w0 * Math.exp(rho * t * S)];
+    } else {
+      const d1 = Math.sqrt(d2);
+      const b0 = (w1 * w1 - w0 * w0 + 4 * d2) / (2 * w0 * 2 * d1);
+      const b1 = (w1 * w1 - w0 * w0 - 4 * d2) / (2 * w1 * 2 * d1);
+      const r0 = Math.log(Math.sqrt(b0 * b0 + 1) - b0), r1 = Math.log(Math.sqrt(b1 * b1 + 1) - b1);
+      S = (r1 - r0) / rho;
+      fn = t => {
+        const s = t * S, c0 = Math.cosh(r0), u = w0 / (2 * d1) * (c0 * Math.tanh(rho * s + r0) - Math.sinh(r0));
+        return [ux0 + u * dx, uy0 + u * dy, w0 * c0 / Math.cosh(rho * s + r0)];
+      };
+    }
+    fn.ms = Math.abs(S) * 1000;
+    return fn;
+  }
+
+  function fly(to, instant) {
+    cancelAnimationFrame(raf);
+    if (instant || reduce) { cam = to; apply(cam); arrived(); return; }
+    const from = cam, path = zoomPath([from.x, from.y, from.w], [to.x, to.y, to.w]);
+    const dur = Math.min(1800, Math.max(650, path.ms * 0.85)), t0 = performance.now();
+    const step = now => {
+      const t = Math.min(1, (now - t0) / dur), e = t < .5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
+      const [x, y, w] = path(e);
+      cam = { x, y, w, r: from.r + (to.r - from.r) * e };
+      apply(cam);
+      if (t < 1) raf = requestAnimationFrame(step);
+      else { cam = to; apply(cam); arrived(); }
+    };
+    raf = requestAnimationFrame(step);
+  }
+
+  const view = () => peek ? ov : stops[cur];
+
+  function arrived() {
+    frames.forEach(f => {
+      const sc = f.querySelector('.scroll');
+      if (sc && f !== view()) sc.scrollTop = 0;
+    });
+    const card = view().querySelector('.card');
+    if (card) checkMore(card);
+  }
+
+  function checkMore(card) {
+    const sc = card.querySelector('.scroll');
+    card.classList.toggle('has-more', sc.scrollHeight - sc.scrollTop - sc.clientHeight > 8);
+  }
+  document.querySelectorAll('.scroll').forEach(sc => sc.addEventListener('scroll', () => checkMore(sc.parentElement), { passive: true }));
+
+  function sync() {
+    const active = view(), f = stops[cur];
+    frames.forEach(fr => {
+      fr.classList.toggle('active', fr === active);
+      const card = fr.querySelector('.card');
+      if (card) { card.inert = fr !== active; if (fr !== active) card.classList.remove('has-more'); }
+    });
+    const sec = f.dataset.sec ? secs[f.dataset.sec - 1] : null;
+    body.classList.toggle('peek', peek);
+    body.classList.toggle('at-end', cur === last);
+    body.style.setProperty('--c', sec ? getComputedStyle(sec).getPropertyValue('--c').trim() : '#2dd4bf');
+    $('#secName').textContent = peek ? 'Vista general' : sec ? sec.dataset.name : cur === 0 ? 'Inicio' : 'Fin';
+    $('#count').textContent = `${cur + 1} / ${stops.length}`;
+    root.style.setProperty('--p', (cur / last * 100).toFixed(2) + '%');
+    $('#prev').disabled = cur === 0 && !peek;
+    $('#next').disabled = cur === last && !peek;
+    history.replaceState(null, '', '#' + (cur + 1));
+  }
+
+  function go(i) {
+    cur = Math.max(0, Math.min(last, i));
+    peek = false;
+    hideToast();
+    sync();
+    fly(camFor(stops[cur]));
+  }
+  const next = () => go(cur + 1);
+  const prev = () => go(peek ? cur : cur - 1);
+  function togglePeek() {
+    if (peek || cur === 0 || cur === last) return go(cur);
+    peek = true;
+    sync();
+    fly(camFor(ov));
+  }
+  function toggleFs() {
+    if (!document.fullscreenEnabled) return;
+    document.fullscreenElement ? document.exitFullscreen() : root.requestFullscreen();
+  }
+
+  $('#next').addEventListener('click', next);
+  $('#prev').addEventListener('click', prev);
+  $('#ovBtn').addEventListener('click', togglePeek);
+  $('#fs').addEventListener('click', toggleFs);
+  if (!document.fullscreenEnabled) $('#fs').hidden = true;
+
+  // Tocar un círculo o una miniatura lleva directo ahí
+  world.addEventListener('click', e => {
+    const f = e.target.closest('.sec, .slide');
+    if (!f || (!peek && f === stops[cur])) return;
+    go(stops.indexOf(f));
+  });
+
+  addEventListener('keydown', e => {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    const k = e.key, onButton = document.activeElement && document.activeElement.matches('button, a');
+    if ((k === ' ' || k === 'Enter') && onButton) return;
+    if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(k)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(k)) { e.preventDefault(); prev(); }
+    else if (k === 'Home') go(0);
+    else if (k === 'End') go(last);
+    else if (k === 'Escape' || k === 'o' || k === 'O') togglePeek();
+    else if (k === 'f' || k === 'F') toggleFs();
+  });
+
+  // Deslizar a los costados para avanzar o retroceder; el deslizamiento vertical hace scroll
+  let sx = null, sy = 0;
+  stage.addEventListener('touchstart', e => {
+    if (e.touches.length !== 1) { sx = null; return; }
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+  }, { passive: true });
+  stage.addEventListener('touchend', e => {
+    if (sx === null) return;
+    const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+    sx = null;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.4) dx < 0 ? next() : prev();
+  }, { passive: true });
+
+  let rt;
+  addEventListener('resize', () => {
+    clearTimeout(rt);
+    rt = setTimeout(() => { layout(); fly(camFor(view()), true); }, 120);
+  });
+
+  const toast = $('#toast');
+  let toastTimer;
+  function hideToast() { clearTimeout(toastTimer); toast.classList.add('hide'); }
+  toast.textContent = matchMedia('(pointer: coarse)').matches
+    ? 'Deslizá ← → para avanzar · tocá un tema para ir directo'
+    : 'Usá ← → o la barra espaciadora · O para la vista general';
+
+  layout();
+  const h = parseInt(location.hash.slice(1), 10);
+  cur = h >= 1 && h <= stops.length ? h - 1 : 0;
+  sync();
+  cam = { x: W / 2, y: H / 2, w: W * 2.6, r: -12 };
+  apply(cam);
+  fly(camFor(stops[cur]));
+  toastTimer = setTimeout(hideToast, 5000);
+})();
+</script>
+</body>
+</html>
