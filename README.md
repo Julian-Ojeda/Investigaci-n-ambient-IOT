@@ -20,7 +20,7 @@ Los precios son de revendedores y fabricantes, consultados en noviembre de 2026.
 
 ## 2. RFID: aplicaciones por rubro · [`rfid-rubros.html`](rfid-rubros.html)
 
-Investigación de mercado sobre posibles aplicaciones de RFID en siete rubros, sin un orden de prioridad: salud, transportes, minería, frigoríficos, financiero, laboratorio y terminales portuarias. Para cada rubro incluye los activos que se pueden controlar, sus etapas de seguimiento, casos públicos y puntos a tener en cuenta.
+Investigación de mercado sobre posibles aplicaciones de RFID en siete rubros, sin un orden de prioridad: salud, transportes, minería, frigoríficos, financiero, laboratorio y terminales portuarias. Para cada rubro incluye los activos que se pueden controlar, aplicaciones específicas, etapas de seguimiento, casos públicos y un FODA desde la perspectiva de ofrecer RFID en Argentina.
 
 ## Cómo usarlas
 

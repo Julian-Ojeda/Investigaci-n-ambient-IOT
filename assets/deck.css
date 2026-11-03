@@ -301,4 +301,16 @@ noscript { position: fixed; inset: auto 16px 16px; z-index: 9; padding: 1em; bor
 .prio.apps dl { grid-template-columns: 1fr; gap: 0; }
 .prio.apps dt { margin-top: .55em; font-size: .72em; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
 .prio.apps header { margin-bottom: .1em; }
+.apps-grid { font-size: .84em; gap: clamp(8px, 1.2vmin, 14px); }
+.app { display: flex; flex-direction: column; background: var(--card); padding: clamp(12px, 1.8vmin, 20px); }
+.app h3 { margin-bottom: .3em; font-family: var(--serif); font-size: 1.12em; }
+.app p { margin: 0 0 .6em; color: var(--soft); }
+.app .dato { margin: auto 0 0; padding-top: .55em; border-top: 1px solid var(--line); font-size: .9em; color: var(--muted); }
+.foda { font-size: .88em; gap: clamp(8px, 1.2vmin, 14px); }
+.foda .q { background: var(--card); border-top: 3px solid var(--qc); padding: clamp(12px, 1.8vmin, 20px); }
+.foda .q h3 { color: var(--qc); font-size: .8em; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .2em; }
+.foda .q ul.list li { margin: .35em 0; }
+.foda .q ul.list li::before { background: var(--qc); }
+.foda .f { --qc: #2b6a59; } .foda .d { --qc: #8f6416; } .foda .o { --qc: #1f4e6e; } .foda .a { --qc: #8a3b32; }
+@media (max-width: 1100px) { .apps-grid { --cols: 2 !important; } }
 @media (max-width: 760px) { .bar button, .bar .home { width: 40px; height: 40px; } }
