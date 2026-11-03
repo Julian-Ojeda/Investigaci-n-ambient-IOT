@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IoT Pixels y Ambient IoT</title>
+<meta name="description" content="Presentación: qué son los IoT Pixels, cómo se comparan con RFID, cuánto cuestan y quién los provee.">
+<meta name="theme-color" content="#ecebe6">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
+  <symbol id="i-chip" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v4M15 1v4M9 19v4M15 19v4M1 9h4M1 15h4M19 9h4M19 15h4"/></symbol>
+  <symbol id="i-bt" viewBox="0 0 24 24"><path d="m6.5 6.5 11 11L12 23V1l5.5 5.5-11 11"/></symbol>
+  <symbol id="i-gw" viewBox="0 0 24 24"><rect x="2" y="14" width="20" height="7" rx="2"/><path d="M6 17.5h.01M10 17.5h.01M12 14V9"/><path d="M8.5 7.5a5 5 0 0 1 7 0M6 5a8.5 8.5 0 0 1 12 0"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></symbol>
+  <symbol id="i-temp" viewBox="0 0 24 24"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></symbol>
+  <symbol id="i-fill" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M5 12h14M5 16h14"/></symbol>
+  <symbol id="i-move" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 2.7 17.7 8.4a8 8 0 1 1-11.3 0z"/></symbol>
+  <symbol id="i-near" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.5M7.8 16.2a6 6 0 0 1 0-8.5M19.1 4.9a10 10 0 0 1 0 14.2M4.9 19.1a10 10 0 0 1 0-14.2"/></symbol>
+  <symbol id="i-net" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-ov" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="4.5" cy="6" r="1.6"/><circle cx="19.5" cy="6" r="1.6"/><circle cx="4.5" cy="18" r="1.6"/><circle cx="19.5" cy="18" r="1.6"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+  <symbol id="i-fs" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></symbol>
+</svg>
+
+<div class="progress"><i></i></div>
+
+<main id="stage">
+<div id="grid"></div>
+<div id="world">
+
+<!-- Vista general -->
+<div class="frame ov" id="ov">
+  <svg class="route" aria-hidden="true"><path id="route"/></svg>
+  <div class="ov-title">
+    <p class="eyebrow">Investigación · Noviembre 2026</p>
+    <h1>IoT Pixels <span class="y">y</span> <span class="g">Ambient IoT</span></h1>
+    <p class="ov-sub">Qué son, cómo se comparan con RFID, cuánto cuestan y quién los provee.</p>
+    <p class="ov-hint start">Tocá un tema o avanzá con → para empezar</p>
+    <p class="ov-hint end">¡Gracias! · ¿Preguntas?</p>
+  </div>
+</div>
+
+<!-- Círculos de cada sección -->
+<div class="frame sec" data-sec="1" data-name="Qué son los IoT Pixels"><button class="circle" aria-label="Ir a: Qué son los IoT Pixels"><span class="c-num">01</span><span class="c-title">Qué son</span><span class="c-sub">Etiquetas sin batería del tamaño de una estampilla</span></button></div>
+<div class="frame sec" data-sec="2" data-name="La tecnología: Ambient IoT"><button class="circle" aria-label="Ir a: La tecnología: Ambient IoT"><span class="c-num">02</span><span class="c-title">Ambient IoT</span><span class="c-sub">Cómo se llama la tecnología y quién la estandariza</span></button></div>
+<div class="frame sec" data-sec="3" data-name="Comparación con RFID"><button class="circle" aria-label="Ir a: Comparación con RFID"><span class="c-num">03</span><span class="c-title">vs RFID</span><span class="c-sub">Frente a frente con el RFID pasivo UHF</span></button></div>
+<div class="frame sec" data-sec="4" data-name="Costos: etiquetas, lectores y software"><button class="circle" aria-label="Ir a: Costos: etiquetas, lectores y software"><span class="c-num">04</span><span class="c-title">Costos</span><span class="c-sub">Precios de referencia de cada tecnología</span></button></div>
+<div class="frame sec" data-sec="5" data-name="Qué conviene por industria"><button class="circle" aria-label="Ir a: Qué conviene por industria"><span class="c-num">05</span><span class="c-title">Por industria</span><span class="c-sub">Qué tecnología conviene en cada sector</span></button></div>
+<div class="frame sec" data-sec="6" data-name="El proveedor: Wiliot"><button class="circle" aria-label="Ir a: El proveedor: Wiliot"><span class="c-num">06</span><span class="c-title">Wiliot</span><span class="c-sub">La empresa detrás de los IoT Pixels</span></button></div>
+<div class="frame sec" data-sec="7" data-name="Top 5 proveedores"><button class="circle" aria-label="Ir a: Top 5 proveedores"><span class="c-num">07</span><span class="c-title">Top 5</span><span class="c-sub">Los proveedores de Ambient IoT más sólidos</span></button></div>
+<div class="frame sec" data-sec="8" data-name="Contactos corporativos"><button class="circle" aria-label="Ir a: Contactos corporativos"><span class="c-num">08</span><span class="c-title">Contactos</span><span class="c-sub">A quién llamar y dónde escribir</span></button></div>
+<div class="frame sec" data-sec="9" data-name="Fuentes"><button class="circle" aria-label="Ir a: Fuentes"><span class="c-num">09</span><span class="c-title">Fuentes</span><span class="c-sub">Investigación y precios</span></button></div>
+
+<!-- ===== Qué son los IoT Pixels ===== -->
+<article class="frame slide" data-sec="1"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">01 · Qué son los IoT Pixels</p>
+  <h2>Pequeñas computadoras <em>sin batería</em></h2>
+  <p class="lead">Los <strong>IoT Pixels</strong> son un producto de <strong>Wiliot</strong>, empresa israelí de "ambient IoT". Son etiquetas del tamaño de una estampilla que funcionan como pequeñas computadoras sin batería; se pegan o integran en productos, cajas o pallets para saber <strong>dónde están</strong> y <strong>en qué condiciones</strong>.</p>
+  <ul class="chips">
+    <li>Producto de Wiliot</li><li>Tamaño estampilla</li><li>Sin batería</li><li>En productos, cajas o pallets</li>
+  </ul>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="1"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">01 · Qué son los IoT Pixels</p>
+  <h2>Cómo <em>funcionan</em></h2>
+  <ol class="flow">
+    <li><span class="badge"><svg class="ico"><use href="#i-zap"/></svg></span><span class="step">PASO 1</span><h3>Energía por radio</h3><p>Un <em>bridge</em> o <em>energizer</em> les transmite energía por ondas de radio, a distancia.</p></li>
+    <li><span class="badge"><svg class="ico"><use href="#i-chip"/></svg></span><span class="step">PASO 2</span><h3>Cosecha</h3><p>El Pixel se alimenta cosechando las ondas de radio del ambiente: no usa batería.</p></li>
+    <li><span class="badge"><svg class="ico"><use href="#i-bt"/></svg></span><span class="step">PASO 3</span><h3>Señal Bluetooth</h3><p>Transmite una señal Bluetooth estándar, tipo beacon.</p></li>
+    <li><span class="badge"><svg class="ico"><use href="#i-gw"/></svg></span><span class="step">PASO 4</span><h3>Gateway</h3><p>Un gateway recibe la señal y la envía a la nube de Wiliot.</p></li>
+    <li><span class="badge"><svg class="ico"><use href="#i-cloud"/></svg></span><span class="step">PASO 5</span><h3>Plataforma con IA</h3><p>La Wiliot Intelligence Platform convierte los datos en visibilidad continua e inteligencia operativa.</p></li>
+  </ol>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="1"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">01 · Qué son los IoT Pixels</p>
+  <h2>Qué pueden <em>medir</em></h2>
+  <ul class="tiles">
+    <li><svg class="ico"><use href="#i-temp"/></svg>Temperatura</li>
+    <li><svg class="ico"><use href="#i-fill"/></svg>Nivel de llenado</li>
+    <li><svg class="ico"><use href="#i-move"/></svg>Movimiento</li>
+    <li><svg class="ico"><use href="#i-pin"/></svg>Ubicación</li>
+    <li><svg class="ico"><use href="#i-drop"/></svg>Humedad</li>
+    <li><svg class="ico"><use href="#i-near"/></svg>Proximidad</li>
+  </ul>
+  <h3 class="gap">Ventajas</h3>
+  <ul class="list check">
+    <li><strong>Sin batería:</strong> ventajas en tamaño, costo y mantenimiento.</li>
+    <li>Vida útil prácticamente ilimitada; se pueden <strong>embeber en los productos</strong>.</li>
+    <li>Infraestructura de lectura mínima y de bajo costo.</li>
+  </ul>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="1"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">01 · Qué son los IoT Pixels</p>
+  <h2>Variantes y <em>evolución</em></h2>
+  <div class="grid" style="--cols:3">
+    <div class="box"><h3>Battery-Free</h3><p>La principal. Tamaño estampilla, <strong>~10 m</strong> de alcance.</p></div>
+    <div class="box"><h3>Battery-Assisted</h3><p>Tamaño tarjeta, con batería impresa. No necesita bridges y cuesta <strong>menos de US$2</strong>.</p></div>
+    <div class="box"><h3>Gen3 · enero 2026</h3><p>Más alcance, <strong>dual band</strong> y menor costo.</p></div>
+  </div>
+  <p class="gap">Fabricantes de las etiquetas: <strong>Avery Dennison</strong>, <strong>Identiv</strong> y <strong>Tageos</strong>.</p>
+  <div class="note"><b>Ojo:</b> "IoT Pixel" a veces se usa para otras cosas (como el PIXO Pixel, un display LED con ESP32). En contexto profesional casi siempre se refiere a Wiliot.</div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<!-- ===== La tecnología: Ambient IoT ===== -->
+<article class="frame slide" data-sec="2"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">02 · La tecnología</p>
+  <h2>La tecnología se llama <em>Ambient IoT</em></h2>
+  <p class="lead">A-IoT, o "IoT ambiental". <strong>"IoT Pixel"</strong> es el nombre comercial del producto de Wiliot.</p>
+  <div class="grid">
+    <div class="box"><span class="badge"><svg class="ico"><use href="#i-zap"/></svg></span><h3>RF energy harvesting</h3><p>La etiqueta obtiene energía de las ondas de radio del entorno en lugar de usar batería ("battery-free").</p></div>
+    <div class="box"><span class="badge"><svg class="ico"><use href="#i-bt"/></svg></span><h3>Bluetooth Low Energy</h3><p>Protocolo con el que transmite los datos a gateways, access points o celulares.</p></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="2"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">02 · La tecnología</p>
+  <h2>No es exclusivo de <em>Wiliot</em></h2>
+  <p class="lead">Ambient IoT se está estandarizando y ya tiene una alianza de industria.</p>
+  <div class="grid" style="--cols:3">
+    <div class="box"><h3>3GPP</h3><p>Dentro de 5G Advanced, reutilizando las redes móviles.</p></div>
+    <div class="box"><h3>Bluetooth SIG</h3><p>El organismo que define el estándar Bluetooth.</p></div>
+    <div class="box"><h3>Ambient IoT Alliance</h3><p>Fundada en 2025 por:</p>
+      <ul class="chips"><li>Intel</li><li>Qualcomm</li><li>Infineon</li><li>PepsiCo</li><li>Atmosic</li><li>VusionGroup</li><li>Wiliot</li></ul></div>
+  </div>
+  <p class="muted gap">Tip de búsqueda: "Ambient IoT" es el término que más bibliografía devuelve.</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<!-- ===== Comparación con RFID ===== -->
+<article class="frame slide" data-sec="3"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">03 · Comparación con RFID</p>
+  <h2>Qué es cada una</h2>
+  <p class="muted">Se compara con <strong>RFID pasivo UHF</strong>, el competidor directo en retail y logística.</p>
+  <div class="cmp">
+    <div class="row hd"><div class="lbl"></div><div class="a">RFID pasivo (UHF)</div><div class="b">IoT Pixel (Wiliot)</div></div>
+    <div class="row"><div class="lbl">Qué es</div><div class="a">Etiqueta con chip y antena que devuelve un ID cuando un lector la "ilumina"</div><div class="b">Etiqueta con chip, sensores y antena que transmite datos por Bluetooth</div></div>
+    <div class="row"><div class="lbl">Energía</div><div class="a">La del lector, solo durante la lectura</div><div class="b">Cosecha ondas de radio del entorno; versión con batería opcional</div></div>
+    <div class="row"><div class="lbl">Protocolo</div><div class="a">EPC Gen2 / ISO 18000-63 (~860–960 MHz)</div><div class="b">Bluetooth Low Energy (2,4 GHz)</div></div>
+    <div class="row"><div class="lbl">Datos</div><div class="a">Principalmente un identificador</div><div class="b">ID + sensado: temperatura, ubicación, movimiento, humedad, nivel</div></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="3"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">03 · Comparación con RFID</p>
+  <h2>Lectura, alcance y <em>costos</em></h2>
+  <div class="cmp">
+    <div class="row hd"><div class="lbl"></div><div class="a">RFID pasivo (UHF)</div><div class="b">IoT Pixel (Wiliot)</div></div>
+    <div class="row"><div class="lbl">Modo de lectura</div><div class="a">Por eventos: portal o escaneo</div><div class="b">Continuo, sin escanear</div></div>
+    <div class="row"><div class="lbl">Alcance</div><div class="a">Pocos metros hasta ~10 m</div><div class="b">~10 m</div></div>
+    <div class="row"><div class="lbl">Costo etiqueta</div><div class="a">~US$0,03–0,25, según formato y volumen</div><div class="b">~US$0,10 según Wiliot; con batería, menos de US$2</div></div>
+    <div class="row"><div class="lbl">Infraestructura</div><div class="a">Lectores dedicados: de mano desde ~US$900; fijos desde ~US$1.400, más antenas e instalación</div><div class="b">Bridges y gateways Bluetooth (Wiliot no publica precios), celulares o equipos existentes</div></div>
+  </div>
+  <p class="muted gap">El detalle de precios está en la sección 04.</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="3"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">03 · Comparación con RFID</p>
+  <h2>Escala, madurez y <em>entorno</em></h2>
+  <div class="cmp">
+    <div class="row hd"><div class="lbl"></div><div class="a">RFID pasivo (UHF)</div><div class="b">IoT Pixel (Wiliot)</div></div>
+    <div class="row"><div class="lbl">Lectura masiva</div><div class="a">Su fuerte: miles de tags por minuto</div><div class="b">Más lenta; pensada para monitoreo continuo</div></div>
+    <div class="row"><div class="lbl">Madurez</div><div class="a">~30 años, estándares globales</div><div class="b">Tecnología joven, mayormente un solo proveedor</div></div>
+    <div class="row"><div class="lbl">Metal y líquidos</div><div class="a">Mal desempeño: el metal refleja la señal y los líquidos la absorben. Existen etiquetas especiales "on-metal", más caras y voluminosas</div><div class="b">Mal desempeño por la misma razón; funcionan mejor sobre cartón o papel</div></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="3"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">03 · Comparación con RFID</p>
+  <h2>La diferencia <em>de fondo</em></h2>
+  <div class="vs">
+    <div class="box rf"><span class="who">RFID responde</span><p class="q">"¿Pasó este objeto por acá?"</p></div>
+    <span class="sep">vs</span>
+    <div class="box px"><span class="who">IoT Pixel responde</span><p class="q">"¿Dónde está este objeto ahora y en qué condiciones?"</p></div>
+  </div>
+  <p class="lead">Las etiquetas cuestan parecido; la diferencia está en el <strong>costo total del sistema</strong> (infraestructura).</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="3"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">03 · Comparación con RFID</p>
+  <h2>Limitaciones de los <em>IoT Pixels</em></h2>
+  <ul class="list">
+    <li>Funcionan mejor sobre cartón o papel; metal y líquidos son un desafío (igual que para RFID).</li>
+    <li>Dependencia de la nube y plataforma de Wiliot (riesgo de <strong>lock-in</strong>).</li>
+    <li>Ecosistema mucho más chico que el de RFID.</li>
+  </ul>
+  <div class="note"><b>Tendencia:</b> más que reemplazarse, se espera que convivan. Wiliot ya ofrece etiquetas "dual band" y Avery Dennison, gigante del RFID, invirtió US$75 millones más en Wiliot en 2026.</div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<!-- ===== Costos: etiquetas, lectores y software ===== -->
+<article class="frame slide" data-sec="4"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">04 · Costos</p>
+  <h2>Costo de las <em>etiquetas</em></h2>
+  <div class="cmp dense">
+    <div class="row hd"><div class="lbl"></div><div class="a">RFID pasivo (UHF)</div><div class="b">IoT Pixel (Wiliot)</div></div>
+    <div class="row"><div class="lbl">Etiqueta estándar</div><div class="a">Sin imprimir (inlay): ~US$0,03–0,15 en alto volumen. Impresa: ~US$0,08–0,25.</div><div class="b">~US$0,10 sin batería, según Wiliot. La venden fabricantes socios (Avery Dennison, Identiv, Tageos), que fijan el precio final.</div></div>
+    <div class="row"><div class="lbl">Con batería</div><div class="a">No aplica al RFID pasivo.</div><div class="b">Menos de US$2 (precio anunciado en 2022).</div></div>
+    <div class="row"><div class="lbl">Para metal</div><div class="a">~US$0,50–1 en volumen; US$3–8 las industriales; más de US$10 las reforzadas para herramientas.</div><div class="b">Sin versión específica con precio público.</div></div>
+    <div class="row"><div class="lbl">Precio por volumen</div><div class="a">Entre 500–1.000 unidades y más de 100.000, el precio puede bajar 40–60%.</div><div class="b">Sin datos públicos.</div></div>
+  </div>
+  <p class="muted gap">Precios de lista de revendedores y fabricantes consultados en noviembre de 2026, en dólares, sin impuestos ni envío. Varían según modelo, formato y volumen: son una referencia, no una cotización.</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="4"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">04 · Costos</p>
+  <h2>Costo de los <em>lectores</em></h2>
+  <div class="cmp dense">
+    <div class="row hd"><div class="lbl"></div><div class="a">RFID pasivo (UHF)</div><div class="b">IoT Pixel (Wiliot)</div></div>
+    <div class="row"><div class="lbl">Lector de mano</div><div class="a">Zebra RFD40, que se acopla a un celular o terminal: ~US$900–1.000 el estándar; ~US$1.400–2.000 el premium.</div><div class="b">No requiere lector dedicado: un celular o un gateway Bluetooth recibe la señal. Los Pixels sin batería necesitan un bridge cerca que los energice.</div></div>
+    <div class="row"><div class="lbl">Punto de lectura fijo</div><div class="a">Lector Impinj R700 de 4 puertos: ~US$1.400–1.700. Cada antena (Zebra AN480): ~US$235–330. Más cableado e instalación.</div><div class="b">Bridges y gateways Bluetooth. Wiliot no publica precios; un gateway Bluetooth genérico (Minew G1) cuesta ~€60–70, sin compatibilidad con Wiliot confirmada.</div></div>
+    <div class="row"><div class="lbl">Codificar etiquetas</div><div class="a">Impresora/codificadora RFID (Zebra ZT411): ~US$3.400–4.300.</div><div class="b">Sin equipo equivalente identificado en fuentes públicas.</div></div>
+    <div class="row"><div class="lbl">Celular común</div><div class="a">No lee UHF: hace falta un lector tipo sled.</div><div class="b">Puede funcionar como gateway Bluetooth.</div></div>
+  </div>
+  <p class="muted gap">Precios de lista de revendedores y fabricantes consultados en noviembre de 2026, en dólares, sin impuestos ni envío. Varían según modelo, formato y volumen: son una referencia, no una cotización.</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="4"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">04 · Costos</p>
+  <h2>Software, suscripción y <em>prueba</em></h2>
+  <div class="cmp dense">
+    <div class="row hd"><div class="lbl"></div><div class="a">RFID pasivo (UHF)</div><div class="b">IoT Pixel (Wiliot)</div></div>
+    <div class="row"><div class="lbl">Software</div><div class="a">Estándar abierto (EPC Gen2): lectores y etiquetas de distintos fabricantes son compatibles y el software se elige aparte.</div><div class="b">Las etiquetas funcionan con la nube de Wiliot: etiqueta y software no se usan por separado.</div></div>
+    <div class="row"><div class="lbl">Costo recurrente</div><div class="a">Depende del software elegido; no hay un pago obligatorio por etiqueta.</div><div class="b">Suscripción. ABI Research estimó en 2022 ~US$0,10 por etiqueta por año para identificación, y del orden de US$0,15 más por cada función adicional. El precio actual no es público.</div></div>
+    <div class="row"><div class="lbl">Para probar</div><div class="a">Un lector de mano (desde ~US$900) y etiquetas de muestra.</div><div class="b">Starter Kit: US$500 (6 meses de nube, 10 Pixels y 2 bridges). Innovation Kit: US$150 (60 días de nube, 12 Pixels y 2 bridges).</div></div>
+    <div class="row"><div class="lbl">Proveedores</div><div class="a">Ecosistema amplio de fabricantes, con integradores locales.</div><div class="b">Una sola plataforma (Wiliot), sin distribuidor oficial en Argentina.</div></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="4"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">04 · Costos</p>
+  <h2>Ejemplo orientativo: <em>10.000 activos</em></h2>
+  <p class="muted">Cálculo propio con los precios de las diapositivas anteriores. Solo hardware, etiquetas y software: no incluye instalación, integración, impuestos ni costos de importación a Argentina.</p>
+  <div class="cmp dense">
+    <div class="row hd"><div class="lbl"></div><div class="a">RFID pasivo (UHF)</div><div class="b">IoT Pixel (Wiliot)</div></div>
+    <div class="row"><div class="lbl">10.000 etiquetas</div><div class="a">~US$300–2.500, de inlay a etiqueta impresa.</div><div class="b">~US$1.000.</div></div>
+    <div class="row"><div class="lbl">Un punto de lectura fijo</div><div class="a">~US$2.350–3.000 (lector y 4 antenas).</div><div class="b">Sin precio público de los bridges de Wiliot.</div></div>
+    <div class="row"><div class="lbl">Un lector de mano</div><div class="a">~US$900–2.000.</div><div class="b">Un celular o gateway, más bridges cerca de las etiquetas sin batería.</div></div>
+    <div class="row"><div class="lbl">Software por año</div><div class="a">Según el proveedor elegido.</div><div class="b">~US$1.000 más funciones adicionales (estimación de 2022).</div></div>
+  </div>
+  <p class="gap">En RFID el costo se concentra en lectores e instalación; en el IoT Pixel, en etiquetas y suscripción. Cuantos más puntos de lectura haga falta cubrir, más pesa el lector.</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<!-- ===== Qué conviene por industria ===== -->
+<article class="frame slide" data-sec="5"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">05 · Qué conviene por industria</p>
+  <h2>La regla <em>general</em></h2>
+  <div class="grid rule">
+    <div class="box rf"><span class="tag t-rfid">RFID</span><p class="big">para identificar muchos objetos rápido en puntos de paso.</p></div>
+    <div class="box px"><span class="tag t-pixel">IoT Pixel</span><p class="big">para conocer estado y ubicación de forma continua y barata.</p></div>
+  </div>
+  <p class="muted gap">En las próximas diapositivas: <span class="tag t-rfid">RFID</span> <span class="tag t-pixel">IoT Pixel</span> <span class="tag t-mix">Mixto</span></p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="5"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">05 · Por industria · 1 de 3</p>
+  <h2>Moda, alimentos, farma y <em>logística</em></h2>
+  <div class="grid ind">
+    <div class="box"><header><h3>Moda / indumentaria</h3><span class="tag t-rfid">RFID</span></header><p>Inventario de prendas: cientos de lecturas en segundos. No requiere sensado.</p></div>
+    <div class="box"><header><h3>Alimentos frescos y cadena de frío</h3><span class="tag t-pixel">IoT Pixel</span></header><p>Importa la temperatura durante todo el trayecto; reduce mermas.</p></div>
+    <div class="box"><header><h3>Farmacéutica / vacunas</h3><span><span class="tag t-pixel">IoT Pixel</span> <span class="tag t-mix">o mixto</span></span></header><p>Monitoreo térmico continuo; RFID para serialización de lotes.</p></div>
+    <div class="box"><header><h3>Logística / centros de distribución</h3><span class="tag t-mix">Mixto</span></header><p>RFID en andenes; Pixels para visibilidad de pallets dentro y fuera del depósito.</p></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="5"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">05 · Por industria · 2 de 3</p>
+  <h2>Retornables, retail, automotriz y <em>aeronáutico</em></h2>
+  <div class="grid ind">
+    <div class="box"><header><h3>Envases y activos retornables</h3><span class="tag t-pixel">IoT Pixel</span></header><p>Se pierden y circulan entre empresas; saber dónde están sin escanear.</p></div>
+    <div class="box"><header><h3>Supermercados / retail masivo</h3><span class="tag t-mix">Mixto → Pixel</span></header><p>RFID para inventario; Pixels para frescos y reposición en tiempo real.</p></div>
+    <div class="box"><header><h3>Automotriz / manufactura</h3><span class="tag t-rfid">RFID</span></header><p>Piezas en línea de producción con puntos de control. Ojo: sobre piezas metálicas ninguna de las dos funciona bien; con RFID hay que usar etiquetas especiales "on-metal".</p></div>
+    <div class="box"><header><h3>Aeronáutico</h3><span class="tag t-rfid">RFID</span></header><p>Estándares adoptados y lectura en puntos fijos.</p></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="5"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">05 · Por industria · 3 de 3</p>
+  <h2>Salud, agro, accesos y <em>consumo</em></h2>
+  <div class="grid ind">
+    <div class="box"><header><h3>Salud / hospitales</h3><span class="tag t-mix">Mixto</span></header><p>RFID para instrumental y acceso; Pixels/BLE para equipos móviles y condiciones.</p></div>
+    <div class="box"><header><h3>Agro / ganadería</h3><span class="tag t-rfid">RFID (LF)</span></header><p>Identificación animal estandarizada; estándar en trazabilidad bovina en Argentina.</p></div>
+    <div class="box"><header><h3>Accesos, peajes, bibliotecas</h3><span class="tag t-rfid">RFID</span></header><p>Identificación en un punto con infraestructura consolidada.</p></div>
+    <div class="box"><header><h3>Bienes de consumo conectados</h3><span class="tag t-pixel">IoT Pixel</span></header><p>Productos que interactúan con el celular del cliente por Bluetooth.</p></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="5"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">05 · Qué conviene por industria</p>
+  <h2>¿Cuál <em>conviene</em>?</h2>
+  <div class="grid">
+    <div class="box"><h3><span class="tag t-rfid">RFID</span> si…</h3><ul class="list check">
+      <li>El objetivo es contar o identificar, no medir.</li>
+      <li>Hay puntos de paso claros.</li>
+      <li>Se necesita lectura masiva rápida.</li>
+      <li>La industria ya tiene estándares RFID.</li></ul></div>
+    <div class="box"><h3><span class="tag t-pixel">IoT Pixel</span> si…</h3><ul class="list check">
+      <li>Importan las condiciones del producto.</li>
+      <li>Los objetos salen de lugares controlados.</li>
+      <li>Querés eliminar el escaneo manual.</li>
+      <li>El producto es perecedero o el activo es valioso.</li></ul></div>
+  </div>
+  <p class="muted gap">Análisis general basado en el uso típico de cada tecnología. En Argentina/LatAm, RFID tiene mucho más ecosistema local; los IoT Pixels todavía tienen poca adopción.</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<!-- ===== El proveedor: Wiliot ===== -->
+<article class="frame slide" data-sec="6"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">06 · El proveedor</p>
+  <h2>Quién es <em>Wiliot</em></h2>
+  <div class="stats">
+    <div class="stat"><b>2017</b><span>Fundada en Israel</span></div>
+    <div class="stat"><b>US$200M</b><span>Ronda de 2021 con SoftBank</span></div>
+    <div class="stat"><b>SaaS</b><span>Su negocio central es el software</span></div>
+  </div>
+  <ul class="list">
+    <li>Fundadores: Tal Tamir, Yaron Elboim y Alon Yehezkely (egresados del Technion).</li>
+    <li>Sede e I+D en Israel; desarrollo de negocios en California y Alemania; oficinas en Ucrania, Australia y Taiwán.</li>
+    <li>Se define como empresa de infraestructura de <strong>"Physical AI"</strong>.</li>
+    <li>Inversores: SoftBank, Amazon, Avery Dennison, Samsung, Qualcomm, PepsiCo, entre otros.</li>
+  </ul>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="6"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">06 · El proveedor</p>
+  <h2>Cliente emblema: <em>Walmart</em></h2>
+  <div class="stats">
+    <div class="stat"><b>~90M</b><span>etiquetas previstas para fines de 2026</span></div>
+    <div class="stat"><b>4.600</b><span>tiendas</span></div>
+    <div class="stat"><b>+40</b><span>centros de distribución</span></div>
+  </div>
+  <p class="lead">Es el mayor despliegue de Ambient IoT del mercado.</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="6"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">06 · El proveedor</p>
+  <h2>El <em>ecosistema</em></h2>
+  <div class="grid" style="--cols:3">
+    <div class="box"><h3>Fabricantes de etiquetas</h3><p>Avery Dennison, Identiv, Tageos.</p></div>
+    <div class="box"><h3>Hardware de lectura</h3><p>Minew, Juniper Mist, MikroTik.</p></div>
+    <div class="box"><h3>Integradores</h3><p>Programa "Works with Wiliot": SATO, VisionID, Tactical Edge, Blyott y otros.</p></div>
+  </div>
+  <div class="note"><b>En Argentina:</b> no se encontró distribuidor o integrador oficial. Opciones: contactar a Wiliot para que asigne un partner, o consultar a las filiales locales de Avery Dennison o SATO. Cuidado con "Williot" (doble L), una marca de ropa española sin relación.</div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<!-- ===== Top 5 proveedores ===== -->
+<article class="frame slide" data-sec="7"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">07 · Top 5 proveedores de Ambient IoT</p>
+  <h2>Los <em>líderes</em></h2>
+  <p class="muted">Ordenados por escala de despliegues reales, respaldo financiero y trayectoria. Es una valoración propia, no un ranking oficial.</p>
+  <div class="rank"><div class="num">1</div><div>
+    <h3>Wiliot <small>· Israel / EE.UU.</small></h3>
+    <p>El líder indiscutido. Mayor despliegue del mercado (Walmart), miembro fundador de la Ambient IoT Alliance, fabricación respaldada por Avery Dennison, Identiv y Tageos.<span class="of"><strong>Ofrece:</strong> solución completa (etiquetas, hardware y plataforma).</span></p>
+  </div></div>
+  <div class="rank"><div class="num">2</div><div>
+    <h3>Atmosic Technologies <small>· EE.UU.</small></h3>
+    <p>US$161,5M recaudados en 4 rondas (la última, US$40M en marzo 2025). Miembro fundador de la Ambient IoT Alliance.<span class="of"><strong>Ofrece:</strong> chips Bluetooth de ultra bajo consumo y cosecha de energía; requiere fabricante o integrador.</span></p>
+  </div></div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="7"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">07 · Top 5 proveedores de Ambient IoT</p>
+  <h2>Puestos <em>3 y 4</em></h2>
+  <div class="rank"><div class="num">3</div><div>
+    <h3>Everactive <small>· EE.UU.</small></h3>
+    <p>El más veterano (2012, universidades de Michigan y Virginia). Líder en monitoreo de condición industrial; clientes como Anheuser-Busch y Hershey.<span class="of"><strong>Ofrece:</strong> sensores y plataforma para mantenimiento industrial. <em>Ojo:</em> última ronda de solo US$10,9M (2024); verificar situación financiera.</span></p>
+  </div></div>
+  <div class="rank"><div class="num">4</div><div>
+    <h3>Energous <small>· EE.UU. · NASDAQ: WATT</small></h3>
+    <p>Empresa cotizante (transparencia financiera). Su etiqueta e-Sense ofrece plataforma completa: sensores sin batería, transmisores de energía RF y software en la nube, para ubicación y temperatura en retail y logística.<span class="of"><em>Ojo:</em> escala mucho menor que Wiliot y empresa chica.</span></p>
+  </div></div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="7"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">07 · Top 5 proveedores de Ambient IoT</p>
+  <h2>Puesto 5 y <em>conclusión</em></h2>
+  <div class="rank"><div class="num">5</div><div>
+    <h3>Dracula Technologies + Paragon ID <small>· Francia</small></h3>
+    <p>Otro enfoque: energía de la <strong>luz</strong> (fotovoltaica orgánica). Etiquetas BLE sin batería pasando a producción masiva. Útil en ambientes iluminados, no en cajas cerradas o depósitos oscuros. Menor trayectoria.</p>
+  </div></div>
+  <div class="note"><b>Conclusión:</b> para supply chain hoy, Wiliot es la opción más probada; la única alternativa "completa" comparable es Energous. Ninguno tiene presencia directa en Argentina.</div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<!-- ===== Contactos corporativos ===== -->
+<article class="frame slide" data-sec="8"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">08 · Contactos corporativos</p>
+  <h2>A quién <em>contactar</em></h2>
+  <div class="grid" style="--cols:3">
+    <div class="box contact"><h3>Wiliot</h3><ul>
+      <li><svg class="ico"><use href="#i-net"/></svg><span><a href="https://www.wiliot.com/contact">wiliot.com/contact</a><span class="pill">recomendado</span></span></li>
+      <li><svg class="ico"><use href="#i-phone"/></svg><a href="tel:+18582054786">+1 (858) 205-4786</a></li>
+      <li><svg class="ico"><use href="#i-pin"/></svg><span>13500 Evening Creek Dr, Suite 120, San Diego, CA</span></li></ul></div>
+    <div class="box contact"><h3>Energous</h3><ul>
+      <li><svg class="ico"><use href="#i-net"/></svg><a href="https://energous.com">energous.com</a></li>
+      <li><svg class="ico"><use href="#i-phone"/></svg><a href="tel:+14089630200">+1 (408) 963-0200</a></li>
+      <li><svg class="ico"><use href="#i-mail"/></svg><span><a href="mailto:PR@energous.com">PR@energous.com</a> (prensa)</span></li>
+      <li><svg class="ico"><use href="#i-pin"/></svg><span>3590 N 1st St., Suite 210, San Jose, CA</span></li></ul></div>
+    <div class="box contact"><h3>Atmosic</h3><ul>
+      <li><svg class="ico"><use href="#i-net"/></svg><a href="https://atmosic.com">atmosic.com</a></li>
+      <li><svg class="ico"><use href="#i-phone"/></svg><a href="tel:+14087240741">+1 (408) 724-0741</a></li>
+      <li><svg class="ico"><use href="#i-pin"/></svg><span>2105 S Bascom Ave, Campbell, CA</span></li></ul></div>
+  </div>
+  <p class="muted gap">Los teléfonos provienen de directorios empresariales y pueden estar desactualizados; confirmar en la web oficial. Horario del Pacífico (5 h menos que Argentina en noviembre).</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<!-- ===== Fuentes ===== -->
+<article class="frame slide" data-sec="9"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">09 · Fuentes</p>
+  <h2>Fuentes: <em>IoT Pixels y Ambient IoT</em></h2>
+  <ol class="sources">
+    <li><a href="https://www.wiliot.com/product/iot-pixels">Wiliot – IoT Pixels</a></li>
+    <li><a href="https://wiliot.com/llms.txt">Wiliot – Plataforma</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Wiliot">Wikipedia – Wiliot</a></li>
+    <li><a href="https://iotm2mcouncil.org/iot-library/news/iot-newsdesk/wiliot-takes-iot-pixel-to-third-generation/">IoT M2M Council – Gen3</a></li>
+    <li><a href="https://www.sdcexec.com/home/news/22957782/wiliot-wiliot-unveils-iot-pixel">SDCExec – Wiliot Unveils IoT Pixel</a></li>
+    <li><a href="https://help.mikrotik.com/docs/spaces/ROS/pages/367919113/Wiliot">MikroTik – Wiliot</a></li>
+    <li><a href="https://www.eenewseurope.com/en/iot-starter-kit-available-to-revolutionize-supply-chain/">eeNews Europe – Starter kit</a></li>
+    <li><a href="https://www.businesswire.com/news/home/20220518005155/en/">Business Wire – Battery-Assisted IoT Pixel</a></li>
+    <li><a href="https://www.fiercesensors.com/iot-wireless/wiliot-aims-to-boost-iot-via-lower-costs-smart-pixels-sensing-as-a-service">Fierce Sensors</a></li>
+    <li><a href="https://www.frost.com/?p=73446">Frost &amp; Sullivan</a></li>
+    <li><a href="https://panqingrui.github.io/homepage/blog/2026/passive-tags-rfid-future/">The Future of Passive Tags – RFID vs A-IoT</a></li>
+    <li><a href="https://www.ynetnews.com/tech-and-digital/article/sk8hq12dze">Ynet News</a></li>
+    <li><a href="https://stockanalysis.com/private/wiliot/">StockAnalysis – Wiliot</a></li>
+    <li><a href="https://foodindustryexecutive.com/?p=16972">Food Industry Executive – Works with Wiliot</a></li>
+    <li><a href="https://convergedigest.com/ambient-iot-alliance-targets-battery-free-wireless-connectivity/?amp=1">Converge Digest – Ambient IoT Alliance</a></li>
+    <li><a href="https://www.cbinsights.com/compare/atmosic-vs-psikick">CB Insights – Atmosic vs Everactive</a></li>
+    <li><a href="https://startupintros.com/orgs/atmosic-technologies">StartupIntros – Atmosic</a></li>
+    <li><a href="https://ir.energous.com/news-releases/news-release-details/energous-introduces-battery-free-e-sense-tag-establishing-first">Energous – e-Sense</a></li>
+    <li><a href="https://www.pulse.bot/hardware/news/paragon-id-dracula-technologies-to-scale-light-powered-ble-tags-ef8acc76-bcd3-4f84-a3a2-4fe85d7f1779/">Paragon ID y Dracula Technologies</a></li>
+    <li><a href="https://www.zoominfo.com/c/wiliot/425705037">ZoomInfo – Wiliot</a></li>
+    <li><a href="https://www.neverbounce.com/company/energous/358818028">NeverBounce – Energous</a></li>
+    <li><a href="https://www.datanyze.com/people/Dylan-Ko/1885027536">Datanyze – Atmosic</a></li>
+  </ol>
+  <p class="muted gap">Investigación compilada el 3 de noviembre de 2026.</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide" data-sec="9"><div class="card"><div class="scroll"><div class="in">
+  <p class="kicker">09 · Fuentes</p>
+  <h2>Fuentes: <em>precios</em></h2>
+  <ol class="sources">
+    <li><a href="https://www.barcodegiant.com/zebra/part-rfd4030-g00b700-us.htm">Barcode Giant: Zebra RFD40 Standard</a></li>
+    <li><a href="https://www.barcodeplanet.com/zebra/rfd40-uhf-rfid.htm">Barcode Planet: Zebra RFD40</a></li>
+    <li><a href="https://www.staples.com/zebra-rfd40-premium-plus-rfd4031-g10b700-us-barcode-readers-handheld/product_IM19ZT318">Staples: Zebra RFD40 Premium Plus</a></li>
+    <li><a href="https://www.cdw.com/product/impinj-r700-rain-rfid-reader-4-port/7757680">CDW: Impinj R700</a></li>
+    <li><a href="https://www.barcodefactory.com/impinj/fixed-readers/r700">Barcode Factory: Impinj R700</a></li>
+    <li><a href="https://www.barcodegiant.com/zebra/part-an480-cl66100wr.htm">Barcode Giant: antena Zebra AN480</a></li>
+    <li><a href="https://www.barcodegiant.com/zebra/zt411r.htm">Barcode Giant: impresora Zebra ZT411 RFID</a></li>
+    <li><a href="https://cdw.com/product/zebra-zt411-300dpi-thermal-transfer-rfid-printer/7204057">CDW: impresora Zebra ZT411 RFID</a></li>
+    <li><a href="https://www.rfidjournal.com/question/what-is-the-price-of-rfid-inlays">RFID Journal: precio de inlays</a></li>
+    <li><a href="https://cpcongroup.com/insights/article/rfid-chip-cost-guide/">CPCON: costo de chips y etiquetas RFID</a></li>
+    <li><a href="https://www.barcodediscount.com/catalog/hid/part-cp15711.htm">Barcode Discount: etiqueta HID para metal</a></li>
+    <li><a href="https://www.digikey.ca/en/products/detail/murata-electronics/LXTBKZMCMG-010/10406247">DigiKey: etiqueta Murata para metal</a></li>
+    <li><a href="https://www.barcodeplanet.com/cats/rfid-tags/uhf/page/5.htm">Barcode Planet: etiquetas UHF para metal</a></li>
+    <li><a href="https://www.wiliot.com/blog/rethinking-visibility-for-smarter-supply-chains-rfid-or-ambient-iot">Wiliot: RFID o Ambient IoT</a></li>
+    <li><a href="https://www.wiliot.com/faq">Wiliot: preguntas frecuentes</a></li>
+    <li><a href="https://shop.wiliot.com/product/starter-kit/">Wiliot: Starter Kit</a></li>
+    <li><a href="https://shop.wiliot.com/innovation-kit/">Wiliot: Innovation Kit</a></li>
+    <li><a href="https://mytechdecisions.com/latest-news/wiliot-announces-a-battery-assisted-version-of-its-iot-pixel-tags-that-take-the-bluetooth-standard-to-places-its-never-been-to-before/">My TechDecisions: IoT Pixel con batería</a></li>
+    <li><a href="https://www.abiresearch.com/market-research/insight/7780550-willing-the-iot-forward-wiliot-enters-new-">ABI Research: modelo de negocio de Wiliot</a></li>
+    <li><a href="https://www.digikey.co.uk/en/products/detail/minew/G1/26776367">DigiKey: gateway Minew G1</a></li>
+  </ol>
+  <p class="muted gap">Consultadas el 3 de noviembre de 2026. La mayoría son precios de revendedores sin fecha publicada.</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+</div>
+</main>
+
+<nav class="bar" aria-label="Navegación de la presentación">
+  <a class="home" href="./" aria-label="Todas las presentaciones" title="Todas las presentaciones"><svg class="ico"><use href="#i-home"/></svg></a>
+  <button id="ovBtn" aria-label="Vista general (O)" title="Vista general (O)"><svg class="ico"><use href="#i-ov"/></svg></button>
+  <button id="prev" aria-label="Anterior (←)" title="Anterior (←)"><svg class="ico"><use href="#i-left"/></svg></button>
+  <div class="where" aria-live="polite"><span id="secName">Inicio</span><span id="count">1 / 1</span></div>
+  <button id="next" aria-label="Siguiente (→)" title="Siguiente (→)"><svg class="ico"><use href="#i-right"/></svg></button>
+  <button id="fs" aria-label="Pantalla completa (F)" title="Pantalla completa (F)"><svg class="ico"><use href="#i-fs"/></svg></button>
+</nav>
+<div class="toast" id="toast"></div>
+<noscript>Esta presentación necesita JavaScript para funcionar.</noscript>
+
+<script src="assets/deck.js"></script>
+</body>
+</html>
