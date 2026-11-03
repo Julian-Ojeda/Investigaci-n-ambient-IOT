@@ -8,8 +8,8 @@ Presentación interactiva con zoom, al estilo Prezi, en un solo archivo: [`index
 2. La tecnología: Ambient IoT
 3. Comparación con RFID
 4. Qué conviene por industria
-5. RFID por rubro: dónde entrar
-6. Siete rubros en detalle (frigoríficos, salud, laboratorio, transportes, minería, puertos y financiero)
+5. RFID por rubro: dónde entrar (prioridades y etapas de seguimiento por activo)
+6. Siete rubros en detalle (frigoríficos, salud, laboratorio, transportes, minería, puertos y financiero): activos, etapas de seguimiento, casos y riesgos
 7. El proveedor: Wiliot
 8. Top 5 proveedores de Ambient IoT
 9. Contactos corporativos

@@ -201,6 +201,21 @@
   .tbl .hd { padding-top: 0; border-bottom: 2px solid color-mix(in srgb, var(--c) 55%, transparent); }
   .tbl .hd > div { font-size: .78em; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--c) !important; }
 
+  /* Etapas de seguimiento: cadena de lecturas por activo */
+  .stages { font-size: .88em; }
+  .st { display: grid; grid-template-columns: minmax(8em, .85fr) 3fr minmax(10em, 1.25fr); gap: .4em 1.4em; align-items: center; padding: .5em 0; border-bottom: 1px solid var(--line); }
+  .st h3 { margin: 0; font-size: 1em; color: #fff; }
+  .st.hd { padding-top: 0; border-bottom: 2px solid color-mix(in srgb, var(--c) 55%, transparent); }
+  .st.hd > div { font-size: .78em; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--c); }
+  .chain { display: flex; flex-wrap: wrap; align-items: center; gap: .35em 1.35em; margin: 0; padding: 0; list-style: none; }
+  .chain li { position: relative; padding: .18em .65em; border-radius: 999px; font-size: .9em; white-space: nowrap;
+    background: color-mix(in srgb, var(--c) 12%, transparent); border: 1px solid color-mix(in srgb, var(--c) 30%, transparent); }
+  .chain li + li::before { content: "→"; position: absolute; left: -1.15em; color: var(--c); font-weight: 800; }
+  .chain.big { font-size: 1.1em; margin: .3em 0 0; }
+  .alert { display: flex; gap: .5em; align-items: flex-start; margin: 0; color: var(--soft); }
+  .alert .ico { width: 1.1em; height: 1.1em; margin-top: .15em; color: var(--mix); }
+  .box .alert { margin-top: .8em; }
+
   /* Prioridades, casos y preguntas */
   .k { display: block; margin-bottom: .3em; font-size: .72em; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--c); }
   .prio header { display: flex; align-items: center; gap: .7em; margin-bottom: .7em; }
@@ -282,6 +297,9 @@
     .tbl .row { display: block; margin-bottom: .5em; padding: .7em .85em; border: 1px solid var(--line); border-radius: .7em; background: rgb(255 255 255 / .03); }
     .tbl .row > div + div { margin-top: .35em; }
     .tbl .row > div[data-l]:not(:first-child)::before { content: attr(data-l); display: block; font-size: .72em; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+    .st.hd { display: none; }
+    .st { grid-template-columns: 1fr; gap: .55em; margin-bottom: .5em; padding: .75em .85em; border: 1px solid var(--line); border-radius: .7em; background: rgb(255 255 255 / .03); }
+    .chain li { white-space: normal; }
     .prio dl { grid-template-columns: 1fr; gap: 0; }
     .prio dt { margin-top: .45em; font-size: .75em; letter-spacing: .06em; text-transform: uppercase; }
     .card::after { font-size: 42vmin; }
@@ -309,6 +327,7 @@
   <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
   <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
   <symbol id="i-ov" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="4.5" cy="6" r="1.6"/><circle cx="19.5" cy="6" r="1.6"/><circle cx="4.5" cy="18" r="1.6"/><circle cx="19.5" cy="18" r="1.6"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
   <symbol id="i-fs" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></symbol>
 </svg>
 
@@ -336,7 +355,7 @@
 <div class="frame sec s3" data-sec="3" data-name="Comparación con RFID"><button class="circle" aria-label="Ir a la sección 3: Comparación con RFID"><span class="c-num">03</span><span class="c-title">vs RFID</span><span class="c-sub">Frente a frente con el RFID pasivo UHF</span></button></div>
 <div class="frame sec s4" data-sec="4" data-name="Qué conviene por industria"><button class="circle" aria-label="Ir a la sección 4: Qué conviene por industria"><span class="c-num">04</span><span class="c-title">Por industria</span><span class="c-sub">Qué tecnología conviene en cada sector</span></button></div>
 <div class="frame sec s5" data-sec="5" data-name="RFID por rubro: dónde entrar"><button class="circle" aria-label="Ir a la sección 5: RFID por rubro, dónde entrar"><span class="c-num">05</span><span class="c-title">Dónde entrar</span><span class="c-sub">Prioridades para llevar RFID a otros rubros</span></button></div>
-<div class="frame sec s6" data-sec="6" data-name="RFID: 7 rubros en detalle"><button class="circle" aria-label="Ir a la sección 6: 7 rubros en detalle"><span class="c-num">06</span><span class="c-title">7 rubros</span><span class="c-sub">Activos, casos y riesgos de cada sector</span></button></div>
+<div class="frame sec s6" data-sec="6" data-name="RFID: 7 rubros en detalle"><button class="circle" aria-label="Ir a la sección 6: 7 rubros en detalle"><span class="c-num">06</span><span class="c-title">7 rubros</span><span class="c-sub">Activos, etapas, casos y riesgos de cada sector</span></button></div>
 <div class="frame sec s7" data-sec="7" data-name="El proveedor: Wiliot"><button class="circle" aria-label="Ir a la sección 7: El proveedor, Wiliot"><span class="c-num">07</span><span class="c-title">Wiliot</span><span class="c-sub">La empresa detrás de los IoT Pixels</span></button></div>
 <div class="frame sec s8" data-sec="8" data-name="Top 5 proveedores"><button class="circle" aria-label="Ir a la sección 8: Top 5 proveedores"><span class="c-num">08</span><span class="c-title">Top 5</span><span class="c-sub">Los proveedores de Ambient IoT más sólidos</span></button></div>
 <div class="frame sec s9" data-sec="9" data-name="Contactos corporativos"><button class="circle" aria-label="Ir a la sección 9: Contactos corporativos"><span class="c-num">09</span><span class="c-title">Contactos</span><span class="c-sub">A quién llamar y dónde escribir</span></button></div>
@@ -620,6 +639,18 @@
   <p class="muted gap">Sirven en cualquier rubro.</p>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
+<article class="frame slide s5" data-sec="5"><div class="card" data-n="05"><div class="scroll"><div class="in">
+  <p class="kicker">05 · RFID por rubro</p>
+  <h2>Etapas de seguimiento <em>por activo</em></h2>
+  <p class="lead">Cada activo se puede seguir como una <strong>cadena de lecturas</strong>: cada etapa marca un cambio de lugar, estado o responsable.</p>
+  <div class="box"><span class="k">Ejemplo · Sábanas, ambos y uniformes (salud)</span><ol class="chain big"><li>Alta</li><li>Entrega</li><li>Uso en sector</li><li>Retiro sucio</li><li>Envío a lavandería</li><li>Lavado</li><li>Retorno</li><li>Stock</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Salida del edificio, prenda sin devolver o fin de vida útil</p></div>
+  <div class="grid gap">
+    <div class="box hl"><span class="k">Para un piloto</span>No hace falta leer todas las etapas. Alcanza con empezar por las que cambian de responsable o de sector, y sumar el resto si el dato lo justifica.</div>
+    <div class="box"><span class="k">Es una propuesta</span>Las cadenas surgen de los usos investigados, no son un estándar: hay que ajustarlas al proceso real de cada cliente.</div>
+  </div>
+  <p class="muted gap">Cada rubro de la sección siguiente tiene su tabla de etapas.</p>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
 <!-- ===== 6. 7 rubros en detalle ===== -->
 <article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 1 · Frigoríficos</p>
@@ -645,6 +676,21 @@
     <div class="row"><div>Pallets y despacho</div><div>Carga correcta por cliente y camión</div><div>Errores de despacho y retiros de mercado lentos</div></div>
     <div class="row"><div>Cuchillos, chairas y EPP</div><div>Asignación, higiene y reposición</div><div>Elementos sin control en áreas sanitarias</div></div>
     <div class="row"><div>Ropa de planta</div><div>Lavado y separación de áreas</div><div>Riesgo sanitario y pérdidas</div></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 1 · Frigoríficos</p>
+  <h2>Frigoríficos: <em>etapas de seguimiento</em></h2>
+  <div class="stages">
+    <div class="st hd"><div>Activo</div><div>Etapas de seguimiento</div><div>Alerta principal</div></div>
+    <div class="st"><h3>Caravanas</h3><ol class="chain"><li>Llegada de la hacienda</li><li>Lectura en línea</li><li>Vínculo con garrón</li><li>Registro en el Sistema Integral de Faena</li><li>Recupero</li><li>Destrucción</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Caravana sin leer, sin vínculo o sin destruir</p></div>
+    <div class="st"><h3>Ganchos y rieles</h3><ol class="chain"><li>Asignación a la res</li><li>Puestos de faena</li><li>Inspección</li><li>Cámara</li><li>Liberación</li><li>Lavado</li><li>Reuso</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Gancho sin lectura o tag que dejó de responder</p></div>
+    <div class="st"><h3>Medias reses en cámara</h3><ol class="chain"><li>Pesaje</li><li>Ingreso a cámara</li><li>Oreo</li><li>Salida</li><li>Cuarteo o despacho</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Tiempo de oreo fuera de rango o res no ubicada</p></div>
+    <div class="st"><h3>Cajones y bandejas</h3><ol class="chain"><li>Lavado</li><li>Asignación de lote</li><li>Desposte</li><li>Cámara</li><li>Despacho</li><li>Retorno</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Mezcla de lotes o cajón sin retorno</p></div>
+    <div class="st"><h3>Pallets y despacho</h3><ol class="chain"><li>Armado</li><li>Cámara</li><li>Preparación del pedido</li><li>Carga</li><li>Entrega</li><li>Retorno del pallet</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Pallet en camión o cliente incorrecto</p></div>
+    <div class="st"><h3>Cuchillos, chairas y EPP</h3><ol class="chain"><li>Entrega</li><li>Uso</li><li>Higiene</li><li>Afilado o inspección</li><li>Devolución</li><li>Baja</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Elemento faltante o sin higiene registrada</p></div>
+    <div class="st"><h3>Ropa de planta</h3><ol class="chain"><li>Entrega</li><li>Ingreso al área</li><li>Retiro</li><li>Lavado</li><li>Retorno</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Prenda fuera de su área o sin lavado registrado</p></div>
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
@@ -677,6 +723,20 @@
 
 <article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 2 · Salud</p>
+  <h2>Salud: <em>etapas de seguimiento</em></h2>
+  <div class="stages">
+    <div class="st hd"><div>Activo</div><div>Etapas de seguimiento</div><div>Alerta principal</div></div>
+    <div class="st"><h3>Sábanas, ambos y uniformes</h3><ol class="chain"><li>Alta</li><li>Entrega</li><li>Uso en sector</li><li>Retiro sucio</li><li>Envío a lavandería</li><li>Lavado</li><li>Retorno</li><li>Stock</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Salida del edificio, prenda sin devolver o fin de vida útil</p></div>
+    <div class="st"><h3>Bombas de infusión, monitores, camas</h3><ol class="chain"><li>Alta</li><li>Depósito</li><li>Asignación a sector</li><li>Uso</li><li>Limpieza</li><li>Mantenimiento</li><li>Disponible</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Mantenimiento vencido o equipo fuera de su zona</p></div>
+    <div class="st"><h3>Instrumental y cajas quirúrgicas</h3><ol class="chain"><li>Armado</li><li>Esterilización</li><li>Depósito estéril</li><li>Quirófano</li><li>Retiro sucio</li><li>Lavado</li><li>Inspección</li><li>Rearmado</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Vencimiento estéril o caja incompleta</p></div>
+    <div class="st"><h3>Endoscopios</h3><ol class="chain"><li>Depósito</li><li>Procedimiento</li><li>Prelavado</li><li>Reprocesamiento</li><li>Secado y guarda</li><li>Mantenimiento</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Uso sin reprocesamiento registrado</p></div>
+    <div class="st"><h3>Implantes y consumibles caros</h3><ol class="chain"><li>Recepción</li><li>Stock o consignación</li><li>Reserva</li><li>Quirófano</li><li>Consumo por paciente</li><li>Facturación y reposición</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Próximo vencimiento o consumo sin registrar</p></div>
+    <div class="st"><h3>Sangre y medicación crítica</h3><ol class="chain"><li>Recepción</li><li>Almacenamiento</li><li>Preparación</li><li>Entrega al sector</li><li>Verificación</li><li>Administración</li><li>Retorno o descarte</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Unidad en sector incorrecto o fuera de tiempo</p></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 2 · Salud</p>
   <h2>Salud: <em>casos</em></h2>
   <div class="grid">
     <div class="box case"><h3><a href="https://www.rfidjournal.com/?p=154248">Sanatorio Finochietto</a></h3><span class="loc">Buenos Aires</span><p>Controla unas 80.000 prendas con UHF, incluida la lavandería externa. Bajó compras redundantes y pérdidas, y detecta salidas no autorizadas. El proveedor es Telectronica: es referencia y también competencia.</p></div>
@@ -699,6 +759,20 @@
     <div class="row"><div>Instrumentos analíticos</div><div>Ubicación, movimientos, servicio y calibración</div><div>Equipos no ubicados y documentación dispersa</div></div>
     <div class="row"><div>Pipetas y patrones</div><div>Vencimiento de calibración</div><div>Uso de un instrumento fuera de calificación</div></div>
     <div class="row"><div>Indumentaria de áreas limpias</div><div>Asignación y circuito de lavado</div><div>Contaminación cruzada</div></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 3 · Laboratorio</p>
+  <h2>Laboratorio: <em>etapas de seguimiento</em></h2>
+  <div class="stages">
+    <div class="st hd"><div>Activo</div><div>Etapas de seguimiento</div><div>Alerta principal</div></div>
+    <div class="st"><h3>Muestras y tubos</h3><ol class="chain"><li>Extracción y rótulo</li><li>Armado del lote</li><li>Envío</li><li>Recepción</li><li>Análisis</li><li>Guarda</li><li>Descarte</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>No llegó al punto siguiente en el tiempo previsto</p></div>
+    <div class="st"><h3>Conservadoras de transporte</h3><ol class="chain"><li>Preparación y carga</li><li>Salida de sede</li><li>Traslado</li><li>Entrega</li><li>Limpieza</li><li>Disponible</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Entrega demorada o conservadora sin retorno</p></div>
+    <div class="st"><h3>Viales en freezer</h3><ol class="chain"><li>Alta y rótulo</li><li>Ingreso a posición</li><li>Inventario</li><li>Retiro</li><li>Reingreso o descarte</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Vial fuera de posición o retiro no autorizado</p></div>
+    <div class="st"><h3>Instrumentos analíticos</h3><ol class="chain"><li>Alta</li><li>Calificación</li><li>Uso en sala</li><li>Traslado</li><li>Mantenimiento</li><li>Recalificación</li><li>Baja</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Movimiento no autorizado o calificación vencida</p></div>
+    <div class="st"><h3>Pipetas y patrones</h3><ol class="chain"><li>Alta</li><li>Asignación</li><li>Uso</li><li>Retiro a calibración</li><li>Reingreso</li><li>Baja</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Uso con calibración vencida</p></div>
+    <div class="st"><h3>Indumentaria de áreas limpias</h3><ol class="chain"><li>Entrega</li><li>Ingreso al área</li><li>Uso</li><li>Retiro</li><li>Lavado</li><li>Reposición</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Prenda fuera de su área o sin lavado registrado</p></div>
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
@@ -732,6 +806,21 @@
 
 <article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 4 · Transportes</p>
+  <h2>Transportes: <em>etapas de seguimiento</em></h2>
+  <div class="stages">
+    <div class="st hd"><div>Activo</div><div>Etapas de seguimiento</div><div>Alerta principal</div></div>
+    <div class="st"><h3>Pallets, cajones y jaulas</h3><ol class="chain"><li>Stock</li><li>Asignación a pedido</li><li>Carga</li><li>Entrega</li><li>Retiro del cliente</li><li>Retorno</li><li>Lavado o reparación</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Unidad sin retorno dentro del plazo acordado</p></div>
+    <div class="st"><h3>Carga y bultos</h3><ol class="chain"><li>Recepción</li><li>Clasificación</li><li>Carga</li><li>Transferencia</li><li>Entrega</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Bulto en camión incorrecto o faltante</p></div>
+    <div class="st"><h3>Neumáticos</h3><ol class="chain"><li>Recepción</li><li>Montaje</li><li>Inspección</li><li>Rotación</li><li>Recapado</li><li>Baja</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Inspección vencida o desgaste fuera de rango</p></div>
+    <div class="st"><h3>Semirremolques</h3><ol class="chain"><li>Salida de base</li><li>Cliente</li><li>Regreso</li><li>Taller</li><li>Disponible</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Unidad inmovilizada o sin regreso</p></div>
+    <div class="st"><h3>Herramientas y kits del vehículo</h3><ol class="chain"><li>Entrega al chofer</li><li>Control de salida</li><li>Control de regreso</li><li>Reposición</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Kit incompleto al volver</p></div>
+    <div class="st"><h3>Combustible</h3><ol class="chain"><li>Identificación de la unidad</li><li>Autorización</li><li>Despacho</li><li>Registro</li><li>Conciliación</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Unidad no autorizada o consumo fuera de rango</p></div>
+    <div class="st"><h3>Equipaje y unidades aéreas</h3><ol class="chain"><li>Despacho</li><li>Clasificación</li><li>Carga</li><li>Transferencia</li><li>Arribo</li><li>Entrega</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Equipaje sin lectura en una etapa o en vuelo incorrecto</p></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 4 · Transportes</p>
   <h2>Transportes: <em>casos y contexto</em></h2>
   <div class="grid">
     <div class="box case"><h3><a href="https://palletenterprise.com/?p=6101">Rehrig Pacific</a></h3><span class="loc">Cajones de bebidas</span><p>Etiquetó 300.000 cajones en siete plantas y reportó 25% menos compras de reposición. La misma nota cita pérdidas anuales de 15-20% en pallets y tapas del sector automotor.</p></div>
@@ -755,6 +844,20 @@
     <div class="row"><div>Dientes de pala</div><div>Desprendimiento antes de llegar a la chancadora</div><div>Daños y material descartado</div></div>
     <div class="row"><div>Repuestos críticos y neumáticos</div><div>Stock, instalación y vida útil</div><div>Paradas por falta de repuesto</div></div>
     <div class="row"><div>Ropa, ropa de cama y equipos de campamento</div><div>Lavado, asignación y reposición</div><div>Pérdidas en sitios remotos</div></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 5 · Minería</p>
+  <h2>Minería: <em>etapas de seguimiento</em></h2>
+  <div class="stages">
+    <div class="st hd"><div>Activo</div><div>Etapas de seguimiento</div><div>Alerta principal</div></div>
+    <div class="st"><h3>Herramientas de pañol</h3><ol class="chain"><li>Alta</li><li>Retiro por persona</li><li>Uso en frente</li><li>Devolución</li><li>Inspección</li><li>Reparación o baja</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Herramienta sin devolver al terminar el turno</p></div>
+    <div class="st"><h3>EPP y equipos de rescate</h3><ol class="chain"><li>Compra</li><li>Entrega</li><li>Inspección periódica</li><li>Reposición</li><li>Baja</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Elemento vencido o inspección pendiente</p></div>
+    <div class="st"><h3>Personas y vehículos</h3><ol class="chain"><li>Autorización</li><li>Ingreso al sitio</li><li>Paso por zonas</li><li>Salida de zona</li><li>Egreso</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Ingreso a zona no autorizada o persona sin egreso</p></div>
+    <div class="st"><h3>Dientes de pala</h3><ol class="chain"><li>Instalación</li><li>Operación</li><li>Control en salida de camión</li><li>Control antes de chancadora</li><li>Cambio</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Diente detectado fuera de la pala</p></div>
+    <div class="st"><h3>Repuestos críticos y neumáticos</h3><ol class="chain"><li>Recepción</li><li>Pañol</li><li>Retiro</li><li>Instalación</li><li>Inspección</li><li>Reparación o baja</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Stock mínimo o fin de vida útil</p></div>
+    <div class="st"><h3>Ropa, ropa de cama y equipos de campamento</h3><ol class="chain"><li>Alta</li><li>Entrega</li><li>Retiro</li><li>Lavandería</li><li>Retorno</li><li>Reposición</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Faltantes por módulo o ciclo de lavado vencido</p></div>
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
@@ -788,6 +891,21 @@
 
 <article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 6 · Terminales portuarias</p>
+  <h2>Puertos: <em>etapas de seguimiento</em></h2>
+  <div class="stages">
+    <div class="st hd"><div>Activo</div><div>Etapas de seguimiento</div><div>Alerta principal</div></div>
+    <div class="st"><h3>Camiones</h3><ol class="chain"><li>Turno</li><li>Llegada</li><li>Gate de entrada</li><li>Patio o muelle</li><li>Carga o descarga</li><li>Gate de salida</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Tiempo excedido o camión en posición incorrecta</p></div>
+    <div class="st"><h3>Contenedores en patio</h3><ol class="chain"><li>Gate de entrada</li><li>Descarga</li><li>Posición asignada</li><li>Reubicación</li><li>Carga</li><li>Salida</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Posición real distinta de la registrada</p></div>
+    <div class="st"><h3>Autoelevadores, tractores y grúas</h3><ol class="chain"><li>Inicio de turno</li><li>Asignación</li><li>Operación por zona</li><li>Carga de combustible</li><li>Mantenimiento</li><li>Fin de turno</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Equipo fuera de zona o mantenimiento vencido</p></div>
+    <div class="st"><h3>Combustible</h3><ol class="chain"><li>Identificación del equipo</li><li>Autorización</li><li>Despacho</li><li>Registro</li><li>Conciliación</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Equipo no autorizado o consumo fuera de rango</p></div>
+    <div class="st"><h3>Reefers</h3><ol class="chain"><li>Ingreso</li><li>Conexión</li><li>Monitoreo</li><li>Desconexión</li><li>Salida</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Temperatura fuera de rango o reefer sin conexión</p></div>
+    <div class="st"><h3>Precintos electrónicos</h3><ol class="chain"><li>Colocación</li><li>Gate</li><li>Patio</li><li>Inspección</li><li>Retiro</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Precinto violado o distinto del declarado</p></div>
+    <div class="st"><h3>Personal y contratistas</h3><ol class="chain"><li>Autorización</li><li>Ingreso</li><li>Paso por zonas</li><li>Egreso</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Acceso vencido o persona sin egreso</p></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 6 · Terminales portuarias</p>
   <h2>Puertos: <em>casos y contexto local</em></h2>
   <div class="grid">
     <div class="box"><h3>Datos públicos</h3><ul class="list">
@@ -814,6 +932,20 @@
     <div class="row"><div>Bolsas, cajas y cofres de valores</div><div>Cadena de custodia e integridad del precinto</div><div>Faltantes y conciliación manual</div></div>
     <div class="row"><div>Pagarés, garantías y legajos</div><div>Ubicación en bóveda y retiro</div><div>Documentos mal archivados</div></div>
     <div class="row"><div>Mobiliario y activos de sucursal</div><div>Inventario contable</div><div>Diferencias con el registro de bienes</div></div>
+  </div>
+</div></div><span class="more">Deslizá para ver más ↓</span></div></article>
+
+<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+  <p class="kicker">06 · Rubro 7 · Financiero</p>
+  <h2>Financiero: <em>etapas de seguimiento</em></h2>
+  <div class="stages">
+    <div class="st hd"><div>Activo</div><div>Etapas de seguimiento</div><div>Alerta principal</div></div>
+    <div class="st"><h3>Servidores y equipos de red</h3><ol class="chain"><li>Recepción</li><li>Alta</li><li>Instalación en rack</li><li>Inventario periódico</li><li>Traslado o reparación</li><li>Borrado</li><li>Baja</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Salida del data center sin autorización</p></div>
+    <div class="st"><h3>Notebooks</h3><ol class="chain"><li>Alta</li><li>Asignación</li><li>Salidas e ingresos</li><li>Devolución</li><li>Borrado</li><li>Baja</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Equipo que sale con otra persona o sin autorización</p></div>
+    <div class="st"><h3>Cintas y discos de respaldo</h3><ol class="chain"><li>Alta</li><li>Grabación</li><li>Salida</li><li>Custodia externa</li><li>Retorno</li><li>Reuso o destrucción</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Salida no autorizada o retorno vencido</p></div>
+    <div class="st"><h3>Bolsas, cajas y cofres de valores</h3><ol class="chain"><li>Preparación y precinto</li><li>Retiro de sucursal</li><li>Transporte</li><li>Ingreso a tesoro</li><li>Apertura y conteo</li><li>Conciliación</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Precinto abierto o unidad que no llega</p></div>
+    <div class="st"><h3>Pagarés, garantías y legajos</h3><ol class="chain"><li>Alta</li><li>Archivo en bóveda</li><li>Retiro</li><li>Devolución</li><li>Custodia externa</li><li>Destrucción</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Retiro vencido o documento fuera del área restringida</p></div>
+    <div class="st"><h3>Mobiliario y activos de sucursal</h3><ol class="chain"><li>Alta contable</li><li>Asignación</li><li>Inventario</li><li>Traslado</li><li>Baja</li></ol><p class="alert"><svg class="ico"><use href="#i-alert"/></svg>Diferencia entre inventario y registro contable</p></div>
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
