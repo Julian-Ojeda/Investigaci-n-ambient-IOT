@@ -5,58 +5,57 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>IoT Pixels y Ambient IoT</title>
 <meta name="description" content="Presentación: qué son los IoT Pixels, comparación con RFID, oportunidades de RFID por rubro, proveedores de Ambient IoT y contactos.">
-<meta name="theme-color" content="#070b16">
+<meta name="theme-color" content="#ecebe6">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #070b16; --ink: #e9eef8; --soft: #c6d0e3; --muted: #93a0ba; --line: rgb(255 255 255 / .09);
-    --card: #0d1528; --card2: #15203b;
-    --rfid: #7aa7ff; --pixel: #2dd4bf; --mix: #fbbf24;
-    --c: #2dd4bf;
+    --bg: #ecebe6; --card: #ffffff; --tint: #f6f5f1; --ink: #1b1d21; --soft: #3f434a; --muted: #6c7078;
+    --line: #e2dfd7; --line2: #d1cdc2;
+    --accent: #1f4e6e; --accent-bg: #ebf1f5; --c: #1f4e6e;
+    --rfid: #355c8c; --pixel: #2b6a59; --mix: #8f6416; --warn-bg: #f7f1e3;
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
     --pad: clamp(10px, 2.4vmin, 30px);
     --barH: 56px;
     --padB: calc(var(--pad) + var(--barH) + 12px + env(safe-area-inset-bottom));
   }
-  .s1 { --c: #2dd4bf; } .s2 { --c: #38bdf8; } .s3 { --c: #c084fc; } .s4 { --c: #fbbf24; } .s5 { --c: #fb7185; }
-  .s6 { --c: #fb923c; } .s7 { --c: #a3e635; } .s8 { --c: #4ade80; } .s9 { --c: #818cf8; } .s10 { --c: #f0abfc; }
 
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; overflow: hidden; -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
-  body { color: var(--ink); background: radial-gradient(120% 90% at 50% 40%, #13214a 0%, #0a1024 45%, #05080f 100%) var(--bg);
-    font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  body { color: var(--ink); background: radial-gradient(120% 90% at 50% 40%, #f4f3ef 0%, #ecebe6 60%, #e3e1db 100%) var(--bg);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
   button { font: inherit; color: inherit; }
-  a { color: var(--c); text-underline-offset: .18em; }
-  strong { color: #fff; font-weight: 700; }
+  a { color: var(--accent); text-underline-offset: .18em; text-decoration-thickness: 1px; }
+  strong { color: var(--ink); font-weight: 600; }
 
   /* ---------- Lienzo ---------- */
   #stage { position: fixed; inset: 0; overflow: hidden; touch-action: pan-y; }
   #grid { position: absolute; left: 50%; top: 50%; width: var(--G); height: var(--G); pointer-events: none;
-    --a1: 0; --a2: .12; --a3: .12;
+    --a1: 0; --a2: .1; --a3: .1;
     background-image:
-      radial-gradient(circle, rgb(255 255 255 / var(--a1)) 1.2px, transparent 1.8px),
-      radial-gradient(circle, rgb(255 255 255 / var(--a2)) 1.2px, transparent 1.8px),
-      radial-gradient(circle, rgb(255 255 255 / var(--a3)) 1.2px, transparent 1.8px); }
+      radial-gradient(circle, rgb(40 40 40 / var(--a1)) 1px, transparent 1.5px),
+      radial-gradient(circle, rgb(40 40 40 / var(--a2)) 1px, transparent 1.5px),
+      radial-gradient(circle, rgb(40 40 40 / var(--a3)) 1px, transparent 1.5px); }
   #world { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-origin: 0 0; }
   .frame { position: absolute; left: 0; top: 0; width: var(--W); height: var(--H); transform-origin: 50% 50%; }
 
   /* ---------- Vista general ---------- */
   .ov { pointer-events: none; }
   .route { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-  .route path { fill: none; stroke: rgb(255 255 255 / .16); stroke-width: 2; stroke-dasharray: 2 9; stroke-linecap: round; }
+  .route path { fill: none; stroke: rgb(0 0 0 / .16); stroke-width: 1.5; stroke-dasharray: 1 7; stroke-linecap: round; }
   .ov-title { position: absolute; left: 50%; top: 46%; transform: translate(-50%, -50%); width: min(50vw, 860px); text-align: center; }
-  .eyebrow { margin: 0; font-size: clamp(11px, .95vw, 15px); font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--pixel); }
-  .ov h1 { margin: .28em 0 .32em; font-size: clamp(30px, 3.5vw, 78px); line-height: 1.02; letter-spacing: -.035em; font-weight: 800; text-wrap: balance; }
-  .ov h1 .y { font-weight: 400; color: var(--muted); }
-  .ov h1 .g { background: linear-gradient(90deg, #2dd4bf, #38bdf8 50%, #a78bfa); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .ov-sub { margin: 0 auto; max-width: 32em; font-size: clamp(14px, 1.2vw, 22px); line-height: 1.45; color: var(--soft); text-wrap: balance; }
-  .ov-hint { margin: 1.3em 0 0; font-size: clamp(12px, .95vw, 16px); color: var(--muted); }
-  .ov-hint.end { display: none; font-size: clamp(20px, 2.1vw, 38px); font-weight: 800; color: #fff; }
+  .eyebrow { margin: 0; font-size: clamp(11px, .9vw, 14px); font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
+  .ov h1 { margin: .3em 0 .35em; font-family: var(--serif); font-size: clamp(30px, 3.4vw, 74px); font-weight: 600; line-height: 1.05; letter-spacing: -.015em; text-wrap: balance; }
+  .ov h1 .y { font-weight: 400; font-style: italic; color: var(--muted); }
+  .ov h1 .g { color: var(--accent); }
+  .ov-sub { margin: 0 auto; max-width: 32em; font-size: clamp(14px, 1.15vw, 21px); line-height: 1.5; color: var(--soft); text-wrap: balance; }
+  .ov-hint { margin: 1.3em 0 0; font-size: clamp(12px, .9vw, 15px); color: var(--muted); }
+  .ov-hint.end { display: none; font-family: var(--serif); font-size: clamp(20px, 2vw, 36px); font-weight: 600; color: var(--ink); }
   body.at-end .ov-hint.start { display: none; }
   body.at-end .ov-hint.end { display: block; }
   .portrait .ov-title { top: calc(env(safe-area-inset-top) + 4.5vh); transform: translateX(-50%); width: calc(100% - 36px); }
-  .portrait .ov h1 { font-size: clamp(30px, 9.6vw, 52px); }
+  .portrait .ov h1 { font-size: clamp(30px, 9.4vw, 52px); }
   .portrait .ov-sub { font-size: clamp(13.5px, 3.7vw, 18px); }
   .portrait .ov-hint.start { display: none; }
 
@@ -64,173 +63,170 @@
   .sec { pointer-events: none; }
   .circle { pointer-events: auto; position: absolute; left: 50%; top: 50%; width: var(--D); height: var(--D); transform: translate(-50%, -50%);
     border: 0; border-radius: 50%; padding: 11cqmin 10cqmin 0; cursor: zoom-in; container-type: size;
-    display: flex; flex-direction: column; align-items: center; text-align: center;
-    background: radial-gradient(circle at 30% 22%, color-mix(in srgb, var(--c) 52%, #0b1224) 0%, color-mix(in srgb, var(--c) 20%, #0b1224) 55%, #0a1122 100%);
-    box-shadow: inset 0 0 0 1.2cqmin color-mix(in srgb, var(--c) 65%, transparent), 0 5cqmin 14cqmin -3cqmin rgb(0 0 0 / .65);
-    transition: filter .25s; }
-  .circle:hover { filter: brightness(1.15); }
-  .circle:focus-visible { outline: 1cqmin solid #fff; outline-offset: 1.5cqmin; }
-  .sec.active .circle { cursor: default; filter: none; }
-  .c-num { display: block; font-size: 13cqmin; font-weight: 800; line-height: 1; color: var(--c); }
-  .c-title { display: block; margin-top: 2cqmin; font-size: 10cqmin; font-weight: 800; line-height: 1.05; letter-spacing: -.03em; }
-  .c-sub { display: block; margin-top: 2.5cqmin; max-width: 66cqmin; font-size: 3.6cqmin; line-height: 1.35; color: var(--soft); }
+    display: flex; flex-direction: column; align-items: center; text-align: center; background: #fbfaf7;
+    box-shadow: inset 0 0 0 .55cqmin var(--line2), 0 2cqmin 6cqmin -2cqmin rgb(0 0 0 / .18);
+    transition: box-shadow .25s; }
+  .circle:hover { box-shadow: inset 0 0 0 .7cqmin var(--accent), 0 2cqmin 6cqmin -2cqmin rgb(0 0 0 / .22); }
+  .circle:focus-visible { outline: 1cqmin solid var(--accent); outline-offset: 1.5cqmin; }
+  .sec.active .circle { cursor: default; box-shadow: inset 0 0 0 .55cqmin var(--line2), 0 2cqmin 6cqmin -2cqmin rgb(0 0 0 / .18); }
+  .c-num { display: block; font-family: var(--serif); font-size: 11cqmin; font-weight: 500; line-height: 1; color: var(--accent); }
+  .c-title { display: block; margin-top: 2cqmin; font-family: var(--serif); font-size: 9.5cqmin; font-weight: 600; line-height: 1.08; letter-spacing: -.01em; color: var(--ink); }
+  .c-sub { display: block; margin-top: 2.5cqmin; max-width: 66cqmin; font-size: 3.5cqmin; line-height: 1.4; color: var(--muted); }
 
   /* ---------- Diapositivas ---------- */
   .slide:not(.active) { cursor: zoom-in; }
-  .card { position: absolute; inset: var(--pad) var(--pad) var(--padB); overflow: hidden;
-    border-radius: clamp(18px, 2.6vmin, 34px); border: 1px solid var(--line);
-    background:
-      radial-gradient(70% 60% at 100% 0%, color-mix(in srgb, var(--c) 16%, transparent), transparent 70%),
-      linear-gradient(155deg, var(--card2), var(--card) 60%);
-    box-shadow: 0 30px 70px -30px rgb(0 0 0 / .75); }
-  .card::before { content: ""; position: absolute; inset: 0 0 auto; height: 5px; background: var(--c); z-index: 2; }
-  .card::after { content: attr(data-n); position: absolute; right: .04em; bottom: -.2em; z-index: 0; pointer-events: none;
-    font-size: clamp(120px, 28vmin, 380px); font-weight: 800; line-height: 1; letter-spacing: -.05em; color: var(--c); opacity: .07; }
+  .card { position: absolute; inset: var(--pad) var(--pad) var(--padB); overflow: hidden; background: var(--card);
+    border-radius: clamp(8px, 1.2vmin, 14px); border: 1px solid var(--line);
+    box-shadow: 0 1px 2px rgb(0 0 0 / .05), 0 18px 40px -24px rgb(0 0 0 / .35); }
+  .card::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: var(--accent); z-index: 2; }
   .scroll { position: absolute; inset: 0; z-index: 1; overflow: hidden auto; overscroll-behavior: contain; display: flex; flex-direction: column;
     padding: clamp(24px, 5.2vmin, 68px) clamp(18px, 5.5vw, 90px);
-    font-size: clamp(15px, calc(.55vw + .8vh + 4px), 24px); line-height: 1.5;
-    scrollbar-width: thin; scrollbar-color: rgb(255 255 255 / .2) transparent; }
+    font-size: clamp(15px, calc(.55vw + .8vh + 4px), 24px); line-height: 1.55;
+    scrollbar-width: thin; scrollbar-color: rgb(0 0 0 / .2) transparent; }
   .slide:not(.active) .scroll { overflow: hidden; }
   .in { margin: auto 0; width: 100%; max-width: 1280px; align-self: center; }
   .more { position: absolute; left: 50%; bottom: 14px; z-index: 3; transform: translate(-50%, 6px); pointer-events: none;
-    padding: .5em 1em; border-radius: 999px; font-size: 12.5px; font-weight: 700; color: #071019; background: var(--c);
-    box-shadow: 0 6px 20px rgb(0 0 0 / .5); opacity: 0; transition: opacity .3s, transform .3s; }
+    padding: .5em 1em; border-radius: 999px; font-size: 12.5px; font-weight: 600; color: #fff; background: var(--ink);
+    box-shadow: 0 6px 18px rgb(0 0 0 / .2); opacity: 0; transition: opacity .3s, transform .3s; }
   .card.has-more .more { opacity: 1; transform: translate(-50%, 0); }
 
-  .kicker { display: flex; align-items: center; gap: .6em; margin: 0 0 .8em; font-size: .76em; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--c); }
-  .kicker::before { content: ""; width: 1.8em; height: 2px; background: currentColor; }
-  h2 { margin: 0 0 .55em; font-size: clamp(26px, calc(1.9vw + 1.9vh), 64px); line-height: 1.08; letter-spacing: -.025em; font-weight: 800; text-wrap: balance; }
-  h2 em { font-style: normal; color: var(--c); }
-  h3 { margin: 0 0 .35em; font-size: 1.08em; line-height: 1.25; }
+  .kicker { display: flex; align-items: center; gap: .6em; margin: 0 0 .8em; font-size: .72em; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+  .kicker::before { content: ""; width: 1.6em; height: 1px; background: currentColor; }
+  h2 { margin: 0 0 .6em; font-family: var(--serif); font-size: clamp(26px, calc(1.8vw + 1.8vh), 58px); font-weight: 600; line-height: 1.12; letter-spacing: -.015em; text-wrap: balance; }
+  h2 em { font-style: normal; color: var(--accent); }
+  h3 { margin: 0 0 .35em; font-size: 1.05em; font-weight: 600; line-height: 1.3; }
   p { margin: 0 0 .8em; }
-  .lead { max-width: 44em; margin-bottom: 1.1em; font-size: 1.2em; line-height: 1.45; color: var(--soft); }
+  .lead { max-width: 44em; margin-bottom: 1.1em; font-size: 1.18em; line-height: 1.5; color: var(--soft); }
   .muted { color: var(--muted); font-size: .86em; }
   .gap { margin-top: 1.2em; }
 
   .chips { display: flex; flex-wrap: wrap; gap: .5em; margin: .4em 0 0; padding: 0; list-style: none; }
-  .chips li { padding: .42em .95em; border-radius: 999px; font-size: .88em; font-weight: 600;
-    background: color-mix(in srgb, var(--c) 13%, transparent); border: 1px solid color-mix(in srgb, var(--c) 35%, transparent); }
+  .chips li { padding: .38em .9em; border-radius: 999px; font-size: .86em; font-weight: 500; color: var(--soft); background: var(--tint); border: 1px solid var(--line); }
 
-  .grid { display: grid; grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr)); gap: clamp(10px, 1.6vmin, 22px); }
-  .box { padding: clamp(14px, 2.2vmin, 28px); border-radius: clamp(12px, 1.6vmin, 20px); background: rgb(255 255 255 / .04); border: 1px solid var(--line); }
-  .box h3 { color: var(--c); }
+  .grid { display: grid; grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr)); gap: clamp(10px, 1.6vmin, 20px); }
+  .box { padding: clamp(14px, 2.2vmin, 26px); border-radius: clamp(8px, 1.1vmin, 12px); background: var(--tint); border: 1px solid var(--line); }
+  .box h3 { color: var(--ink); }
   .box p:last-child, .box ul:last-child { margin-bottom: 0; }
-  .ico { width: 1.25em; height: 1.25em; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; }
-  .badge { display: grid; place-items: center; width: 2.5em; height: 2.5em; margin-bottom: .7em; border-radius: .8em; color: var(--c);
-    background: color-mix(in srgb, var(--c) 15%, transparent); }
+  .ico { width: 1.25em; height: 1.25em; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+  .badge { display: grid; place-items: center; width: 2.4em; height: 2.4em; margin-bottom: .7em; border-radius: .6em; color: var(--accent); background: var(--accent-bg); }
 
   ul.list { margin: .3em 0 0; padding: 0; list-style: none; }
-  ul.list li { position: relative; padding-left: 1.4em; margin: .45em 0; }
-  ul.list li::before { content: ""; position: absolute; left: .2em; top: .62em; width: .45em; height: .45em; border-radius: 50%; background: var(--c); }
-  ul.check li::before { content: "✓"; width: auto; height: auto; top: 0; left: 0; background: none; color: var(--c); font-weight: 800; }
+  ul.list li { position: relative; padding-left: 1.3em; margin: .45em 0; }
+  ul.list li::before { content: ""; position: absolute; left: .2em; top: .68em; width: .36em; height: .36em; border-radius: 50%; background: var(--accent); }
+  ul.check li::before { content: "✓"; width: auto; height: auto; top: 0; left: 0; background: none; color: var(--accent); font-weight: 700; }
 
-  .note { margin: 1.1em 0 0; padding: .85em 1.1em; border-radius: .7em; font-size: .92em; border-left: 4px solid var(--mix); background: rgb(251 191 36 / .08); }
+  .note { margin: 1.1em 0 0; padding: .85em 1.1em; border-radius: .5em; font-size: .92em; border-left: 3px solid var(--mix); background: var(--warn-bg); }
   .note b { color: var(--mix); }
 
   /* Flujo de funcionamiento */
   .flow { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1.1em; margin: .6em 0 0; padding: 0; list-style: none; }
-  .flow li { position: relative; padding: 1.1em 1em; border-radius: 1em; background: rgb(255 255 255 / .04); border: 1px solid var(--line); font-size: .92em; }
-  .flow li:not(:last-child)::after { content: "→"; position: absolute; right: -1em; top: 1.55em; width: 1em; text-align: center; color: var(--c); font-weight: 800; }
-  .flow .step { display: block; font-size: .72em; font-weight: 800; letter-spacing: .12em; color: var(--muted); margin-bottom: .2em; }
-  .flow h3 { color: #fff; }
+  .flow li { position: relative; padding: 1.1em 1em; border-radius: .7em; background: var(--tint); border: 1px solid var(--line); font-size: .92em; }
+  .flow li:not(:last-child)::after { content: "→"; position: absolute; right: -1em; top: 1.55em; width: 1em; text-align: center; color: var(--muted); }
+  .flow .step { display: block; font-size: .72em; font-weight: 600; letter-spacing: .12em; color: var(--muted); margin-bottom: .2em; }
+  .flow h3 { color: var(--ink); }
   .flow p { margin: 0; color: var(--soft); }
 
   /* Mosaico de sensores */
   .tiles { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .8em; margin: .4em 0 0; padding: 0; list-style: none; }
-  .tiles li { display: flex; flex-direction: column; align-items: center; gap: .55em; padding: 1em .4em; border-radius: 1em; text-align: center; font-weight: 600; font-size: .9em;
-    background: color-mix(in srgb, var(--c) 8%, transparent); border: 1px solid color-mix(in srgb, var(--c) 22%, transparent); }
-  .tiles .ico { width: 1.9em; height: 1.9em; color: var(--c); }
+  .tiles li { display: flex; flex-direction: column; align-items: center; gap: .55em; padding: 1em .4em; border-radius: .7em; text-align: center; font-weight: 500; font-size: .9em;
+    background: var(--tint); border: 1px solid var(--line); }
+  .tiles .ico { width: 1.8em; height: 1.8em; color: var(--accent); }
 
   /* Comparación RFID vs Pixel */
-  .cmp { display: grid; gap: .55em; }
-  .cmp .row { display: grid; grid-template-columns: minmax(8em, .75fr) 2fr 2fr; gap: .55em; }
-  .cmp .row > div { padding: .75em 1em; border-radius: .7em; background: rgb(255 255 255 / .04); }
+  .cmp { display: grid; gap: .5em; }
+  .cmp .row { display: grid; grid-template-columns: minmax(8em, .75fr) 2fr 2fr; gap: .5em; }
+  .cmp .row > div { padding: .75em 1em; border-radius: .5em; background: var(--tint); }
   .cmp .a { box-shadow: inset 3px 0 0 var(--rfid); }
   .cmp .b { box-shadow: inset 3px 0 0 var(--pixel); }
-  .cmp .lbl { background: transparent !important; padding-left: 0 !important; font-weight: 700; color: #fff; }
-  .cmp .hd > div { padding-block: .3em; background: transparent; box-shadow: none; font-size: .8em; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+  .cmp .lbl { background: transparent !important; padding-left: 0 !important; font-weight: 600; color: var(--ink); }
+  .cmp .hd > div { padding-block: .3em; background: transparent; box-shadow: none; font-size: .78em; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
   .cmp .hd .a { color: var(--rfid); } .cmp .hd .b { color: var(--pixel); }
 
   /* Dos preguntas */
   .vs { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1.2em; align-items: stretch; margin: .4em 0 1.2em; }
-  .vs .box { display: flex; flex-direction: column; justify-content: center; }
-  .vs .who { font-size: .78em; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .5em; }
-  .vs .q { margin: 0; font-size: clamp(20px, calc(1.1vw + 1.3vh), 40px); line-height: 1.2; font-weight: 700; color: #fff; }
-  .vs .sep { align-self: center; font-weight: 800; color: var(--muted); }
-  .vs .rf { border-color: rgb(122 167 255 / .35); } .vs .rf .who { color: var(--rfid); }
-  .vs .px { border-color: rgb(45 212 191 / .35); } .vs .px .who { color: var(--pixel); }
+  .vs .box { display: flex; flex-direction: column; justify-content: center; background: var(--card); }
+  .vs .who { font-size: .76em; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .5em; }
+  .vs .q { margin: 0; font-family: var(--serif); font-size: clamp(20px, calc(1.1vw + 1.3vh), 40px); line-height: 1.25; font-weight: 600; color: var(--ink); }
+  .vs .sep { align-self: center; font-family: var(--serif); font-style: italic; color: var(--muted); }
+  .vs .rf { border-color: color-mix(in srgb, var(--rfid) 40%, transparent); border-top: 3px solid var(--rfid); } .vs .rf .who { color: var(--rfid); }
+  .vs .px { border-color: color-mix(in srgb, var(--pixel) 40%, transparent); border-top: 3px solid var(--pixel); } .vs .px .who { color: var(--pixel); }
 
   /* Etiquetas de tecnología */
-  .tag { display: inline-block; padding: .2em .7em; border-radius: 999px; font-size: .76em; font-weight: 700; white-space: nowrap; }
-  .t-rfid { background: rgb(122 167 255 / .16); color: var(--rfid); }
-  .t-pixel { background: rgb(45 212 191 / .16); color: var(--pixel); }
-  .t-mix { background: rgb(251 191 36 / .15); color: var(--mix); }
+  .tag { display: inline-block; padding: .18em .65em; border-radius: 999px; font-size: .76em; font-weight: 600; white-space: nowrap; }
+  .t-rfid { background: #e6edf6; color: var(--rfid); }
+  .t-pixel { background: #e4f0ec; color: var(--pixel); }
+  .t-mix { background: #f4ebd8; color: var(--mix); }
   .ind .box header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .4em .8em; margin-bottom: .45em; }
-  .ind .box h3 { margin: 0; color: #fff; }
+  .ind .box h3 { margin: 0; color: var(--ink); }
   .ind .box p { margin: 0; color: var(--soft); font-size: .94em; }
-  .rule .box { border-width: 2px; }
-  .rule .big { margin: .2em 0 0; font-size: 1.3em; line-height: 1.35; font-weight: 600; color: #fff; }
-  .rule .rf { border-color: rgb(122 167 255 / .4); } .rule .px { border-color: rgb(45 212 191 / .4); }
+  .rule .big { margin: .4em 0 0; font-family: var(--serif); font-size: 1.35em; line-height: 1.35; font-weight: 500; color: var(--ink); }
+  .rule .rf { background: var(--card); border-top: 3px solid var(--rfid); } .rule .px { background: var(--card); border-top: 3px solid var(--pixel); }
 
   /* Cifras */
-  .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(10px, 1.6vmin, 22px); margin: .2em 0 1.2em; }
-  .stat b { display: block; font-size: clamp(30px, calc(1.6vw + 2vh), 72px); line-height: 1; font-weight: 800; letter-spacing: -.03em; color: var(--c); }
+  .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(10px, 1.6vmin, 20px); margin: .2em 0 1.2em; }
+  .stat { padding-top: .8em; border-top: 2px solid var(--accent); }
+  .stat b { display: block; font-family: var(--serif); font-size: clamp(30px, calc(1.6vw + 2vh), 68px); line-height: 1; font-weight: 600; letter-spacing: -.02em; color: var(--accent); }
   .stat span { display: block; margin-top: .45em; font-size: .9em; color: var(--soft); }
 
   /* Ranking */
   .rank { display: flex; gap: 1.1em; align-items: flex-start; padding: 1.1em 0; border-top: 1px solid var(--line); }
   .rank:first-of-type { border-top: 0; padding-top: .2em; }
-  .num { flex: none; display: grid; place-items: center; width: 2.3em; height: 2.3em; border-radius: 50%; font-size: 1.25em; font-weight: 800; color: #0a0f1e; background: var(--c); }
-  .rank h3 { font-size: 1.25em; margin-bottom: .3em; }
-  .rank h3 small { font-size: .7em; font-weight: 500; color: var(--muted); }
+  .num { flex: none; display: grid; place-items: center; width: 2.2em; height: 2.2em; border-radius: 50%; font-size: 1.15em; font-weight: 600; color: #fff; background: var(--accent); }
+  .rank h3 { font-family: var(--serif); font-size: 1.3em; margin-bottom: .3em; }
+  .rank h3 small { font-family: Inter, system-ui, sans-serif; font-size: .62em; font-weight: 400; color: var(--muted); }
   .rank p { margin: 0; color: var(--soft); }
   .rank .of { display: block; margin-top: .45em; color: var(--ink); }
 
   /* Contactos */
-  .contact h3 { font-size: 1.35em; color: #fff; }
+  .contact { background: var(--card); }
+  .contact h3 { font-family: var(--serif); font-size: 1.35em; color: var(--ink); }
   .contact ul { margin: .6em 0 0; padding: 0; list-style: none; }
   .contact li { display: flex; gap: .65em; align-items: flex-start; margin: .5em 0; font-size: .93em; overflow-wrap: anywhere; }
-  .contact .ico { margin-top: .15em; color: var(--c); }
-  .pill { display: inline-block; margin-left: .3em; padding: .05em .55em; border-radius: 999px; font-size: .75em; font-weight: 700; color: #0a0f1e; background: var(--c); }
+  .contact .ico { margin-top: .15em; color: var(--accent); }
+  .pill { display: inline-block; margin-left: .3em; padding: .05em .55em; border-radius: 999px; font-size: .75em; font-weight: 600; color: var(--accent); background: var(--accent-bg); }
 
   /* Tablas de activos (en celular se vuelven tarjetas) */
   .tbl { font-size: .9em; }
   .tbl .row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1.35fr); gap: 1.2em; padding: .55em 0; border-bottom: 1px solid var(--line); }
-  .tbl .row > div:first-child { font-weight: 700; color: #fff; }
+  .tbl .row > div:first-child { font-weight: 600; color: var(--ink); }
   .tbl .row > div:not(:first-child) { color: var(--soft); }
-  .tbl .hd { padding-top: 0; border-bottom: 2px solid color-mix(in srgb, var(--c) 55%, transparent); }
-  .tbl .hd > div { font-size: .78em; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--c) !important; }
+  .tbl .hd { padding-top: 0; border-bottom: 2px solid var(--line2); }
+  .tbl .hd > div { font-size: .76em; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent) !important; }
 
   /* Etapas de seguimiento: cadena de lecturas por activo */
   .stages { font-size: .88em; }
   .st { display: grid; grid-template-columns: minmax(8em, .85fr) 3fr minmax(10em, 1.25fr); gap: .4em 1.4em; align-items: center; padding: .5em 0; border-bottom: 1px solid var(--line); }
-  .st h3 { margin: 0; font-size: 1em; color: #fff; }
-  .st.hd { padding-top: 0; border-bottom: 2px solid color-mix(in srgb, var(--c) 55%, transparent); }
-  .st.hd > div { font-size: .78em; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--c); }
+  .st h3 { margin: 0; font-size: 1em; color: var(--ink); }
+  .st.hd { padding-top: 0; border-bottom: 2px solid var(--line2); }
+  .st.hd > div { font-size: .76em; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
   .chain { display: flex; flex-wrap: wrap; align-items: center; gap: .35em 1.35em; margin: 0; padding: 0; list-style: none; }
-  .chain li { position: relative; padding: .18em .65em; border-radius: 999px; font-size: .9em; white-space: nowrap;
-    background: color-mix(in srgb, var(--c) 12%, transparent); border: 1px solid color-mix(in srgb, var(--c) 30%, transparent); }
-  .chain li + li::before { content: "→"; position: absolute; left: -1.15em; color: var(--c); font-weight: 800; }
+  .chain li { position: relative; padding: .16em .62em; border-radius: 999px; font-size: .9em; white-space: nowrap; color: var(--ink); background: var(--tint); border: 1px solid var(--line2); }
+  .chain li + li::before { content: "→"; position: absolute; left: -1.15em; color: var(--muted); }
   .chain.big { font-size: 1.1em; margin: .3em 0 0; }
+  .chain.big li { background: var(--card); }
   .alert { display: flex; gap: .5em; align-items: flex-start; margin: 0; color: var(--soft); }
-  .alert .ico { width: 1.1em; height: 1.1em; margin-top: .15em; color: var(--mix); }
+  .alert .ico { width: 1.1em; height: 1.1em; margin-top: .18em; color: var(--mix); }
   .box .alert { margin-top: .8em; }
 
   /* Prioridades, casos y preguntas */
-  .k { display: block; margin-bottom: .3em; font-size: .72em; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--c); }
+  .k { display: block; margin-bottom: .3em; font-size: .72em; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+  .prio .box { background: var(--card); }
   .prio header { display: flex; align-items: center; gap: .7em; margin-bottom: .7em; }
   .prio .num { width: 1.9em; height: 1.9em; font-size: 1em; }
-  .prio h3 { margin: 0; font-size: 1.15em; color: #fff; }
+  .prio h3 { margin: 0; font-family: var(--serif); font-size: 1.2em; color: var(--ink); }
   .prio dl { display: grid; grid-template-columns: auto 1fr; gap: .4em .9em; margin: 0; font-size: .9em; }
-  .prio dt { font-weight: 600; color: var(--muted); }
+  .prio dt { font-weight: 500; color: var(--muted); }
   .prio dd { margin: 0; }
-  .case h3 { margin-bottom: .1em; }
-  .case h3 a { color: #fff; text-decoration-color: var(--c); }
+  .case { background: var(--card); }
+  .case h3 { margin-bottom: .1em; font-family: var(--serif); font-size: 1.15em; }
+  .case h3 a { color: var(--ink); text-decoration-color: var(--line2); }
+  .case h3 a:hover { color: var(--accent); }
   .case .loc { display: block; margin-bottom: .45em; font-size: .78em; color: var(--muted); }
   .case p { font-size: .92em; color: var(--soft); }
-  .box.hl { border-color: color-mix(in srgb, var(--c) 50%, transparent); background: color-mix(in srgb, var(--c) 8%, transparent); }
-  .qs .qn { display: block; font-size: 2.6em; font-weight: 800; line-height: 1; color: var(--c); }
-  .qs .q { margin: .35em 0 .5em; font-size: 1.3em; font-weight: 700; line-height: 1.3; color: #fff; }
+  .box.hl { border-color: color-mix(in srgb, var(--accent) 28%, transparent); background: var(--accent-bg); }
+  .qs .box { background: var(--card); }
+  .qs .qn { display: block; font-family: var(--serif); font-size: 2.4em; font-weight: 500; line-height: 1; color: var(--accent); }
+  .qs .q { margin: .35em 0 .5em; font-family: var(--serif); font-size: 1.3em; font-weight: 600; line-height: 1.3; color: var(--ink); }
   .qs p:last-child { color: var(--soft); }
 
   /* Fuentes */
@@ -238,33 +234,33 @@
   .sources li { break-inside: avoid; margin: 0 0 .45em; overflow-wrap: anywhere; }
   .srcgroups { columns: 3 15em; column-gap: 2.2em; font-size: .82em; }
   .srcgroups section { break-inside: avoid; margin-bottom: 1em; }
-  .srcgroups h3 { margin: 0 0 .3em; font-size: 1em; color: var(--c); }
+  .srcgroups h3 { margin: 0 0 .3em; font-size: 1em; color: var(--accent); }
   .srcgroups ul { margin: 0; padding-left: 1.2em; }
   .srcgroups li { margin: 0 0 .35em; overflow-wrap: anywhere; }
 
   /* ---------- Barra de control ---------- */
   .progress { position: fixed; left: 0; top: 0; z-index: 6; width: 100%; height: 3px; pointer-events: none; }
-  .progress i { display: block; height: 100%; width: var(--p, 0%); background: var(--c); transition: width .6s, background-color .6s; }
+  .progress i { display: block; height: 100%; width: var(--p, 0%); background: var(--accent); transition: width .6s; }
   .bar { position: fixed; z-index: 6; right: max(16px, env(safe-area-inset-right)); bottom: calc(14px + env(safe-area-inset-bottom));
     display: flex; align-items: center; gap: 2px; height: var(--barH); padding: 6px; border-radius: 999px;
-    background: rgb(11 17 34 / .9); border: 1px solid var(--line); box-shadow: 0 14px 40px -10px rgb(0 0 0 / .7); }
-  .bar button { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: transparent; cursor: pointer; transition: background-color .2s, opacity .2s; }
+    background: rgb(255 255 255 / .96); border: 1px solid var(--line); box-shadow: 0 10px 28px -14px rgb(0 0 0 / .35); }
+  .bar button { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--ink); cursor: pointer; transition: background-color .2s, opacity .2s; }
   .bar button[hidden] { display: none; }
-  .bar button:hover:not(:disabled) { background: rgb(255 255 255 / .08); }
-  .bar button:focus-visible { outline: 2px solid var(--c); outline-offset: 1px; }
+  .bar button:hover:not(:disabled) { background: var(--tint); }
+  .bar button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
   .bar button:disabled { opacity: .3; cursor: default; }
-  .bar #next { background: var(--c); color: #071019; transition: background-color .6s; }
-  .bar #next:hover:not(:disabled) { filter: brightness(1.1); background: var(--c); }
-  body.peek #ovBtn { background: rgb(255 255 255 / .14); }
+  .bar #next { background: var(--accent); color: #fff; }
+  .bar #next:hover:not(:disabled) { background: #173d57; }
+  body.peek #ovBtn { background: var(--tint); }
   .bar .ico { width: 22px; height: 22px; }
   .where { display: flex; flex-direction: column; justify-content: center; min-width: 9.5em; max-width: 17em; padding: 0 .7em; line-height: 1.25; }
-  #secName { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #secName { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   #count { font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
   .toast { position: fixed; z-index: 7; left: max(16px, env(safe-area-inset-left)); bottom: calc(22px + env(safe-area-inset-bottom)); max-width: calc(100% - 32px);
-    padding: .65em 1.1em; border-radius: 999px; border: 1px solid var(--line); background: rgb(11 17 34 / .92);
+    padding: .65em 1.1em; border-radius: 999px; border: 1px solid var(--line); background: #fff; box-shadow: 0 8px 22px -14px rgb(0 0 0 / .35);
     font-size: 13px; color: var(--soft); text-align: center; transition: opacity .6s; pointer-events: none; }
   .toast.hide { opacity: 0; }
-  noscript { position: fixed; inset: auto 16px 16px; z-index: 9; padding: 1em; border-radius: 12px; background: #fbbf24; color: #111; }
+  noscript { position: fixed; inset: auto 16px 16px; z-index: 9; padding: 1em; border-radius: 12px; background: var(--warn-bg); color: var(--ink); }
 
   /* ---------- Celular ---------- */
   @media (max-width: 760px) {
@@ -272,7 +268,7 @@
     .bar { left: max(10px, env(safe-area-inset-left)); right: max(10px, env(safe-area-inset-right)); bottom: calc(10px + env(safe-area-inset-bottom)); }
     .where { flex: 1; min-width: 0; max-width: none; }
     .toast { left: 50%; transform: translateX(-50%); width: max-content; top: calc(12px + env(safe-area-inset-top)); bottom: auto; border-radius: 14px; }
-    .scroll { line-height: 1.45; }
+    .scroll { line-height: 1.5; }
     .grid, .stats { --cols: 1; grid-template-columns: 1fr; }
     .stats { gap: 10px; }
     .stat { display: flex; align-items: baseline; gap: .7em; }
@@ -294,15 +290,14 @@
     .rank { gap: .8em; }
     .num { font-size: 1.05em; }
     .tbl .hd { display: none; }
-    .tbl .row { display: block; margin-bottom: .5em; padding: .7em .85em; border: 1px solid var(--line); border-radius: .7em; background: rgb(255 255 255 / .03); }
+    .tbl .row { display: block; margin-bottom: .5em; padding: .7em .85em; border: 1px solid var(--line); border-radius: .6em; background: var(--tint); }
     .tbl .row > div + div { margin-top: .35em; }
-    .tbl .row > div[data-l]:not(:first-child)::before { content: attr(data-l); display: block; font-size: .72em; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+    .tbl .row > div[data-l]:not(:first-child)::before { content: attr(data-l); display: block; font-size: .72em; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
     .st.hd { display: none; }
-    .st { grid-template-columns: 1fr; gap: .55em; margin-bottom: .5em; padding: .75em .85em; border: 1px solid var(--line); border-radius: .7em; background: rgb(255 255 255 / .03); }
-    .chain li { white-space: normal; }
+    .st { grid-template-columns: 1fr; gap: .55em; margin-bottom: .5em; padding: .75em .85em; border: 1px solid var(--line); border-radius: .6em; background: var(--tint); }
+    .chain li { white-space: normal; background: var(--card); }
     .prio dl { grid-template-columns: 1fr; gap: 0; }
     .prio dt { margin-top: .45em; font-size: .75em; letter-spacing: .06em; text-transform: uppercase; }
-    .card::after { font-size: 42vmin; }
   }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -350,19 +345,19 @@
 </div>
 
 <!-- Círculos de cada sección -->
-<div class="frame sec s1" data-sec="1" data-name="Qué son los IoT Pixels"><button class="circle" aria-label="Ir a la sección 1: Qué son los IoT Pixels"><span class="c-num">01</span><span class="c-title">Qué son</span><span class="c-sub">Etiquetas sin batería del tamaño de una estampilla</span></button></div>
-<div class="frame sec s2" data-sec="2" data-name="La tecnología: Ambient IoT"><button class="circle" aria-label="Ir a la sección 2: La tecnología"><span class="c-num">02</span><span class="c-title">Ambient IoT</span><span class="c-sub">Cómo se llama la tecnología y quién la estandariza</span></button></div>
-<div class="frame sec s3" data-sec="3" data-name="Comparación con RFID"><button class="circle" aria-label="Ir a la sección 3: Comparación con RFID"><span class="c-num">03</span><span class="c-title">vs RFID</span><span class="c-sub">Frente a frente con el RFID pasivo UHF</span></button></div>
-<div class="frame sec s4" data-sec="4" data-name="Qué conviene por industria"><button class="circle" aria-label="Ir a la sección 4: Qué conviene por industria"><span class="c-num">04</span><span class="c-title">Por industria</span><span class="c-sub">Qué tecnología conviene en cada sector</span></button></div>
-<div class="frame sec s5" data-sec="5" data-name="RFID por rubro: dónde entrar"><button class="circle" aria-label="Ir a la sección 5: RFID por rubro, dónde entrar"><span class="c-num">05</span><span class="c-title">Dónde entrar</span><span class="c-sub">Prioridades para llevar RFID a otros rubros</span></button></div>
-<div class="frame sec s6" data-sec="6" data-name="RFID: 7 rubros en detalle"><button class="circle" aria-label="Ir a la sección 6: 7 rubros en detalle"><span class="c-num">06</span><span class="c-title">7 rubros</span><span class="c-sub">Activos, etapas, casos y riesgos de cada sector</span></button></div>
-<div class="frame sec s7" data-sec="7" data-name="El proveedor: Wiliot"><button class="circle" aria-label="Ir a la sección 7: El proveedor, Wiliot"><span class="c-num">07</span><span class="c-title">Wiliot</span><span class="c-sub">La empresa detrás de los IoT Pixels</span></button></div>
-<div class="frame sec s8" data-sec="8" data-name="Top 5 proveedores"><button class="circle" aria-label="Ir a la sección 8: Top 5 proveedores"><span class="c-num">08</span><span class="c-title">Top 5</span><span class="c-sub">Los proveedores de Ambient IoT más sólidos</span></button></div>
-<div class="frame sec s9" data-sec="9" data-name="Contactos corporativos"><button class="circle" aria-label="Ir a la sección 9: Contactos corporativos"><span class="c-num">09</span><span class="c-title">Contactos</span><span class="c-sub">A quién llamar y dónde escribir</span></button></div>
-<div class="frame sec s10" data-sec="10" data-name="Fuentes"><button class="circle" aria-label="Ir a la sección 10: Fuentes"><span class="c-num">10</span><span class="c-title">Fuentes</span><span class="c-sub">51 fuentes consultadas</span></button></div>
+<div class="frame sec" data-sec="1" data-name="Qué son los IoT Pixels"><button class="circle" aria-label="Ir a la sección 1: Qué son los IoT Pixels"><span class="c-num">01</span><span class="c-title">Qué son</span><span class="c-sub">Etiquetas sin batería del tamaño de una estampilla</span></button></div>
+<div class="frame sec" data-sec="2" data-name="La tecnología: Ambient IoT"><button class="circle" aria-label="Ir a la sección 2: La tecnología"><span class="c-num">02</span><span class="c-title">Ambient IoT</span><span class="c-sub">Cómo se llama la tecnología y quién la estandariza</span></button></div>
+<div class="frame sec" data-sec="3" data-name="Comparación con RFID"><button class="circle" aria-label="Ir a la sección 3: Comparación con RFID"><span class="c-num">03</span><span class="c-title">vs RFID</span><span class="c-sub">Frente a frente con el RFID pasivo UHF</span></button></div>
+<div class="frame sec" data-sec="4" data-name="Qué conviene por industria"><button class="circle" aria-label="Ir a la sección 4: Qué conviene por industria"><span class="c-num">04</span><span class="c-title">Por industria</span><span class="c-sub">Qué tecnología conviene en cada sector</span></button></div>
+<div class="frame sec" data-sec="5" data-name="RFID por rubro: dónde entrar"><button class="circle" aria-label="Ir a la sección 5: RFID por rubro, dónde entrar"><span class="c-num">05</span><span class="c-title">Dónde entrar</span><span class="c-sub">Prioridades para llevar RFID a otros rubros</span></button></div>
+<div class="frame sec" data-sec="6" data-name="RFID: 7 rubros en detalle"><button class="circle" aria-label="Ir a la sección 6: 7 rubros en detalle"><span class="c-num">06</span><span class="c-title">7 rubros</span><span class="c-sub">Activos, etapas, casos y riesgos de cada sector</span></button></div>
+<div class="frame sec" data-sec="7" data-name="El proveedor: Wiliot"><button class="circle" aria-label="Ir a la sección 7: El proveedor, Wiliot"><span class="c-num">07</span><span class="c-title">Wiliot</span><span class="c-sub">La empresa detrás de los IoT Pixels</span></button></div>
+<div class="frame sec" data-sec="8" data-name="Top 5 proveedores"><button class="circle" aria-label="Ir a la sección 8: Top 5 proveedores"><span class="c-num">08</span><span class="c-title">Top 5</span><span class="c-sub">Los proveedores de Ambient IoT más sólidos</span></button></div>
+<div class="frame sec" data-sec="9" data-name="Contactos corporativos"><button class="circle" aria-label="Ir a la sección 9: Contactos corporativos"><span class="c-num">09</span><span class="c-title">Contactos</span><span class="c-sub">A quién llamar y dónde escribir</span></button></div>
+<div class="frame sec" data-sec="10" data-name="Fuentes"><button class="circle" aria-label="Ir a la sección 10: Fuentes"><span class="c-num">10</span><span class="c-title">Fuentes</span><span class="c-sub">51 fuentes consultadas</span></button></div>
 
 <!-- ===== 1. Qué son ===== -->
-<article class="frame slide s1" data-sec="1"><div class="card" data-n="01"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="1"><div class="card" data-n="01"><div class="scroll"><div class="in">
   <p class="kicker">01 · Qué son los IoT Pixels</p>
   <h2>Pequeñas computadoras <em>sin batería</em></h2>
   <p class="lead">Los <strong>IoT Pixels</strong> son un producto de <strong>Wiliot</strong>, empresa israelí de "ambient IoT". Son etiquetas del tamaño de una estampilla que funcionan como pequeñas computadoras sin batería; se pegan o integran en productos, cajas o pallets para saber <strong>dónde están</strong> y <strong>en qué condiciones</strong>.</p>
@@ -371,7 +366,7 @@
   </ul>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s1" data-sec="1"><div class="card" data-n="01"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="1"><div class="card" data-n="01"><div class="scroll"><div class="in">
   <p class="kicker">01 · Qué son los IoT Pixels</p>
   <h2>Cómo <em>funcionan</em></h2>
   <ol class="flow">
@@ -383,7 +378,7 @@
   </ol>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s1" data-sec="1"><div class="card" data-n="01"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="1"><div class="card" data-n="01"><div class="scroll"><div class="in">
   <p class="kicker">01 · Qué son los IoT Pixels</p>
   <h2>Qué pueden <em>medir</em></h2>
   <ul class="tiles">
@@ -402,7 +397,7 @@
   </ul>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s1" data-sec="1"><div class="card" data-n="01"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="1"><div class="card" data-n="01"><div class="scroll"><div class="in">
   <p class="kicker">01 · Qué son los IoT Pixels</p>
   <h2>Variantes y <em>evolución</em></h2>
   <div class="grid" style="--cols:3">
@@ -415,7 +410,7 @@
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
 <!-- ===== 2. Ambient IoT ===== -->
-<article class="frame slide s2" data-sec="2"><div class="card" data-n="02"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="2"><div class="card" data-n="02"><div class="scroll"><div class="in">
   <p class="kicker">02 · La tecnología</p>
   <h2>La tecnología se llama <em>Ambient IoT</em></h2>
   <p class="lead">A-IoT, o "IoT ambiental". <strong>"IoT Pixel"</strong> es el nombre comercial del producto de Wiliot.</p>
@@ -425,7 +420,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s2" data-sec="2"><div class="card" data-n="02"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="2"><div class="card" data-n="02"><div class="scroll"><div class="in">
   <p class="kicker">02 · La tecnología</p>
   <h2>No es exclusivo de <em>Wiliot</em></h2>
   <p class="lead">Ambient IoT se está estandarizando y ya tiene una alianza de industria.</p>
@@ -439,7 +434,7 @@
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
 <!-- ===== 3. vs RFID ===== -->
-<article class="frame slide s3" data-sec="3"><div class="card" data-n="03"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="3"><div class="card" data-n="03"><div class="scroll"><div class="in">
   <p class="kicker">03 · Comparación con RFID</p>
   <h2>Qué es cada una</h2>
   <p class="muted">Se compara con <strong>RFID pasivo UHF</strong>, el competidor directo en retail y logística.</p>
@@ -452,7 +447,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s3" data-sec="3"><div class="card" data-n="03"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="3"><div class="card" data-n="03"><div class="scroll"><div class="in">
   <p class="kicker">03 · Comparación con RFID</p>
   <h2>Lectura, alcance y <em>costos</em></h2>
   <div class="cmp">
@@ -464,7 +459,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s3" data-sec="3"><div class="card" data-n="03"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="3"><div class="card" data-n="03"><div class="scroll"><div class="in">
   <p class="kicker">03 · Comparación con RFID</p>
   <h2>Escala, madurez y <em>entorno</em></h2>
   <div class="cmp">
@@ -475,7 +470,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s3" data-sec="3"><div class="card" data-n="03"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="3"><div class="card" data-n="03"><div class="scroll"><div class="in">
   <p class="kicker">03 · Comparación con RFID</p>
   <h2>La diferencia <em>de fondo</em></h2>
   <div class="vs">
@@ -486,7 +481,7 @@
   <p class="lead">Las etiquetas cuestan parecido; la diferencia está en el <strong>costo total del sistema</strong> (infraestructura).</p>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s3" data-sec="3"><div class="card" data-n="03"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="3"><div class="card" data-n="03"><div class="scroll"><div class="in">
   <p class="kicker">03 · Comparación con RFID</p>
   <h2>Limitaciones de los <em>IoT Pixels</em></h2>
   <ul class="list">
@@ -498,7 +493,7 @@
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
 <!-- ===== 4. Por industria ===== -->
-<article class="frame slide s4" data-sec="4"><div class="card" data-n="04"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="4"><div class="card" data-n="04"><div class="scroll"><div class="in">
   <p class="kicker">04 · Qué conviene por industria</p>
   <h2>La regla <em>general</em></h2>
   <div class="grid rule">
@@ -508,7 +503,7 @@
   <p class="muted gap">En las próximas diapositivas: <span class="tag t-rfid">RFID</span> <span class="tag t-pixel">IoT Pixel</span> <span class="tag t-mix">Mixto</span></p>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s4" data-sec="4"><div class="card" data-n="04"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="4"><div class="card" data-n="04"><div class="scroll"><div class="in">
   <p class="kicker">04 · Por industria · 1 de 3</p>
   <h2>Moda, alimentos, farma y <em>logística</em></h2>
   <div class="grid ind">
@@ -519,7 +514,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s4" data-sec="4"><div class="card" data-n="04"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="4"><div class="card" data-n="04"><div class="scroll"><div class="in">
   <p class="kicker">04 · Por industria · 2 de 3</p>
   <h2>Retornables, retail, automotriz y <em>aeronáutico</em></h2>
   <div class="grid ind">
@@ -530,7 +525,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s4" data-sec="4"><div class="card" data-n="04"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="4"><div class="card" data-n="04"><div class="scroll"><div class="in">
   <p class="kicker">04 · Por industria · 3 de 3</p>
   <h2>Salud, agro, accesos y <em>consumo</em></h2>
   <div class="grid ind">
@@ -541,7 +536,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s4" data-sec="4"><div class="card" data-n="04"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="4"><div class="card" data-n="04"><div class="scroll"><div class="in">
   <p class="kicker">04 · Qué conviene por industria</p>
   <h2>¿Cuál <em>conviene</em>?</h2>
   <div class="grid">
@@ -560,7 +555,7 @@
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
 <!-- ===== 5. RFID por rubro: dónde entrar ===== -->
-<article class="frame slide s5" data-sec="5"><div class="card" data-n="05"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="5"><div class="card" data-n="05"><div class="scroll"><div class="in">
   <p class="kicker">05 · RFID por rubro</p>
   <h2>Frigoríficos y salud: <em>las mejores entradas</em></h2>
   <div class="grid">
@@ -571,7 +566,7 @@
   <div class="note"><b>Pregunta abierta:</b> ¿la plataforma trabaja solo en UHF? Si es así, en frigoríficos haría falta sumar lectura de baja frecuencia para las caravanas.</div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s5" data-sec="5"><div class="card" data-n="05"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="5"><div class="card" data-n="05"><div class="scroll"><div class="in">
   <p class="kicker">05 · RFID por rubro</p>
   <h2>Prioridades <em>1 a 4</em></h2>
   <div class="grid prio">
@@ -594,7 +589,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s5" data-sec="5"><div class="card" data-n="05"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="5"><div class="card" data-n="05"><div class="scroll"><div class="in">
   <p class="kicker">05 · RFID por rubro</p>
   <h2>Prioridades <em>5 a 7</em></h2>
   <div class="grid prio" style="--cols:3">
@@ -613,7 +608,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s5" data-sec="5"><div class="card" data-n="05"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="5"><div class="card" data-n="05"><div class="scroll"><div class="in">
   <p class="kicker">05 · RFID por rubro</p>
   <h2>Qué cambia respecto de <em>hotelería</em></h2>
   <p>La plataforma de eventos, alertas y analítica se reutiliza, pero <strong>el tag y el lector cambian según el entorno</strong>.</p>
@@ -629,7 +624,7 @@
   <p class="muted gap">Guía general para definir pruebas, no un resultado de los casos citados.</p>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s5" data-sec="5"><div class="card" data-n="05"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="5"><div class="card" data-n="05"><div class="scroll"><div class="in">
   <p class="kicker">05 · RFID por rubro</p>
   <h2>Dos preguntas para <em>calificar un piloto</em></h2>
   <div class="grid qs">
@@ -639,7 +634,7 @@
   <p class="muted gap">Sirven en cualquier rubro.</p>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s5" data-sec="5"><div class="card" data-n="05"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="5"><div class="card" data-n="05"><div class="scroll"><div class="in">
   <p class="kicker">05 · RFID por rubro</p>
   <h2>Etapas de seguimiento <em>por activo</em></h2>
   <p class="lead">Cada activo se puede seguir como una <strong>cadena de lecturas</strong>: cada etapa marca un cambio de lugar, estado o responsable.</p>
@@ -652,7 +647,7 @@
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
 <!-- ===== 6. 7 rubros en detalle ===== -->
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 1 · Frigoríficos</p>
   <h2>Frigoríficos: <em>la norma ya obliga</em></h2>
   <p class="lead">Desde el <strong>1 de julio de 2026</strong>, las plantas deben leer la caravana electrónica en la línea de faena y asociarla al número de garrón. La oportunidad es seguir esa identidad después de la lectura obligatoria: cuarteo, cámara, cajones y despacho.</p>
@@ -664,7 +659,7 @@
   </ul>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 1 · Frigoríficos</p>
   <h2>Frigoríficos: <em>qué se controla</em></h2>
   <div class="tbl">
@@ -679,7 +674,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 1 · Frigoríficos</p>
   <h2>Frigoríficos: <em>etapas de seguimiento</em></h2>
   <div class="stages">
@@ -694,7 +689,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 1 · Frigoríficos</p>
   <h2>Frigoríficos: <em>evidencia y primer paso</em></h2>
   <ul class="list">
@@ -706,7 +701,7 @@
   <div class="box hl gap"><span class="k">Primer paso sugerido</span>Empezar en cajones y cámara, donde hay menos riesgo que en ganchos, y probar ganchos en un tramo chico de línea.</div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 2 · Salud</p>
   <h2>Salud: <em>de la hotelería al hospital</em></h2>
   <p>Los textiles funcionan igual que en hotelería y ya hay un caso en Buenos Aires. Desde ahí se puede crecer hacia equipos médicos e instrumental, donde el ahorro por activo es mayor.</p>
@@ -721,7 +716,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 2 · Salud</p>
   <h2>Salud: <em>etapas de seguimiento</em></h2>
   <div class="stages">
@@ -735,7 +730,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 2 · Salud</p>
   <h2>Salud: <em>casos</em></h2>
   <div class="grid">
@@ -747,7 +742,7 @@
   <div class="note"><b>A tener en cuenta:</b> Lothian eligió lectores por sala o sector, no ubicación exacta, para contener el costo. Su hospital piloto usó 75 lectores y 150 antenas. También reportó que reetiquetar llevó mucho tiempo y que la superficie y la orientación afectan la lectura.</div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 3 · Laboratorio</p>
   <h2>Laboratorio: <em>no perder muestras</em></h2>
   <p>El mayor valor está en no perder ni confundir muestras y en demostrar el estado de cada equipo durante una auditoría. Abarca análisis clínicos y laboratorio farmacéutico.</p>
@@ -762,7 +757,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 3 · Laboratorio</p>
   <h2>Laboratorio: <em>etapas de seguimiento</em></h2>
   <div class="stages">
@@ -776,7 +771,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 3 · Laboratorio</p>
   <h2>Laboratorio: <em>casos y contexto</em></h2>
   <div class="grid">
@@ -788,7 +783,7 @@
   <div class="note"><b>A tener en cuenta:</b> en frío extremo el caso citado usa HF y lectores especiales, no UHF estándar. Conviene empezar por conservadoras y equipos, que no exigen etiquetar tubo por tubo.</div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 4 · Transportes</p>
   <h2>Transportes: <em>recuperar retornables</em></h2>
   <p>El negocio más claro es recuperar lo que circula entre clientes y depósitos. El RFID muestra dónde se perdió cada unidad, y <strong>un contrato convierte ese dato en dinero recuperado</strong>.</p>
@@ -804,7 +799,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 4 · Transportes</p>
   <h2>Transportes: <em>etapas de seguimiento</em></h2>
   <div class="stages">
@@ -819,7 +814,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 4 · Transportes</p>
   <h2>Transportes: <em>casos y contexto</em></h2>
   <div class="grid">
@@ -832,7 +827,7 @@
   <div class="note"><b>A tener en cuenta:</b> como advierte la <a href="https://palletenterprise.com/?p=6101">misma nota de pallets</a>, sin acuerdos que definan quién paga una pérdida, la tecnología no frena la fuga. En ruta, GPS y telemetría resuelven mejor la ubicación continua. RFID sirve en bases, muelles y puntos de paso.</div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 5 · Minería</p>
   <h2>Minería: <em>pañol, EPP y campamento</em></h2>
   <p>La mejor entrada es controlar lo que entra y sale de puntos definidos. Los casos publicados más citados son subterráneos; en operaciones a cielo abierto o en salares hay que validar si aplican.</p>
@@ -847,7 +842,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 5 · Minería</p>
   <h2>Minería: <em>etapas de seguimiento</em></h2>
   <div class="stages">
@@ -861,7 +856,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 5 · Minería</p>
   <h2>Minería: <em>casos y contexto</em></h2>
   <div class="grid">
@@ -873,7 +868,7 @@
   <div class="note"><b>A tener en cuenta:</b> en áreas abiertas, RFID pasivo solo registra pasos por puntos fijos, así que no reemplaza a GPS o redes de largo alcance. El seguimiento de personas requiere acordar privacidad con los trabajadores. La idea de campamento es una extensión de la oferta textil, sin caso publicado.</div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 6 · Terminales portuarias</p>
   <h2>Puertos: <em>flota, combustible y gate</em></h2>
   <p>El gate es el uso más probado, pero compite con OCR y exige integrarse con el sistema operativo de la terminal. Una entrada más accesible es controlar flota interna, combustible y equipos, sin tocar el flujo crítico del contenedor.</p>
@@ -889,7 +884,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 6 · Terminales portuarias</p>
   <h2>Puertos: <em>etapas de seguimiento</em></h2>
   <div class="stages">
@@ -904,7 +899,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 6 · Terminales portuarias</p>
   <h2>Puertos: <em>casos y contexto local</em></h2>
   <div class="grid">
@@ -920,7 +915,7 @@
   <div class="note"><b>A tener en cuenta:</b> los contenedores de terceros rara vez llevan un tag propio, así que el modelo citado usa tags temporales o magnéticos. El metal y las distancias de lectura exigen pruebas en sitio: Hazira leía a unos 3 metros en gates y grúas de patio, y hasta 8 metros en grúas de muelle.</div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 7 · Financiero</p>
   <h2>Financiero: <em>inventario de IT</em></h2>
   <p>El caso más sólido es el inventario de equipos IT: acelera auditorías y evita activos fantasma. El control de efectivo y documentos tiene valor, pero depende de muy pocos clientes y de procesos reservados.</p>
@@ -935,7 +930,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 7 · Financiero</p>
   <h2>Financiero: <em>etapas de seguimiento</em></h2>
   <div class="stages">
@@ -949,7 +944,7 @@
   </div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s6" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="6"><div class="card" data-n="06"><div class="scroll"><div class="in">
   <p class="kicker">06 · Rubro 7 · Financiero</p>
   <h2>Financiero: <em>casos y alertas</em></h2>
   <div class="grid" style="--cols:3">
@@ -962,7 +957,7 @@
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
 <!-- ===== 5. Wiliot ===== -->
-<article class="frame slide s7" data-sec="7"><div class="card" data-n="07"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="7"><div class="card" data-n="07"><div class="scroll"><div class="in">
   <p class="kicker">07 · El proveedor</p>
   <h2>Quién es <em>Wiliot</em></h2>
   <div class="stats">
@@ -978,7 +973,7 @@
   </ul>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s7" data-sec="7"><div class="card" data-n="07"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="7"><div class="card" data-n="07"><div class="scroll"><div class="in">
   <p class="kicker">07 · El proveedor</p>
   <h2>Cliente emblema: <em>Walmart</em></h2>
   <div class="stats">
@@ -989,7 +984,7 @@
   <p class="lead">Es el mayor despliegue de Ambient IoT del mercado.</p>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s7" data-sec="7"><div class="card" data-n="07"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="7"><div class="card" data-n="07"><div class="scroll"><div class="in">
   <p class="kicker">07 · El proveedor</p>
   <h2>El <em>ecosistema</em></h2>
   <div class="grid" style="--cols:3">
@@ -1001,7 +996,7 @@
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
 <!-- ===== 6. Top 5 ===== -->
-<article class="frame slide s8" data-sec="8"><div class="card" data-n="08"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="8"><div class="card" data-n="08"><div class="scroll"><div class="in">
   <p class="kicker">08 · Top 5 proveedores de Ambient IoT</p>
   <h2>Los <em>líderes</em></h2>
   <p class="muted">Ordenados por escala de despliegues reales, respaldo financiero y trayectoria. Es una valoración propia, no un ranking oficial.</p>
@@ -1015,7 +1010,7 @@
   </div></div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s8" data-sec="8"><div class="card" data-n="08"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="8"><div class="card" data-n="08"><div class="scroll"><div class="in">
   <p class="kicker">08 · Top 5 proveedores de Ambient IoT</p>
   <h2>Puestos <em>3 y 4</em></h2>
   <div class="rank"><div class="num">3</div><div>
@@ -1028,7 +1023,7 @@
   </div></div>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s8" data-sec="8"><div class="card" data-n="08"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="8"><div class="card" data-n="08"><div class="scroll"><div class="in">
   <p class="kicker">08 · Top 5 proveedores de Ambient IoT</p>
   <h2>Puesto 5 y <em>conclusión</em></h2>
   <div class="rank"><div class="num">5</div><div>
@@ -1039,7 +1034,7 @@
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
 <!-- ===== 7. Contactos ===== -->
-<article class="frame slide s9" data-sec="9"><div class="card" data-n="09"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="9"><div class="card" data-n="09"><div class="scroll"><div class="in">
   <p class="kicker">09 · Contactos corporativos</p>
   <h2>A quién <em>contactar</em></h2>
   <div class="grid" style="--cols:3">
@@ -1061,7 +1056,7 @@
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
 <!-- ===== 8. Fuentes ===== -->
-<article class="frame slide s10" data-sec="10"><div class="card" data-n="10"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="10"><div class="card" data-n="10"><div class="scroll"><div class="in">
   <p class="kicker">10 · Fuentes</p>
   <h2>Fuentes: <em>IoT Pixels y Ambient IoT</em></h2>
   <ol class="sources">
@@ -1091,7 +1086,7 @@
   <p class="muted gap">Investigación compilada el 3 de noviembre de 2026.</p>
 </div></div><span class="more">Deslizá para ver más ↓</span></div></article>
 
-<article class="frame slide s10" data-sec="10"><div class="card" data-n="10"><div class="scroll"><div class="in">
+<article class="frame slide" data-sec="10"><div class="card" data-n="10"><div class="scroll"><div class="in">
   <p class="kicker">10 · Fuentes</p>
   <h2>Fuentes: <em>RFID por rubro</em></h2>
   <p class="muted">Del informe "RFID por rubro: usos, activos y problemáticas" (3 de noviembre de 2026). Todas fueron abiertas salvo la Resolución AGP 37/2019, que el sitio no permitió leer por completo.</p>
@@ -1160,7 +1155,7 @@
     const heads = [...t.querySelectorAll('.hd > div')].map(h => h.textContent.trim());
     t.querySelectorAll('.row:not(.hd)').forEach(r => [...r.children].forEach((c, i) => c.dataset.l = heads[i]));
   });
-  const ROT = [-6, 4, -3, 5, -4, 3, -5, 4, -3, 5];
+  const ROT = [0];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Recorrido: vista general → cada círculo y sus diapositivas → vista general
@@ -1249,8 +1244,8 @@
     const G = Math.ceil(2 * Math.hypot(W, H)), sizes = [base, base * 2, base * 4];
     grid.style.backgroundSize = sizes.map(s => `${s}px ${s}px`).join(',');
     grid.style.backgroundPosition = sizes.map(s => `${G / 2 - c.x * k - s / 2}px ${G / 2 - c.y * k - s / 2}px`).join(',');
-    grid.style.setProperty('--a1', (fr * 0.12).toFixed(3));
-    grid.style.setProperty('--a3', ((1 - fr) * 0.12).toFixed(3));
+    grid.style.setProperty('--a1', (fr * 0.1).toFixed(3));
+    grid.style.setProperty('--a3', ((1 - fr) * 0.1).toFixed(3));
     grid.style.transform = `translate(-50%,-50%) rotate(${-c.r}deg)`;
   }
 
@@ -1319,8 +1314,7 @@
     const sec = f.dataset.sec ? secs[f.dataset.sec - 1] : null;
     body.classList.toggle('peek', peek);
     body.classList.toggle('at-end', cur === last);
-    body.style.setProperty('--c', sec ? getComputedStyle(sec).getPropertyValue('--c').trim() : '#2dd4bf');
-    $('#secName').textContent = peek ? 'Vista general' : sec ? sec.dataset.name : cur === 0 ? 'Inicio' : 'Fin';
+        $('#secName').textContent = peek ? 'Vista general' : sec ? sec.dataset.name : cur === 0 ? 'Inicio' : 'Fin';
     $('#count').textContent = `${cur + 1} / ${stops.length}`;
     root.style.setProperty('--p', (cur / last * 100).toFixed(2) + '%');
     $('#prev').disabled = cur === 0 && !peek;
@@ -1396,14 +1390,14 @@
   let toastTimer;
   function hideToast() { clearTimeout(toastTimer); toast.classList.add('hide'); }
   toast.textContent = matchMedia('(pointer: coarse)').matches
-    ? 'Deslizá ← → para avanzar · tocá un tema para ir directo'
+    ? 'Deslizá ← → para avanzar'
     : 'Usá ← → o la barra espaciadora · O para la vista general';
 
   layout();
   const h = parseInt(location.hash.slice(1), 10);
   cur = h >= 1 && h <= stops.length ? h - 1 : 0;
   sync();
-  cam = { x: W / 2, y: H / 2, w: W * 2.6, r: -12 };
+  cam = { x: W / 2, y: H / 2, w: W * 1.8, r: 0 };
   apply(cam);
   fly(camFor(stops[cur]));
   toastTimer = setTimeout(hideToast, 5000);
