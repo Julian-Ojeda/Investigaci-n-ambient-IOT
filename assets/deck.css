@@ -301,6 +301,9 @@ noscript { position: fixed; inset: auto 16px 16px; z-index: 9; padding: 1em; bor
 .prio.apps dl { grid-template-columns: 1fr; gap: 0; }
 .prio.apps dt { margin-top: .55em; font-size: .72em; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
 .prio.apps header { margin-bottom: .1em; }
+.prio .soon { display: flex; flex-direction: column; justify-content: center; background: transparent; border: 1.5px dashed var(--line2); }
+.prio .soon h3 { margin: 0 0 .3em; font-family: var(--serif); font-size: 1.2em; color: var(--muted); }
+.prio .soon p { margin: 0; font-size: .9em; color: var(--muted); }
 .apps-grid { font-size: .84em; gap: clamp(8px, 1.2vmin, 14px); }
 .app { display: flex; flex-direction: column; background: var(--card); padding: clamp(12px, 1.8vmin, 20px); }
 .app h3 { margin-bottom: .3em; font-family: var(--serif); font-size: 1.12em; }
