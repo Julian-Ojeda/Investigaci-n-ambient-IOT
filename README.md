@@ -1,12 +1,12 @@
-# RFID en la Biblioteca UNAHUR
+# Temas en investigación
 
-Investigación de respaldo para la implementación de RFID en la Biblioteca Miguel Cervantes de la UNAHUR, que usa Koha 22.11.27. La portada ([`index.html`](index.html)) se lee en 3 minutos: situación verificada, la decisión de actualizar Koha, próximos pasos y los temas ordenados por relevancia para la biblioteca. Cada tema abre con un bloque **Lo esencial** (1 minuto) y sigue con el detalle.
+Cuatro investigaciones independientes. La portada ([`index.html`](index.html)) se lee en 3 minutos: una ficha por tema con la conclusión, las cifras clave y el próximo paso. Cada tema abre con un bloque **Lo esencial** (1 minuto) y sigue con el detalle.
 
 ## Temas
 
 | Archivo | Tema | Estado |
 |---|---|---|
-| [`koha.html`](koha.html) | Koha y RFID en la UNAHUR: situación del Koha de la biblioteca, SIP2, API REST, plugin RFID abierto, HF o UHF, plan por fases y preguntas para TI | Central |
+| [`koha.html`](koha.html) | Koha y RFID en la UNAHUR: situación del Koha de la biblioteca, SIP2, API REST, plugin RFID abierto, HF o UHF, plan por fases y preguntas para TI | Nuevo |
 | [`rfid-rubros.html`](rfid-rubros.html) | RFID: aplicaciones por rubro. Doce rubros con activos, aplicaciones, etapas de seguimiento, casos y FODA | En curso |
 | [`iot-pixels.html`](iot-pixels.html) | IoT Pixels y Ambient IoT: comparación con RFID pasivo UHF, costos, proveedores y contactos | Completo |
 | [`metales.html`](metales.html) | Trazabilidad sobre metal: RFID UHF y NFC para metal, marcado directo, BLE, entornos extremos y casos | Exploratorio |

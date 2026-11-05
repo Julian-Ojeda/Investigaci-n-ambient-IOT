@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>RFID en la Biblioteca UNAHUR</title>
+<title>Temas en investigación</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Resumen para dirección del proyecto RFID de la Biblioteca UNAHUR: situación de Koha, decisión de actualización, próximos pasos e investigación de respaldo.">
+<meta name="description" content="Cuatro temas en investigación: IoT Pixels, RFID por rubro, trazabilidad sobre metal y Koha con RFID.">
 <meta name="theme-color" content="#f3f4f1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/deck.css">
 <style>
-  /* Hoja de decisión del proyecto: situación, decisión, pasos y respaldo */
+  /* Cuatro fichas iguales: conclusión, cifras y próximo paso de cada tema; el detalle a un clic */
   .wrap { max-width: 1080px; margin: 0 auto; padding-block: clamp(32px, 7vh, 72px) 56px;
     padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
   .head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: end; padding-bottom: 28px; border-bottom: 2px solid var(--ink); }
@@ -25,60 +25,36 @@
   .block-h { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; margin: 0 0 14px; }
   .block-h h2 { margin: 0; font-family: var(--f-display); font-stretch: 88%; font-size: 24px; font-weight: 800; letter-spacing: -.005em; }
   .block-h p { margin: 0; font-size: 14px; color: var(--muted); }
-  .exec { margin: 0; }
-  .exec .go { display: inline-block; margin-top: 18px; font-weight: 600; }
-
-  .paths { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-  .path { min-width: 0; padding: 20px 22px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
-  .path.rec { border: 2px solid var(--accent); }
-  .path .top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; margin-bottom: 6px; }
-  .path .k { margin: 0; }
-  .path h3 { margin: 0 0 10px; font-family: var(--f-display); font-stretch: 88%; font-size: 22px; font-weight: 800; line-height: 1.15; }
-  .path ul { margin: 0; padding-left: 1.1em; color: var(--soft); }
-  .path li { margin: 0 0 5px; }
-  .pick { padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; background: var(--accent); color: var(--accent-ink); }
-  .verdict-line { margin: 14px 0 0; font-size: 15.5px; color: var(--soft); max-width: 60em; }
-
-  .steps { margin: 0; padding: 0; list-style: none; counter-reset: s; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
-  .steps li { counter-increment: s; display: grid; grid-template-columns: 2.2em minmax(0, 1fr) minmax(0, 15em); gap: 6px 20px; align-items: baseline; padding: 16px 22px; }
-  .steps li::before { content: counter(s); display: grid; place-items: center; width: 1.9em; height: 1.9em; border-radius: 8px; font-family: var(--f-mono); font-size: 14px; background: var(--accent-bg); color: var(--accent); }
-  .steps li + li { border-top: 1px solid var(--line); }
-  .steps .a { font-size: 16px; }
-  .steps .a b { display: block; }
-  .steps .r { font-size: 14px; color: var(--muted); }
-  .steps .r b { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 
   .topics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-  .topic { display: flex; flex-direction: column; min-width: 0; padding: 20px 22px 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); color: inherit; text-decoration: none; transition: border-color .15s, box-shadow .15s; }
-  .topic:hover { border-color: var(--line2); box-shadow: var(--shadow); }
-  .topic:hover .go { text-decoration: underline; }
+  .topic { display: flex; flex-direction: column; min-width: 0; padding: 22px 22px 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
   .topic .top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; margin-bottom: 10px; }
+  .topic .status { margin: 0; }
   .topic .time { font-size: 13px; color: var(--muted); }
-  .topic h3 { margin: 0 0 8px; font-family: var(--f-display); font-stretch: 85%; font-size: 25px; font-weight: 800; line-height: 1.08; letter-spacing: -.01em; }
-  .topic p { margin: 0 0 14px; color: var(--soft); text-wrap: pretty; }
-  .topic .go { margin-top: auto; font-weight: 600; color: var(--accent); }
-  .rel { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
-  .rel.r1 { background: var(--accent); color: var(--accent-ink); }
-  .rel.r2 { background: var(--accent-bg); color: var(--accent); }
-  .rel.r3 { background: var(--sunk); color: var(--soft); }
-  .rel.r4 { background: transparent; color: var(--muted); border: 1px solid var(--line2); }
+  .topic h3 { margin: 0 0 8px; font-family: var(--f-display); font-stretch: 85%; font-size: 27px; font-weight: 800; line-height: 1.08; letter-spacing: -.01em; }
+  .topic h3 a { color: inherit; text-decoration: none; }
+  .topic h3 a:hover { color: var(--accent); }
+  .topic > p { margin: 0 0 16px; color: var(--soft); text-wrap: pretty; }
+  .topic dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: auto 0 0; padding-top: 14px; border-top: 1px solid var(--line); }
+  .topic dl div { display: flex; flex-direction: column; min-width: 0; }
+  .topic dd { order: 1; margin: 0 0 2px; font-family: var(--f-display); font-stretch: 85%; font-size: 26px; font-weight: 800; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .topic dt { order: 2; font-size: 13px; line-height: 1.4; color: var(--muted); }
+  .topic .nx { margin: 16px 0 14px; padding: 10px 12px; border-radius: 8px; background: var(--accent-bg); font-size: 14.5px; color: var(--ink); }
+  .topic .nx b { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+  .topic .go { font-weight: 600; }
 
   .legend { display: flex; flex-wrap: wrap; gap: 10px 18px; margin: 0; padding: 0; list-style: none; font-size: 14px; color: var(--soft); }
   .legend li { display: flex; align-items: center; gap: 8px; }
   .foot { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--muted); }
   .foot p { margin: 0 0 6px; max-width: 70em; }
 
-  @media (max-width: 860px) {
-    .paths, .topics { grid-template-columns: minmax(0, 1fr); }
-    .steps li { grid-template-columns: 2.2em minmax(0, 1fr); }
-    .steps .r { grid-column: 2; }
-  }
+  @media (max-width: 860px) { .topics { grid-template-columns: minmax(0, 1fr); } }
   @media (max-width: 560px) {
     .head { grid-template-columns: minmax(0, 1fr); }
     .clock { text-align: left; display: flex; align-items: baseline; gap: 8px; }
     .clock b { display: inline; font-size: 28px; }
-    .steps li { padding: 14px 16px; gap: 4px 12px; }
-    .path, .topic { padding: 18px 16px; }
+    .topic { padding: 18px 16px 16px; }
+    .topic h3 { font-size: 24px; }
   }
 </style>
 </head>
@@ -86,87 +62,66 @@
 <main class="wrap">
   <header class="head">
     <div>
-      <p class="eyebrow">Proyecto RFID · Biblioteca Miguel Cervantes · 5 de noviembre de 2026</p>
-      <h1>RFID en la Biblioteca UNAHUR</h1>
-      <p class="ov-sub">Cómo integrar nuestro sistema RFID con el Koha de la biblioteca: situación verificada, la decisión pendiente y los próximos pasos.</p>
+      <p class="eyebrow">Noviembre 2026</p>
+      <h1>Temas en investigación</h1>
     </div>
     <p class="clock"><b>3 min</b>de lectura</p>
   </header>
 
-  <section class="block" aria-labelledby="sit">
-    <div class="block-h"><h2 id="sit">Situación</h2><p>Verificado en el servidor de la biblioteca</p></div>
-    <div class="exec">
-      <p class="verdict">La biblioteca usa Koha 22.11.27. Con esa versión se puede integrar RFID por SIP2 desde hoy, pero el plugin de mostrador y el préstamo por API requieren actualizar Koha a la 25.11 o posterior.</p>
-      <dl class="figs">
-        <div><dt>versión de Koha de la UNAHUR, verificada en su catálogo público</dt><dd>22.11.27</dd></div>
-        <div><dt>versión mínima para el plugin RFID abierto y para prestar por la API</dt><dd>25.11</dd></div>
-        <div><dt>actualizaciones de seguridad de la 22.11 publicadas después de la que tiene la UNAHUR</dt><dd>7+</dd></div>
-      </dl>
-      <p class="conf"><span class="cf v">Versión y API verificadas el 5/11/2026</span><span class="cf p">Última versión 22.11 conocida: 22.11.34, enero de 2026</span></p>
-    </div>
-  </section>
-
-  <section class="block" aria-labelledby="dec">
-    <div class="block-h"><h2 id="dec">La decisión pendiente</h2><p>¿Actualizar Koha antes de integrar?</p></div>
-    <div class="paths">
-      <div class="path rec">
-        <div class="top"><span class="k">Camino B</span><span class="pick">Recomendado para arrancar</span></div>
-        <h3>Integrar ya por SIP2, con Koha 22.11</h3>
-        <ul><li>Préstamo y devolución desde una pantalla de nuestro sistema.</li><li>Es la misma vía del quiosco de autopréstamo y el buzón: el trabajo se aprovecha.</li><li>No depende de los tiempos de TI.</li></ul>
-      </div>
-      <div class="path">
-        <div class="top"><span class="k">Camino A</span><span class="rel r3">Proponer en paralelo</span></div>
-        <h3>Actualizar Koha a 25.11 o posterior</h3>
-        <ul><li>Suma el plugin abierto en el mostrador: varios libros a la vez y antirrobo automático.</li><li>La API pasa a registrar préstamos.</li><li>Pone al día las correcciones de seguridad.</li></ul>
-      </div>
-    </div>
-    <p class="verdict-line">No hace falta elegir uno solo: arrancar por SIP2 no impide actualizar después, y la actualización conviene igual por seguridad.</p>
-  </section>
-
-  <section class="block" aria-labelledby="pasos">
-    <div class="block-h"><h2 id="pasos">Próximos pasos</h2><p>En orden</p></div>
-    <ol class="steps">
-      <li><span class="a"><b>Reunión con TI y la biblioteca</b>Acordar la actualización de Koha, habilitar SIP2, un usuario técnico para la API y confirmar el hardware ya elegido.</span><span class="r"><b>Responsable</b>TI de la UNAHUR y dirección de la biblioteca</span></li>
-      <li><span class="a"><b>Piloto de mostrador</b>En un Koha de prueba de la misma versión: nuestro sistema presta y devuelve por SIP2 y maneja el antirrobo de la etiqueta.</span><span class="r"><b>Requiere</b>Un Koha de prueba, un lector y etiquetas de muestra</span></li>
-      <li><span class="a"><b>Prueba en las estanterías</b>Leer etiquetas con el lector de mano en las estanterías y carros reales antes de etiquetar toda la colección.</span><span class="r"><b>Requiere</b>Muestras de etiquetas y una hora en la sala</span></li>
-      <li><span class="a"><b>Arcos y buzón según la obra</b>Definir si se instalan en Origone B o en la biblioteca ampliada del edificio Tres Cruces.</span><span class="r"><b>Requiere</b>Cronograma de la obra (Licitación 04/23)</span></li>
-    </ol>
-  </section>
-
   <section class="block" aria-labelledby="temas">
-    <div class="block-h"><h2 id="temas">Investigación de respaldo</h2><p>Ordenada por relevancia para la biblioteca</p></div>
+    <div class="block-h"><h2 id="temas">Los cuatro temas</h2><p>Cada detalle abre con un resumen de 1 minuto.</p></div>
     <div class="topics">
-      <a class="topic" href="koha.html">
-        <div class="top"><span class="rel r1">Central</span><span class="time">Detalle: 10 min</span></div>
-        <h3>Koha y RFID en la UNAHUR</h3>
-        <p>Situación del Koha de la biblioteca, las tres vías de integración, HF o UHF, plan por fases y preguntas para TI.</p>
-        <span class="go">Leer detalle →</span>
-      </a>
-      <a class="topic" href="metales.html">
-        <div class="top"><span class="rel r2">Útil para las pruebas</span><span class="time">Detalle: 9 min</span></div>
-        <h3>Trazabilidad sobre metal</h3>
-        <p>Por qué el metal afecta la lectura. Aplica a estanterías y carros metálicos, sobre todo si las etiquetas son UHF.</p>
-        <span class="go">Leer detalle →</span>
-      </a>
-      <a class="topic" href="rfid-rubros.html">
-        <div class="top"><span class="rel r3">Contexto</span><span class="time">Detalle: 4 min por rubro</span></div>
-        <h3>RFID: aplicaciones por rubro</h3>
-        <p>Doce rubros relevados. Bibliotecas era un rubro pendiente: la UNAHUR podría ser el primer caso documentado de Koha con RFID en el país.</p>
-        <span class="go">Leer detalle →</span>
-      </a>
-      <a class="topic" href="iot-pixels.html">
-        <div class="top"><span class="rel r4">No aplica por ahora</span><span class="time">Detalle: 12 min</span></div>
-        <h3>IoT Pixels y Ambient IoT</h3>
-        <p>Etiquetas sin batería que miden temperatura y ubicación. Para libros, RFID es la tecnología establecida.</p>
-        <span class="go">Leer detalle →</span>
-      </a>
+      <article class="topic">
+        <div class="top"><span class="status listo">Completo</span><span class="time">Detalle: 12 min</span></div>
+        <h3><a href="iot-pixels.html">IoT Pixels y Ambient IoT</a></h3>
+        <p>Complementan al RFID, no lo reemplazan: miden temperatura y ubicación de forma continua, pero dependen de un solo proveedor sin presencia en Argentina.</p>
+        <dl>
+          <div><dt>por etiqueta, contra US$0,03–0,25 de RFID UHF</dt><dd>US$0,10</dd></div>
+          <div><dt>etiquetas previstas en Walmart a fines de 2026</dt><dd>~90 M</dd></div>
+        </dl>
+        <p class="nx"><b>Próximo paso</b>Probar con el kit de Wiliot (US$150) solo si aparece un caso que necesite medir condición o ubicación continua.</p>
+        <a class="go" href="iot-pixels.html">Leer detalle →</a>
+      </article>
+      <article class="topic">
+        <div class="top"><span class="status curso">En curso</span><span class="time">Detalle: 4 min por rubro</span></div>
+        <h3><a href="rfid-rubros.html">RFID: aplicaciones por rubro</a></h3>
+        <p>Hay aplicaciones concretas en los 12 rubros relevados. Dos preguntas filtran casi todo: si el activo pasa por un punto de lectura y si alguien responde por la pérdida.</p>
+        <dl>
+          <div><dt>rubros relevados, con casos y FODA</dt><dd>12</dd></div>
+          <div><dt>lectura obligatoria de caravanas en faena</dt><dd>1/7/2026</dd></div>
+        </dl>
+        <p class="nx"><b>Próximo paso</b>Elegir 2 o 3 rubros con las dos preguntas y validarlos con clientes reales antes de calcular costos.</p>
+        <a class="go" href="rfid-rubros.html">Leer detalle →</a>
+      </article>
+      <article class="topic">
+        <div class="top"><span class="status exp">Exploratorio</span><span class="time">Detalle: 9 min</span></div>
+        <h3><a href="metales.html">Trazabilidad sobre metal</a></h3>
+        <p>Existe tecnología para identificar activos metálicos, pero casi todos los datos vienen de fabricantes: falta probarla sobre las piezas reales.</p>
+        <dl>
+          <div><dt>lectura UHF sobre metal, según hoja técnica</dt><dd>hasta 10 m</dd></div>
+          <div><dt>alcance con NFC y ferrita, leído con celular</dt><dd>1–2 cm</dd></div>
+        </dl>
+        <p class="nx"><b>Próximo paso</b>Probar tags de 2 o 3 fabricantes sobre la pieza real, con el lector y la antena que se usarían.</p>
+        <a class="go" href="metales.html">Leer detalle →</a>
+      </article>
+      <article class="topic">
+        <div class="top"><span class="status nuevo">Nuevo</span><span class="time">Detalle: 10 min</span></div>
+        <h3><a href="koha.html">Koha y RFID en la UNAHUR</a></h3>
+        <p>La biblioteca usa Koha 22.11.27: se puede integrar por SIP2 desde hoy, pero el plugin de mostrador y el préstamo por API requieren actualizar a la 25.11.</p>
+        <dl>
+          <div><dt>versión de Koha de la biblioteca, verificada</dt><dd>22.11.27</dd></div>
+          <div><dt>versión mínima para el plugin RFID abierto</dt><dd>25.11</dd></div>
+        </dl>
+        <p class="nx"><b>Próximo paso</b>Reunión con TI para acordar la actualización de Koha, habilitar SIP2 y confirmar el hardware elegido.</p>
+        <a class="go" href="koha.html">Leer detalle →</a>
+      </article>
     </div>
   </section>
 
   <section class="block" aria-labelledby="conf">
     <div class="block-h"><h2 id="conf">Cómo leer la confianza de los datos</h2></div>
     <ul class="legend">
-      <li><span class="cf v">Verificado</span>en fuente primaria: el servidor de la UNAHUR, código, norma o manual</li>
+      <li><span class="cf v">Verificado</span>en fuente primaria: código, norma, manual o la institución</li>
       <li><span class="cf p">Proveedor</span>lo dice quien vende, o la fuente es parcial</li>
       <li><span class="cf u">A verificar</span>indicio sin confirmar</li>
       <li><span class="cf x">Descartado</span>falso o sin sustento</li>
@@ -174,7 +129,7 @@
   </section>
 
   <footer class="foot">
-    <p>Investigación de escritorio con fuentes públicas y consultas de solo lectura al catálogo público de la biblioteca, entre el 3 y el 5 de noviembre de 2026. No se accedió a la interfaz de administración de Koha.</p>
+    <p>Investigación de escritorio con fuentes públicas, entre el 3 y el 5 de noviembre de 2026. Los precios son de lista, en dólares, sin impuestos ni importación: son una referencia, no una cotización.</p>
     <p>En cada tema, el botón Presentar (o la tecla P) lo muestra en pantalla completa, una diapositiva a la vez.</p>
   </footer>
 </main>
