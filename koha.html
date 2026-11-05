@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Koha y RFID en la UNAHUR</title>
+<meta name="description" content="Integración del sistema RFID con el Koha de la Biblioteca UNAHUR: situación verificada (Koha 22.11.27), vías de integración, decisión de actualización, hardware y plan por fases.">
+<meta name="theme-color" content="#f3f4f1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></symbol>
+</svg>
+
+<header class="topbar">
+  <a class="tb-back" href="index.html" title="Volver al resumen"><svg class="ico"><use href="#i-left"/></svg><span>Resumen</span></a>
+  <p class="tb-title"><b>Koha y RFID en la UNAHUR</b><span id="tbSec"></span></p>
+  <button class="tb-btn" id="tocBtn" type="button" aria-controls="toc" aria-expanded="false"><svg class="ico"><use href="#i-list"/></svg>Índice</button>
+  <button class="tb-btn primary" id="presentBtn" type="button" title="Presentar (P)"><svg class="ico"><use href="#i-play"/></svg>Presentar</button>
+</header>
+<div class="progress"><i></i></div>
+<div class="layout">
+<nav class="toc" id="toc" aria-label="Índice">
+  <p class="toc-h">En esta página</p>
+  <ol>
+    <li><a class="esc" href="#esencial"><span class="n">→</span>Lo esencial</a></li>
+    <li><a href="#s1"><span class="n">01</span>El Koha de la UNAHUR</a></li>
+    <li><a href="#s2"><span class="n">02</span>La decisión: actualizar Koha</a></li>
+    <li><a href="#s3"><span class="n">03</span>Tres vías de integración</a></li>
+    <li><a href="#s4"><span class="n">04</span>SIP2</a></li>
+    <li><a href="#s5"><span class="n">05</span>API REST</a></li>
+    <li><a href="#s6"><span class="n">06</span>El plugin RFID abierto</a></li>
+    <li><a href="#s7"><span class="n">07</span>Etiquetas y lectores</a></li>
+    <li><a href="#s8"><span class="n">08</span>Plan para la biblioteca</a></li>
+    <li><a href="#s9"><span class="n">09</span>Casos</a></li>
+    <li><a href="#s10"><span class="n">10</span>Qué descartamos</a></li>
+    <li><a href="#s11"><span class="n">11</span>Fuentes</a></li>
+  </ol>
+  <p class="toc-foot">Tecla <kbd>P</kbd> o botón Presentar para verlo en pantalla completa.</p>
+</nav>
+<main class="doc" id="doc">
+<header class="hero" id="inicio" data-name="Inicio">
+  <div>
+    <span class="status nuevo">Proyecto en curso</span>
+    <p class="eyebrow">Biblioteca Miguel Cervantes · UNAHUR · Noviembre 2026</p>
+    <h1>Koha <span class="y">y</span> <span class="g">RFID</span> en la UNAHUR</h1>
+    <p class="ov-sub">Cómo conectar nuestro sistema RFID con el Koha de la biblioteca: qué versión tiene, qué permite hoy, qué decisión hay que tomar y por dónde empezar.</p>
+  </div>
+</header>
+
+<section class="exec" id="esencial" data-name="Lo esencial" aria-labelledby="esencial-t">
+  <h2 class="exec-t" id="esencial-t">Lo esencial <small>Lectura de 1 min · detalle completo, 10 min</small></h2>
+  <p class="verdict">La biblioteca usa Koha 22.11.27. Con esa versión se puede integrar RFID por SIP2 desde hoy, pero el plugin de mostrador y el préstamo por API requieren actualizar Koha a la 25.11 o posterior.</p>
+  <dl class="figs">
+    <div><dt>es la versión de Koha de la UNAHUR, verificada en su catálogo público.</dt><dd>22.11.27</dd></div>
+    <div><dt>es la versión mínima para usar el plugin RFID abierto y para registrar préstamos por la API.</dt><dd>25.11</dd></div>
+    <div><dt>es la vía que funciona con la versión actual, tanto en el mostrador como en el autopréstamo.</dt><dd>SIP2</dd></div>
+  </dl>
+  <div class="exec-cols">
+    <div><h3>Lo que ya está</h3><ul><li>Catálogo y API REST activos en <code>biblioteca.unahur.edu.ar</code>.</li><li>La API permite buscar ejemplares por código de barras.</li><li>Koha 22.11 trae un servidor SIP2.</li></ul></div>
+    <div><h3>Riesgos</h3><ul><li>La 22.11.27 está varias actualizaciones de seguridad atrás: salieron al menos hasta la 22.11.34.</li><li>Sin actualizar Koha, la API no registra préstamos ni devoluciones.</li><li>La obra de ampliación de la biblioteca define dónde van los arcos.</li></ul></div>
+    <div class="next"><h3>Próximo paso sugerido</h3><p>Reunión con TI de la UNAHUR para acordar tres cosas: si se actualiza Koha y cuándo, habilitar SIP2 y qué hardware RFID ya se eligió.</p></div>
+  </div>
+  <p class="conf"><span class="cf v">Versión y API verificadas en el servidor de la UNAHUR, el 5/11/2026</span><span class="cf v">Plugin verificado en su código fuente</span></p>
+</section>
+
+<section class="sec" id="s1" data-name="El Koha de la UNAHUR">
+<header class="sec-h"><span class="sec-n">01</span><h2>El Koha de la UNAHUR</h2><p>Qué verificamos en el servidor de la biblioteca</p></header>
+<article class="slide" data-sec="1"><div class="in">
+  <p class="kicker">01 · El Koha de la UNAHUR</p>
+  <h2>Koha <em>22.11.27</em>, con la API REST activa</h2>
+  <p class="lead">La versión surge de los archivos que publica el catálogo (por ejemplo, <code>opac_22.1127000.css</code>). La API responde en <code>biblioteca.unahur.edu.ar/api/v1/</code> con 123 rutas. <span class="cf v">Verificado el 5/11/2026</span></p>
+  <div class="tbl c4">
+    <div class="row hd"><div>Qué necesita el sistema RFID</div><div>Qué hay en la UNAHUR</div><div>Consecuencia</div><div>Estado</div></div>
+    <div class="row"><div>Buscar un ejemplar por código de barras</div><div><code>GET /items</code> con el filtro <code>external_id</code></div><div>Se puede pasar de la etiqueta al libro</div><div><span class="cf v">Disponible</span></div></div>
+    <div class="row"><div>Ver préstamos</div><div><code>GET /checkouts</code></div><div>Consultas y reportes</div><div><span class="cf v">Disponible</span></div></div>
+    <div class="row"><div>Renovar</div><div><code>POST /checkouts/{id}/renewal</code></div><div>Renovación desde nuestro sistema</div><div><span class="cf v">Disponible</span></div></div>
+    <div class="row"><div>Registrar un préstamo</div><div>No existe <code>POST /checkouts</code></div><div>Hay que prestar por SIP2 o desde Koha</div><div><span class="cf x">Falta</span></div></div>
+    <div class="row"><div>Saber si se puede prestar</div><div>No existe <code>/checkouts/availability</code></div><div>Lo resuelve SIP2</div><div><span class="cf x">Falta</span></div></div>
+    <div class="row"><div>Registrar una devolución</div><div>No existe en ninguna versión de Koha</div><div>Hay que devolver por SIP2 o desde Koha</div><div><span class="cf x">Falta</span></div></div>
+  </div>
+  <p class="muted gap">La API admite autenticación básica, OAuth2 y cookies; las dos primeras se habilitan en las preferencias del sistema. No pudimos ver si SIP2 está habilitado: eso se consulta con TI.</p>
+</div></article>
+<article class="slide" data-sec="1"><div class="in">
+  <p class="kicker">01 · El Koha de la UNAHUR</p>
+  <h2>La biblioteca y su contexto</h2>
+  <div class="grid" style="--cols:3">
+    <div class="box"><h3>Biblioteca Miguel Cervantes</h3><p>Funciona en Origone B (Tte. Origone 151, Villa Tesei), de lunes a viernes de 8 a 21 y los sábados de 9 a 16. <span class="cf v">Sitio de la UNAHUR</span></p></div>
+    <div class="box"><h3>Obra de ampliación</h3><p>La Licitación Pública 04/23 cubre la ampliación y refacción de la biblioteca en el edificio Tres Cruces, con un plazo de 420 días. <span class="cf v">Boletín Oficial</span></p></div>
+    <div class="box"><h3>Autopréstamo web</h3><p>Koha trae una pantalla de autopréstamo, pero en la UNAHUR la dirección redirige a otra página: parece deshabilitada. <span class="cf u">A confirmar con TI</span></p></div>
+  </div>
+  <p class="note"><b>Por qué importa la obra:</b> los arcos de seguridad y el buzón de devolución conviene instalarlos una sola vez. Hay que saber si el proyecto RFID arranca en Origone B o en el edificio nuevo.</p>
+</div></article>
+</section>
+
+<section class="sec" id="s2" data-name="La decisión: actualizar Koha">
+<header class="sec-h"><span class="sec-n">02</span><h2>La decisión: actualizar Koha</h2><p>Dos caminos y una recomendación</p></header>
+<article class="slide" data-sec="2"><div class="in">
+  <p class="kicker">02 · La decisión</p>
+  <h2>¿Actualizar Koha <em>antes</em> o integrar con la versión actual?</h2>
+  <div class="grid" style="--cols:2">
+    <div class="box"><span class="k">Camino A</span><h3>Actualizar a Koha 25.11 o posterior</h3><ul class="list"><li>Permite usar el plugin RFID abierto en el mostrador: varios libros a la vez y antirrobo automático.</li><li>La API pasa a registrar préstamos.</li><li>Pone al día las correcciones de seguridad.</li><li><b>Costo:</b> trabajo de TI, pruebas y revisar las personalizaciones del catálogo.</li></ul></div>
+    <div class="box"><span class="k">Camino B</span><h3>Seguir con Koha 22.11</h3><ul class="list"><li>Préstamo y devolución por SIP2, desde una pantalla de nuestro sistema.</li><li>Como alternativa simple, el lector escribe el código en Koha como si fuera un teclado, de a un libro por vez.</li><li>La API queda solo para consultas.</li><li><b>Costo:</b> la pantalla de mostrador la tenemos que hacer nosotros.</li></ul></div>
+  </div>
+  <div class="box hl gap"><h3>Recomendación</h3><p>No esperar la actualización para empezar. SIP2 funciona en las dos versiones y es la misma vía que después usan el quiosco de autopréstamo y el buzón, así que ese trabajo se aprovecha igual. En paralelo, proponer a TI actualizar Koha, por seguridad y para sumar el plugin en el mostrador.</p></div>
+</div></article>
+</section>
+
+<section class="sec" id="s3" data-name="Tres vías de integración">
+<header class="sec-h"><span class="sec-n">03</span><h2>Tres vías de integración</h2><p>Qué resuelve cada una y si sirve hoy en la UNAHUR</p></header>
+<article class="slide" data-sec="3"><div class="in">
+  <p class="kicker">03 · Tres vías de integración</p>
+  <h2>Cada vía resuelve <em>una parte distinta</em></h2>
+  <div class="tbl c4">
+    <div class="row hd"><div>Vía</div><div>Para qué sirve</div><div>Cómo se conecta</div><div>En la UNAHUR hoy</div></div>
+    <div class="row"><div>SIP2</div><div>Préstamo, devolución y renovación; quioscos de autopréstamo y buzones.</div><div>Conexión TCP directa al servidor SIP que trae Koha.</div><div><span class="cf v">Compatible</span> hay que habilitarlo</div></div>
+    <div class="row"><div>API REST</div><div>Consultas, renovaciones y reportes desde nuestro sistema.</div><div>HTTPS con un usuario técnico de Koha.</div><div><span class="cf p">Parcial</span> sin préstamo ni devolución</div></div>
+    <div class="row"><div>Plugin RFID de mostrador</div><div>Préstamo, devolución e inventario con el lector sobre el escritorio.</div><div>El navegador del bibliotecario llama a un servicio en la misma PC.</div><div><span class="cf x">No compatible</span> pide Koha 25.11</div></div>
+  </div>
+</div></article>
+</section>
+
+<section class="sec" id="s4" data-name="SIP2">
+<header class="sec-h"><span class="sec-n">04</span><h2>SIP2</h2><p>La vía que funciona con la versión actual</p></header>
+<article class="slide" data-sec="4"><div class="in">
+  <p class="kicker">04 · SIP2</p>
+  <h2>El estándar de los <em>quioscos</em>, y nuestra vía de entrada</h2>
+  <p class="lead">Koha trae su propio servidor SIP2. Es la vía que usan los quioscos de autopréstamo y los buzones de devolución del mercado. <span class="cf v">Manual de Koha</span></p>
+  <div class="grid" style="--cols:3">
+    <div class="box"><h3>Qué hace TI</h3><p>Completa <code>SIPconfig.xml</code> y ejecuta <code>koha-enable-sip</code> y <code>koha-start-sip</code> en el servidor.</p></div>
+    <div class="box"><h3>Cuentas</h3><p>Cada equipo entra con un usuario de Koha. El manual recomienda darle solo permiso de circulación.</p></div>
+    <div class="box"><h3>Sedes y reglas</h3><p>La biblioteca se declara con su código de sede y define qué operaciones acepta, por ejemplo si permite renovar.</p></div>
+  </div>
+  <div class="tbl c2 gap">
+    <div class="row hd"><div>Mensaje SIP2</div><div>Para qué lo usaría nuestro sistema</div></div>
+    <div class="row"><div><code>93 / 94</code></div><div>Iniciar sesión con la cuenta del equipo</div></div>
+    <div class="row"><div><code>11 / 12</code></div><div>Prestar los libros leídos en el pad</div></div>
+    <div class="row"><div><code>09 / 10</code></div><div>Devolverlos</div></div>
+    <div class="row"><div><code>17 / 18</code></div><div>Consultar el estado de un ejemplar</div></div>
+    <div class="row"><div><code>23 / 24</code> y <code>29 / 30</code></div><div>Ver el estado del socio y renovar</div></div>
+  </div>
+  <p class="note"><b>Límites:</b> SIP2 solo cubre circulación; no sirve para catalogar ni para inventario masivo. Además viaja sin cifrar, así que conviene que el servidor y los equipos se comuniquen por la red interna o por un túnel cifrado.</p>
+</div></article>
+</section>
+
+<section class="sec" id="s5" data-name="API REST">
+<header class="sec-h"><span class="sec-n">05</span><h2>API REST</h2><p>Qué cambia si se actualiza Koha</p></header>
+<article class="slide" data-sec="5"><div class="in">
+  <p class="kicker">05 · API REST</p>
+  <h2>La API en la UNAHUR y en las versiones actuales</h2>
+  <div class="tbl c4">
+    <div class="row hd"><div>Endpoint</div><div>Uso en RFID</div><div>UNAHUR (22.11)</div><div>Koha actual</div></div>
+    <div class="row"><div><code>GET /items?external_id=</code></div><div>De la etiqueta al ejemplar</div><div><span class="cf v">Sí</span></div><div><span class="cf v">Sí</span></div></div>
+    <div class="row"><div><code>GET /checkouts</code></div><div>Consultas y reportes</div><div><span class="cf v">Sí</span></div><div><span class="cf v">Sí</span></div></div>
+    <div class="row"><div><code>POST /checkouts/{id}/renewal</code></div><div>Renovar</div><div><span class="cf v">Sí</span></div><div><span class="cf v">Sí</span></div></div>
+    <div class="row"><div><code>POST /checkouts</code></div><div>Prestar desde nuestro sistema</div><div><span class="cf x">No</span></div><div><span class="cf v">Sí</span></div></div>
+    <div class="row"><div><code>GET /checkouts/availability</code></div><div>Avisar antes de prestar</div><div><span class="cf x">No</span></div><div><span class="cf v">Sí</span></div></div>
+    <div class="row"><div><code>POST /checkins</code></div><div>Devolver</div><div><span class="cf x">No</span></div><div><span class="cf x">No</span> en revisión</div></div>
+  </div>
+  <p class="muted gap">"Koha actual" se verificó en una instancia demo con una versión reciente. La devolución está en revisión en el bug 24401. <span class="cf p">Estado del bug según el tablero de Koha</span></p>
+</div></article>
+<article class="slide" data-sec="5"><div class="in">
+  <p class="kicker">05 · API REST</p>
+  <h2>Acceso y permisos</h2>
+  <div class="grid" style="--cols:3">
+    <div class="box"><h3>OAuth2</h3><p>Solo el flujo <em>client credentials</em>: credenciales para una aplicación, sin inicio de sesión de una persona. El token se pide a <code>/api/v1/oauth/token</code>. <span class="cf v">Bug 20402 y API de la UNAHUR</span></p></div>
+    <div class="box"><h3>Permisos heredados</h3><p>Cada credencial queda atada a un usuario de Koha y tiene sus mismos permisos. Conviene pedirle a TI un usuario técnico solo con lectura y circulación.</p></div>
+    <div class="box"><h3>Habilitación</h3><p>La autenticación básica y OAuth2 se activan en las preferencias del sistema. No sabemos si en la UNAHUR están activas. <span class="cf u">A confirmar con TI</span></p></div>
+  </div>
+</div></article>
+</section>
+
+<section class="sec" id="s6" data-name="El plugin RFID abierto">
+<header class="sec-h"><span class="sec-n">06</span><h2>El plugin RFID abierto</h2><p>Para cuando la UNAHUR tenga Koha 25.11 o posterior</p></header>
+<article class="slide" data-sec="6"><div class="in">
+  <p class="kicker">06 · El plugin RFID abierto</p>
+  <h2>Dónde encajaría <em>nuestro sistema</em></h2>
+  <p class="lead">ByWater Solutions publica un plugin de código abierto (GPL-3, versión 0.10.0 del 29/10/2026). Koha no habla con el lector: el navegador del bibliotecario consulta a un servicio en la misma PC, y ese servicio sería el nuestro.</p>
+  <ol class="arch" style="--cols:4">
+    <li data-via="USB"><span class="who">Hardware</span><h3>Lector RFID</h3><p>Pad sobre el mostrador que lee las etiquetas de los libros.</p></li>
+    <li class="ours" data-via="HTTP"><span class="who">Nuestro sistema</span><h3>Servicio local</h3><p>Traduce cada etiqueta a código de barras y maneja el bit antirrobo.</p></li>
+    <li data-via="Web"><span class="who">Plugin en Koha</span><h3>Navegador</h3><p>Toma los códigos y ejecuta préstamo, devolución o inventario.</p></li>
+    <li><span class="who">Servidor</span><h3>Koha</h3><p>Registra la operación como si se hubieran escaneado los códigos.</p></li>
+  </ol>
+  <p class="note"><b>Versión mínima:</b> desde la versión 0.9.0 (21/10/2026) el plugin declara Koha 25.11. Las versiones anteriores no publican un mínimo en su código, así que no hay garantía de que funcionen en la 22.11. <span class="cf v">Historial del repositorio</span></p>
+</div></article>
+<article class="slide" data-sec="6"><div class="in">
+  <p class="kicker">06 · El plugin RFID abierto</p>
+  <h2>Qué tendría que responder <em>nuestro servicio</em></h2>
+  <p class="lead">El plugin define tres operaciones por proveedor. Este es el formato que usa para Tech Logic CircIT, que permite configurar el puerto:</p>
+<pre><code>GET  http://localhost:{puerto}/Temporary_Listen_Addresses/alive
+     → {"status": true, "statuscode": 0}
+
+GET  …/getitems
+     → {"items": [{"barcode": "0001234", "security": false}]}
+
+GET  …/setsecurity/0001234/true      (activa el antirrobo)</code></pre>
+  <div class="grid" style="--cols:2">
+    <div class="box"><h3>Qué cubre</h3><p>Préstamo y préstamo por lote, devolución, renovación, transferencias, inventario y listas. Desactiva el antirrobo al prestar y lo activa al devolver; se detiene si hay una reserva o algo para confirmar.</p></div>
+    <div class="box"><h3>Cómo sumarnos</h3><p>Agregar un adaptador propio: un objeto con cuatro funciones en <code>rfid.js</code>. Se puede proponer al proyecto o mantener una copia propia. Hay que verificar que el navegador permita llamar a <code>localhost</code>.</p></div>
+  </div>
+</div></article>
+</section>
+
+<section class="sec" id="s7" data-name="Etiquetas y lectores">
+<header class="sec-h"><span class="sec-n">07</span><h2>Etiquetas y lectores</h2><p>HF o UHF, y qué se graba en la etiqueta</p></header>
+<article class="slide" data-sec="7"><div class="in">
+  <p class="kicker">07 · Etiquetas y lectores</p>
+  <h2>HF o UHF: la decisión que <em>define la compra</em></h2>
+  <p class="lead">Si el proyecto ya eligió hardware, esta sección sirve para confirmar que la elección sea coherente con la norma de bibliotecas.</p>
+  <div class="cmp" style="--la:'HF';--lb:'UHF'">
+    <div class="row hd"><div class="lbl"></div><div class="a">HF · 13,56 MHz</div><div class="b">UHF · EPC Gen2</div></div>
+    <div class="row"><div class="lbl">Uso en bibliotecas</div><div class="a">El estándar histórico: casi todos los sistemas en producción en EE.UU. eran HF. <span class="cf p">Informe de la ALA, 2012</span></div><div class="b">Minoritario en bibliotecas; las generaciones nuevas mejoraron cerca de metal y agua.</div></div>
+    <div class="row"><div class="lbl">Norma de datos</div><div class="a">ISO 28560-2: el modelo de datos para bibliotecas, sobre etiquetas ISO 15693.</div><div class="b">ISO/TS 28560-4:2023: especificación técnica para etiquetas con memoria en bancos, como las Gen2.</div></div>
+    <div class="row"><div class="lbl">Lectura</div><div class="a">Corto alcance: mostrador, pad y quiosco.</div><div class="b">Más alcance: inventario rápido de estanterías y arcos más anchos.</div></div>
+  </div>
+  <p class="note"><b>Para la UNAHUR:</b> pedir al proveedor de etiquetas que grabe con la norma ISO 28560 que corresponda a la frecuencia, y probar la lectura sobre las estanterías y los carros reales, que suelen ser de metal. Ver el tema <a href="metales.html">Trazabilidad sobre metal</a>.</p>
+</div></article>
+</section>
+
+<section class="sec" id="s8" data-name="Plan para la biblioteca">
+<header class="sec-h"><span class="sec-n">08</span><h2>Plan para la biblioteca</h2><p>Fases, preguntas abiertas y decisiones</p></header>
+<article class="slide" data-sec="8"><div class="in">
+  <p class="kicker">08 · Plan para la biblioteca</p>
+  <h2>Cuatro fases, de <em>menor a mayor</em> alcance</h2>
+  <div class="grid" style="--cols:2">
+    <div class="box hl"><span class="k">Fase 0 · Definiciones</span><h3>Reunión con TI y la biblioteca</h3><p>Plan de actualización de Koha, habilitación de SIP2, usuario técnico para la API, hardware elegido y en qué edificio se arranca.</p></div>
+    <div class="box"><span class="k">Fase 1 · Mostrador</span><h3>Piloto de préstamo y devolución</h3><p>En un Koha de prueba de la misma versión: nuestro sistema presta y devuelve por SIP2, y maneja el antirrobo de la etiqueta. Si Koha ya se actualizó, se suma el plugin.</p></div>
+    <div class="box"><span class="k">Fase 2 · Colección</span><h3>Etiquetado y arcos</h3><p>Grabado de etiquetas con el código de barras de cada ejemplar y arcos de seguridad, coordinados con la obra de ampliación.</p></div>
+    <div class="box"><span class="k">Fase 3 · Autoservicio</span><h3>Autopréstamo, buzón e inventario</h3><p>Quiosco y buzón por SIP2; inventario con lector de mano, contrastado contra Koha por la API.</p></div>
+  </div>
+</div></article>
+<article class="slide" data-sec="8"><div class="in">
+  <p class="kicker">08 · Plan para la biblioteca</p>
+  <h2>Preguntas para TI y la biblioteca</h2>
+  <div class="grid" style="--cols:2">
+    <div class="box"><h3>Para TI</h3><ul class="list"><li>¿Hay plan para actualizar Koha 22.11.27? ¿A qué versión?</li><li>¿Está habilitado SIP2? ¿En qué puerto y desde qué red?</li><li>¿Pueden crear un usuario técnico para la API y otro para SIP2?</li><li>¿Hay un Koha de prueba con una copia de la base?</li></ul></div>
+    <div class="box"><h3>Para la biblioteca</h3><ul class="list"><li>¿Cuántos ejemplares hay que etiquetar y en qué orden?</li><li>¿El proyecto arranca en Origone B o en el edificio nuevo?</li><li>¿Qué etiquetas y lectores ya se compraron o licitaron?</li><li>¿Se busca autopréstamo, o primero solo mostrador e inventario?</li></ul></div>
+  </div>
+</div></article>
+</section>
+
+<section class="sec" id="s9" data-name="Casos">
+<header class="sec-h"><span class="sec-n">09</span><h2>Casos</h2><p>Otras bibliotecas con Koha y RFID</p></header>
+<article class="slide" data-sec="9"><div class="in">
+  <p class="kicker">09 · Casos</p>
+  <h2>Integraciones de Koha con RFID</h2>
+  <div class="tbl c4">
+    <div class="row hd"><div>Caso</div><div>Qué hicieron</div><div>Detalle</div><div>Confianza</div></div>
+    <div class="row"><div>Roseville Public Library · California</div><div>11 quioscos de autopréstamo, clasificadoras y arcos con RFID y SIP2.</div><div>El mismo camino que proponemos: todo por SIP2. Presentado en KohaNA 2015.</div><div><span class="cf p">Congreso, dato de 2015</span></div></div>
+    <div class="row"><div>Biblioteca de Oslo · koha-rfidhub</div><div>Servidor propio que une lectores RFID con Koha por SIP2.</div><div>Completo en 2014; hoy archivado. Sirve como referencia de código.</div><div><span class="cf v">Código público, inactivo</span></div></div>
+    <div class="row"><div>Bibliotheca + ByWater · EE.UU., 2026</div><div>Estaciones RFID de mostrador integradas a Koha con el plugin.</div><div>Koha controla el pad y se activa por sede. Anuncian circulación más rápida, sin cifras.</div><div><span class="cf p">Proveedor y prensa sectorial</span></div></div>
+    <div class="row"><div>TH Wildau · Alemania</div><div>Servicio en Node.js para lectores FEIG y librería para la norma ISO 28560.</div><div>El plugin para Koha no se publicó.</div><div><span class="cf u">Lista de correo, sin resultado</span></div></div>
+    <div class="row"><div>Universidades argentinas</div><div>La UNLP, la UNGS y la UNDEF usan Koha.</div><div>No encontramos casos públicos de Koha con RFID en el país: la UNAHUR podría ser el primero documentado.</div><div><span class="cf v">Fuentes de cada institución</span></div></div>
+  </div>
+</div></article>
+</section>
+
+<section class="sec" id="s10" data-name="Qué descartamos">
+<header class="sec-h"><span class="sec-n">10</span><h2>Qué descartamos</h2><p>Datos filtrados por poco confiables</p></header>
+<article class="slide" data-sec="10"><div class="in">
+  <p class="kicker">10 · Qué descartamos</p>
+  <h2>Datos que <em>no usamos</em> y por qué</h2>
+  <div class="tbl c2">
+    <div class="row hd"><div>Dato</div><div>Motivo</div></div>
+    <div class="row"><div>"La API REST registra devoluciones"</div><div><span class="cf x">Falso hoy</span> No existe en ninguna versión publicada; está en revisión (bug 24401).</div></div>
+    <div class="row"><div>"El plugin funciona con cualquier Koha"</div><div><span class="cf x">Falso</span> Desde la versión 0.9.0 pide Koha 25.11.</div></div>
+    <div class="row"><div>Fecha de fin de soporte de Koha 22.11</div><div><span class="cf u">Sin confirmar</span> Las fuentes se contradicen; sí se confirma que hubo versiones hasta la 22.11.34.</div></div>
+    <div class="row"><div>Mejoras de velocidad de Bibliotheca</div><div><span class="cf p">Solo el proveedor</span> No hay mediciones independientes.</div></div>
+    <div class="row"><div>Alianza ByWater y FE Technologies</div><div><span class="cf p">Anuncio comercial</span> Sin detalle técnico ni fecha verificable.</div></div>
+    <div class="row"><div>Serdoc, "compatible con Koha"</div><div><span class="cf p">Afirmación comercial</span> Sin un caso documentado.</div></div>
+    <div class="row"><div>Koha y NCIP</div><div><span class="cf u">Sin confirmar</span> Las licitaciones lo piden, pero no verificamos soporte en Koha.</div></div>
+    <div class="row"><div>Estudios de Kenia (Chuka, 2019) y de la Universidad de Delhi</div><div><span class="cf u">Sin datos</span> Mencionan Koha y RFID sin cifras ni detalle de implementación.</div></div>
+  </div>
+</div></article>
+</section>
+
+<section class="sec" id="s11" data-name="Fuentes">
+<header class="sec-h"><span class="sec-n">11</span><h2>Fuentes</h2><p>Consultadas el 5 de noviembre de 2026</p></header>
+<article class="slide" data-sec="11"><div class="in">
+  <p class="kicker">11 · Fuentes</p>
+  <h2>Fuentes consultadas</h2>
+  <div class="srcgroups">
+    <section><h3>UNAHUR</h3><ul>
+      <li><a href="https://biblioteca.unahur.edu.ar/">Catálogo de la Biblioteca UNAHUR (Koha)</a></li>
+      <li><a href="https://biblioteca.unahur.edu.ar/api/v1/.html">API REST de la Biblioteca UNAHUR</a></li>
+      <li><a href="https://unahur.edu.ar/biblioteca/">UNAHUR: página de la biblioteca</a></li>
+      <li><a href="https://www.boletinoficial.gob.ar/pdf/linkQR/SS9HZFFFSkl6TWxSbkVWUVVZR3c4dz09">Boletín Oficial: Licitación Pública 04/23</a></li>
+      <li><a href="https://www.boletinoficial.gob.ar/detalleAviso/tercera/2336061/20230207">Boletín Oficial: Licitación Pública 14/22</a></li>
+    </ul></section>
+    <section><h3>Koha</h3><ul>
+      <li><a href="https://koha-manual-screenshots-wip.koha-community.org/manual/es/html/apis_protocols.html">Manual de Koha: otras API y protocolos (SIP2)</a></li>
+      <li><a href="https://demo.bibkat.no/api/v1/.html">API REST en una instancia demo reciente</a></li>
+      <li><a href="https://koha-community.org/?p=10811">Koha 22.11.29</a> y <a href="https://koha-community.org/author/khall/">versiones posteriores de 22.11</a></li>
+      <li><a href="https://git.koha-community.org/Koha-community/Koha/commit/6db025bd9dfeecb1f59490578befafbe57a1548e">Bug 23336: endpoints de préstamo</a></li>
+      <li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20402">Bug 20402: OAuth2 para la API</a></li>
+      <li><a href="https://www.mail-archive.com/koha-bugs@lists.koha-community.org/msg583945.html">Bug 24401: endpoint de devolución</a></li>
+      <li><a href="https://www.intersearch.com.au/node/496">Intersearch: guía de configuración de SIP2</a></li>
+    </ul></section>
+    <section><h3>Plugin RFID</h3><ul>
+      <li><a href="https://github.com/bywatersolutions/koha-plugin-rfid">ByWater: plugin RFID para Koha</a></li>
+      <li><a href="https://github.com/bywatersolutions/koha-plugin-rfid/commit/9e4a33d8d1e527a99d4c108e9671461b4c2d5a22">Commit que fija el mínimo en Koha 25.11</a></li>
+      <li><a href="https://wiki.koha-community.org/wiki/RFID_RFC">Wiki de Koha: propuesta de RFID</a></li>
+    </ul></section>
+    <section><h3>Etiquetas y normas</h3><ul>
+      <li><a href="https://www.iso.org/fr/standard/85151.html">ISO/TS 28560-4:2023</a></li>
+      <li><a href="https://journals.ala.org/ltr/article/view/4514/5301">ALA Library Technology Reports: RFID en bibliotecas</a></li>
+      <li><a href="https://galecia.com/node/6164">Galecia: estado de ISO 28560 (2010)</a></li>
+    </ul></section>
+    <section><h3>Casos</h3><ul>
+      <li><a href="https://bywatersolutions.com/news/kohana-2015-koha-with-rfid-and-sip2">ByWater: Roseville en KohaNA 2015</a></li>
+      <li><a href="https://awesome.ecosyste.ms/projects/github.com%2Fdigibib%2Fkoha-rfidhub">koha-rfidhub (Oslo)</a></li>
+      <li><a href="https://www.bibliotheca.com/bibliotheca-bywater-solutions-rfid-koha-integration/">Bibliotheca: anuncio de la integración</a> (proveedor)</li>
+      <li><a href="https://newsbreaks.infotoday.com/Digest/Bibliotheca-and-ByWater-Solutions-Integrate-RFID-Workstations-With-Koha-175190.asp">Information Today: nota sobre la integración</a></li>
+      <li><a href="https://www.fau.unlp.edu.ar/novedades-fau/biblioteca-fau-nuevo-catalogo-y-sistema-de-gestion-koha/">FAU UNLP</a>, <a href="https://biblioteca.ungs.edu.ar/">UNGS</a> y <a href="https://www.undef.edu.ar/wp-content/uploads/2024/12/Incorporacion-de-software-libre-y-cooperacion-bibliotecaria.-Implementacion-de-Koha-Silvia-Saura.pdf">UNDEF</a></li>
+    </ul></section>
+  </div>
+</div></article>
+</section>
+
+<footer class="doc-end">
+  <a href="index.html">← Volver al resumen</a>
+  <a href="metales.html">Siguiente tema: Trazabilidad sobre metal →</a>
+</footer>
+</main>
+</div>
+
+<script src="assets/deck.js"></script>
+</body>
+</html>
