@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trazabilidad sobre metal</title>
+<meta name="description" content="Investigación exploratoria: tecnologías para identificar y seguir activos metálicos (RFID UHF y NFC para metal, marcado directo, BLE), con alcances, casos y próximos pasos.">
+<meta name="theme-color" content="#f3f4f1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
+  <symbol id="i-chip" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v4M15 1v4M9 19v4M15 19v4M1 9h4M1 15h4M19 9h4M19 15h4"/></symbol>
+  <symbol id="i-bt" viewBox="0 0 24 24"><path d="m6.5 6.5 11 11L12 23V1l5.5 5.5-11 11"/></symbol>
+  <symbol id="i-gw" viewBox="0 0 24 24"><rect x="2" y="14" width="20" height="7" rx="2"/><path d="M6 17.5h.01M10 17.5h.01M12 14V9"/><path d="M8.5 7.5a5 5 0 0 1 7 0M6 5a8.5 8.5 0 0 1 12 0"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></symbol>
+  <symbol id="i-temp" viewBox="0 0 24 24"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></symbol>
+  <symbol id="i-fill" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M5 12h14M5 16h14"/></symbol>
+  <symbol id="i-move" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 2.7 17.7 8.4a8 8 0 1 1-11.3 0z"/></symbol>
+  <symbol id="i-near" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.5M7.8 16.2a6 6 0 0 1 0-8.5M19.1 4.9a10 10 0 0 1 0 14.2M4.9 19.1a10 10 0 0 1 0-14.2"/></symbol>
+  <symbol id="i-net" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-ov" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="4.5" cy="6" r="1.6"/><circle cx="19.5" cy="6" r="1.6"/><circle cx="4.5" cy="18" r="1.6"/><circle cx="19.5" cy="18" r="1.6"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+  <symbol id="i-fs" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></symbol>
+</svg>
+
+<header class="topbar">
+  <a class="tb-back" href="index.html" title="Volver al resumen"><svg class="ico"><use href="#i-left"/></svg><span>Resumen</span></a>
+  <p class="tb-title"><b>Trazabilidad sobre metal</b><span id="tbSec"></span></p>
+  <button class="tb-btn" id="tocBtn" type="button" aria-controls="toc" aria-expanded="false"><svg class="ico"><use href="#i-list"/></svg>Índice</button>
+  <button class="tb-btn primary" id="presentBtn" type="button" title="Presentar (P)"><svg class="ico"><use href="#i-play"/></svg>Presentar</button>
+</header>
+<div class="progress"><i></i></div>
+<div class="layout">
+<nav class="toc" id="toc" aria-label="Índice">
+  <p class="toc-h">En esta página</p>
+  <ol>
+    <li><a class="esc" href="#esencial"><span class="n">→</span>Lo esencial</a></li>
+    <li><a href="#s1"><span class="n"></span>El problema del metal</a></li>
+    <li><a href="#s2"><span class="n"></span>RFID UHF para metal</a></li>
+    <li><a href="#s3"><span class="n"></span>NFC con ferrita</a></li>
+    <li><a href="#s4"><span class="n"></span>Marcado directo</a></li>
+    <li><a href="#s5"><span class="n"></span>Entornos extremos</a></li>
+    <li><a href="#s6"><span class="n"></span>BLE y Ambient IoT</a></li>
+    <li><a href="#s7"><span class="n"></span>Casos</a></li>
+    <li><a href="#s8"><span class="n"></span>Cómo elegir</a></li>
+    <li><a href="#s9"><span class="n"></span>Fuentes</a></li>
+  </ol>
+  <p class="toc-foot">Tecla <kbd>P</kbd> o botón Presentar para verlo en pantalla completa.</p>
+</nav>
+<main class="doc" id="doc">
+<header class="hero" id="inicio" data-name="Inicio">
+  <div>
+    <span class="status exp">Exploratorio</span>
+    <p class="eyebrow">Investigación · Noviembre 2026</p>
+    <h1>Trazabilidad <span class="g">sobre metal</span></h1>
+    <p class="ov-sub">Qué tecnologías permiten identificar y seguir activos metálicos, qué alcance tienen y qué falta probar. Investigación inicial.</p>
+  </div>
+</header>
+
+<section class="exec" id="esencial" data-name="Lo esencial" aria-labelledby="esencial-t">
+  <h2 class="exec-t" id="esencial-t">Lo esencial <small>Lectura de 1 min · detalle completo, 9 min</small></h2>
+  <p class="verdict">Existe tecnología para identificar activos metálicos, pero casi todos los datos vienen de fabricantes: falta probarla sobre las piezas reales.</p>
+  <p class="ctx"><b>Para la Biblioteca UNAHUR:</b> las estanterías y los carros suelen ser de metal y afectan la lectura, sobre todo en UHF. Antes de etiquetar toda la colección, probar el inventario con el lector de mano en las estanterías reales.</p>
+  <dl class="figs">
+    <div><dt>de lectura UHF sobre metal con un tag diseñado para eso, según la hoja técnica de Ironside Slim.</dt><dd>hasta 10 m</dd></div>
+    <div><dt>de alcance con NFC y ferrita sobre metal, en pruebas de Taoglas. Se lee con cualquier celular.</dt><dd>1–2 cm</dd></div>
+    <div><dt>casos publicados en Argentina centrados en tags para metal.</dt><dd>0</dd></div>
+  </dl>
+  <div class="exec-cols">
+    <div><h3>Opciones</h3><ul><li>UHF para metal: muchas piezas leídas a distancia.</li><li>NFC con ferrita: inspección de a una pieza con el celular.</li><li>DataMatrix grabado: identificación permanente y barata.</li></ul></div>
+    <div><h3>Riesgos</h3><ul><li>Las distancias de las hojas técnicas son teóricas.</li><li>Modelos discontinuados: Confidex pasó a Beontag.</li><li>No hay proveedores con stock y precio público en el país.</li></ul></div>
+    <div class="next"><h3>Próximo paso sugerido</h3><p>Probar tags de 2 o 3 fabricantes sobre la pieza real, con el lector y la antena que se usarían.</p></div>
+  </div>
+  <p class="conf"><span class="cf p">Datos de fabricantes y hojas técnicas</span><span class="cf u">Sin pruebas propias todavía</span></p>
+</section>
+
+
+<!-- ===== El problema del metal ===== -->
+<section class="sec" id="s1" data-name="El problema del metal">
+<header class="sec-h"><h2>El problema del metal</h2><p>Por qué falla la lectura y qué opciones hay</p></header>
+<article class="slide" data-sec="1"><div class="in">
+  <p class="kicker">El problema del metal</p>
+  <h2>Trabajar con metal: <em>qué cambia</em></h2>
+  <p class="lead">Un tag común pegado sobre metal casi no se lee. El problema no es la tecnología sino el diseño del tag: hay tags pensados para metal, cada uno con su alcance y su costo.</p>
+  <div class="grid" style="--cols:3">
+    <div class="box"><h3>UHF, largo alcance</h3><p>El metal refleja la señal y desafina la antena. Se resuelve separando la antena de la superficie o diseñándola para que use el metal a su favor (<a href="https://rfid4ustore.com/rfid-blog/metal-environment-rfid-tags/">RFID4U</a>).</p></div>
+    <div class="box"><h3>NFC y HF, corto alcance</h3><p>El campo magnético induce corrientes en el metal que lo debilitan. Se resuelve con una capa de ferrita entre el tag y la superficie (<a href="https://www.taoglas.com/datasheets/FXR.06.A.dg.pdf">Taoglas</a>).</p></div>
+    <div class="box"><h3>BLE y otros activos</h3><p>El metal cercano desafina la antena y baja la señal. Se resuelve con distancia, carcasas no metálicas o antenas direccionales.</p></div>
+  </div>
+  <div class="note"><b>Estado:</b> investigación exploratoria. Los datos vienen sobre todo de fabricantes y hojas técnicas; falta hacer pruebas propias.</div>
+</div></article>
+
+<article class="slide" data-sec="1"><div class="in">
+  <p class="kicker">El problema del metal</p>
+  <h2>Mapa de <em>opciones</em></h2>
+  <div class="tbl">
+    <div class="row hd"><div>Tecnología</div><div>Cómo resuelve el metal</div><div>Cuándo conviene</div></div>
+    <div class="row"><div>Etiqueta UHF flexible para metal</div><div data-l="Cómo resuelve el metal">Capa separadora entre la antena y la superficie</div><div data-l="Cuándo conviene">Equipos, racks y contenedores: muchos objetos leídos a distancia</div></div>
+    <div class="row"><div>Tag UHF rígido</div><div data-l="Cómo resuelve el metal">Carcasa con una antena diseñada para metal</div><div data-l="Cuándo conviene">Activos a la intemperie o expuestos a golpes</div></div>
+    <div class="row"><div>Tag UHF embebido</div><div data-l="Cómo resuelve el metal">Va dentro de una perforación en la pieza</div><div data-l="Cuándo conviene">Herramientas, instrumental y tubos</div></div>
+    <div class="row"><div>NFC con ferrita</div><div data-l="Cómo resuelve el metal">La ferrita aísla el campo de la superficie</div><div data-l="Cuándo conviene">Inspecciones de a una pieza con el celular</div></div>
+    <div class="row"><div>Marcado directo (DataMatrix)</div><div data-l="Cómo resuelve el metal">Se graba en la pieza, sin electrónica</div><div data-l="Cuándo conviene">Identificación permanente y barata por pieza</div></div>
+    <div class="row"><div>BLE con batería</div><div data-l="Cómo resuelve el metal">Distancia al metal y antenas direccionales</div><div data-l="Cuándo conviene">Ubicación continua, no solo puntos de paso</div></div>
+  </div>
+  <p class="muted gap">Se pueden combinar: por ejemplo, el código grabado como respaldo permanente y el tag RFID para leer muchas piezas juntas.</p>
+</div></article>
+
+<!-- ===== RFID UHF para metal ===== -->
+</section>
+
+<section class="sec" id="s2" data-name="RFID UHF para metal">
+<header class="sec-h"><h2>RFID UHF para metal</h2><p>Etiquetas, tags rígidos y embebidos</p></header>
+<article class="slide" data-sec="2"><div class="in">
+  <p class="kicker">RFID UHF para metal</p>
+  <h2>UHF para metal: <em>tipos de tag</em></h2>
+  <div class="tbl">
+    <div class="row hd"><div>Tipo</div><div>Cómo se fija</div><div>Ejemplos de uso</div></div>
+    <div class="row"><div>Etiqueta flexible imprimible</div><div data-l="Cómo se fija">Adhesiva; se imprime y codifica en una impresora RFID</div><div data-l="Ejemplos de uso">Equipos IT, racks y contenedores</div></div>
+    <div class="row"><div>Tag rígido</div><div data-l="Cómo se fija">Adhesivo industrial o remaches</div><div data-l="Ejemplos de uso">Contenedores retornables, grúas y cilindros</div></div>
+    <div class="row"><div>Tag de bandera</div><div data-l="Cómo se fija">Sobresale del objeto y aleja la antena del metal</div><div data-l="Ejemplos de uso">Caños, cilindros y piezas redondas</div></div>
+    <div class="row"><div>Tag embebido</div><div data-l="Cómo se fija">Dentro de una perforación o con rosca</div><div data-l="Ejemplos de uso">Instrumental, herramientas y tubos de petróleo</div></div>
+    <div class="row"><div>Tag de alta temperatura</div><div data-l="Cómo se fija">Carcasa resistente al calor</div><div data-l="Ejemplos de uso">Bobinas y planchas de acero</div></div>
+  </div>
+</div></article>
+
+<article class="slide" data-sec="2"><div class="in">
+  <p class="kicker">RFID UHF para metal</p>
+  <h2>UHF para metal: <em>alcance y ejemplos</em></h2>
+  <div class="grid apps-grid" style="--cols:3">
+    <div class="box app"><h3>Más alcance sobre metal</h3><p>Un tag bien diseñado puede leer mejor sobre metal que en el aire.</p><p class="dato">Ironside Slim: hasta 10 m sobre metal y 4 m sobre plástico (<a href="https://rfid4ustore.com/content/data_sheet/Ironside_Slim_UCODE_7xm_Datasheet.pdf">hoja técnica</a>).</p></div>
+    <div class="box app"><h3>Tag de bandera</h3><p>Para piezas donde no entra un tag plano.</p><p class="dato">Ironside Flag: hasta 11 m sobre metal (<a href="https://atlasrfidstore.com/confidex-ironside-flag-rfid-tag">revendedor</a>).</p></div>
+    <div class="box app"><h3>Embebido en tubos</h3><p>Tag con rosca que se coloca en el propio tubo.</p><p class="dato">Xerafy XPLORER Screw: hasta 5 m embebido en acero (<a href="https://therainalliance.org/xerafy-announces-xplorer-screw-availability-for-octg-and-tubular-lifecycle-tracking/">RAIN Alliance</a>).</p></div>
+    <div class="box app"><h3>Equipos de izaje</h3><p>Grilletes, ganchos y eslingas con tag para registrar inspecciones.</p><p class="dato">Rope and Sling Specialists etiquetó todo su equipo (<a href="https://www.cranebriefing.com/news/rfid-tags-tracks-lifting-gear/8016895.article">Crane Briefing</a>).</p></div>
+    <div class="box app"><h3>Catálogo amplio</h3><p>Los fabricantes grandes ofrecen líneas completas para metal.</p><p class="dato">Por ejemplo, <a href="https://www.hidglobal.com/es/solutions/metal-rfid-tags">HID</a>.</p></div>
+    <div class="box app"><h3>Modelos que cambian</h3><p>Confidex pasó a Beontag y algunos modelos se discontinuaron.</p><p class="dato">Conviene pedir la hoja técnica vigente (<a href="https://www.atlasrfidstore.com/beontag-ironside-classic-rfid-tag-monza-r6-p">revendedor</a>).</p></div>
+  </div>
+  <div class="note"><b>A tener en cuenta:</b> las distancias de las hojas técnicas son teóricas, calculadas sin reflexiones. Confidex recomienda apoyar el tag sobre una superficie metálica plana, sin aire entre ambos. En la práctica dependen del lector, la antena, la forma de la pieza y el metal que la rodea.</div>
+</div></article>
+
+<!-- ===== NFC con ferrita ===== -->
+</section>
+
+<section class="sec" id="s3" data-name="NFC con ferrita">
+<header class="sec-h"><h2>NFC con ferrita</h2><p>Lectura de a uno con el celular</p></header>
+<article class="slide" data-sec="3"><div class="in">
+  <p class="kicker">NFC con ferrita</p>
+  <h2>NFC para metal: <em>leer con el celular</em></h2>
+  <p class="lead">La gran ventaja del NFC es que lo lee cualquier celular que tenga NFC, sin comprar lectores. Sirve para inspecciones y mantenimiento, donde se revisa una pieza a la vez.</p>
+  <div class="grid">
+    <div class="box"><h3>Cuánto alcance se pierde</h3><p>En pruebas de <a href="https://www.taoglas.com/datasheets/FXR.06.A.dg.pdf">Taoglas</a>, ocho tags NFC se leyeron a entre 7 y 20 mm sobre metal, contra 10 a 27 mm sobre plástico. El alcance es de uno o dos centímetros.</p></div>
+    <div class="box"><h3>Etiquetas comerciales</h3><p>Smartrac, hoy parte de Avery Dennison, ofrece etiquetas NFC con ferrita para objetos metálicos (<a href="https://rfid.averydennison.com/en/home/news-insights/press-releases/smartrac-launches-block-on-metal-nfc-tags-with-excellent-performance-on-metallic-objects.html">Avery Dennison</a>).</p></div>
+    <div class="box"><h3>Usos típicos</h3><p>Inspección de equipos de izaje, matafuegos, válvulas y tableros: se acerca el celular, se abre la ficha y se registra el control.</p></div>
+    <div class="box"><h3>Límite</h3><p>No sirve para inventario masivo ni para portales de lectura: hay que acercar el celular a cada pieza.</p></div>
+  </div>
+</div></article>
+
+<!-- ===== Marcado directo ===== -->
+</section>
+
+<section class="sec" id="s4" data-name="Marcado directo">
+<header class="sec-h"><h2>Marcado directo</h2><p>Código DataMatrix grabado en la pieza</p></header>
+<article class="slide" data-sec="4"><div class="in">
+  <p class="kicker">Marcado directo</p>
+  <h2>Marcado directo: <em>el código en la pieza</em></h2>
+  <p class="lead">Un código DataMatrix grabado en el metal no tiene electrónica, no se despega y cuesta muy poco por pieza. Es una práctica estándar en aviación y defensa.</p>
+  <div class="tbl">
+    <div class="row hd"><div>Método</div><div>Cómo marca</div><div>A tener en cuenta</div></div>
+    <div class="row"><div>Láser</div><div data-l="Cómo marca">Modifica la superficie con calor</div><div data-l="A tener en cuenta">Deja una marca legible incluso en superficies rugosas</div></div>
+    <div class="row"><div>Micropercusión</div><div data-l="Cómo marca">Un punzón hace puntos en el metal</div><div data-l="A tener en cuenta">Pide una superficie lisa (<a href="https://Www.wikipedia.org/wiki/Direct_part_marking">Wikipedia</a>)</div></div>
+    <div class="row"><div>Chorro de tinta</div><div data-l="Cómo marca">Imprime el código sobre la pieza</div><div data-l="A tener en cuenta">Menos durable que el grabado</div></div>
+  </div>
+  <div class="grid gap">
+    <div class="box"><h3>Normas</h3><p>NASA empezó a estudiarlo después del accidente del Challenger. Su norma NASA-STD-6002 y la militar MIL-STD-130 usan el mismo formato y son la base de la mayoría de las normas (<a href="https://ntrs.nasa.gov/api/citations/20080023311/downloads/20080023311.pdf">NASA</a>).</p></div>
+    <div class="box"><h3>Límite</h3><p>Se lee de a una pieza y con el código a la vista. Los grabados de poco contraste suelen necesitar lectores industriales (inferencia propia).</p></div>
+  </div>
+</div></article>
+
+<!-- ===== Entornos extremos ===== -->
+</section>
+
+<section class="sec" id="s5" data-name="Entornos extremos">
+<header class="sec-h"><h2>Entornos extremos</h2><p>Esterilización, calor y aviación</p></header>
+<article class="slide" data-sec="5"><div class="in">
+  <p class="kicker">Entornos extremos</p>
+  <h2>Entornos extremos: <em>qué hay disponible</em></h2>
+  <div class="grid apps-grid" style="--cols:4">
+    <div class="box app"><h3>Esterilización</h3><p>Tags chicos para instrumental quirúrgico que soportan autoclave.</p><p class="dato">Xerafy: 1.000 ciclos a 121 °C en sus propias pruebas (<a href="https://www.rfidjournal.com/xerafy-releases-its-smallest-on-metal-rfid-tags">RFID Journal</a>); más de 600 a 134 °C en otro modelo (<a href="https://www.atlasrfidstore.com/xerafy-micro-medical-rfid-tag-nxp-ucode-9">revendedor</a>).</p></div>
+    <div class="box app"><h3>Calor</h3><p>Etiquetas para bobinas y planchas de acero recién laminadas.</p><p class="dato">GO2 Partners: hasta 371 °C (<a href="https://www.go2partners.com/high-temp-tracking-solutions">proveedor</a>).</p></div>
+    <div class="box app"><h3>Aviación</h3><p>Tags para piezas de avión con pruebas ambientales normalizadas.</p><p class="dato">La norma SAE AS5678 fija los requisitos para tags UHF pasivos en aviación (<a href="https://connect.snv.ch/en/sae-as5678">SNV</a>).</p></div>
+    <div class="box app"><h3>Hielo, sal y suciedad</h3><p>Donde el código de barras se tapa, el RFID se sigue leyendo.</p><p class="dato">Por eso ThyssenKrupp descartó el código de barras en planchas de acero (<a href="https://www.rfidjournal.com/?p=79871">RFID Journal</a>).</p></div>
+  </div>
+  <div class="note"><b>A tener en cuenta:</b> las cifras de resistencia son del fabricante o del revendedor. En salud o aviación hay que pedir la validación del tag para el proceso real.</div>
+</div></article>
+
+<!-- ===== BLE y Ambient IoT ===== -->
+</section>
+
+<section class="sec" id="s6" data-name="BLE y Ambient IoT">
+<header class="sec-h"><h2>BLE y Ambient IoT</h2><p>BLE y Ambient IoT cerca del metal</p></header>
+<article class="slide" data-sec="6"><div class="in">
+  <p class="kicker">BLE y Ambient IoT</p>
+  <h2>Tags activos: <em>cerca del metal</em></h2>
+  <p class="lead">Cuando hace falta saber dónde está un activo todo el tiempo, y no solo cuándo pasó por un punto, se usan tags activos. También sufren con el metal.</p>
+  <div class="grid" style="--cols:3">
+    <div class="box"><h3>BLE con batería</h3><p>El metal cercano desafina la antena y baja la señal. Una recomendación habitual es separar la antena unos 10 cm del metal (<a href="https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/10020571">patente US 10.020.571</a>).</p></div>
+    <div class="box"><h3>Gabinetes metálicos</h3><p>Hay que dejar aberturas cerca de la antena (<a href="https://test-devzone.nordicsemi.com/f/nordic-q-a/85665/query-on-the-ble-signal-penetration-through-metal-sheet">Nordic</a>) o usar antenas direccionales de mayor ganancia.</p></div>
+    <div class="box"><h3>IoT Pixels de Wiliot</h3><p>Wiliot indica que el material de la superficie afecta el rendimiento. Su nueva generación trabaja en dos bandas (2,4 GHz y menos de 1 GHz), pero no publica cifras sobre metal (<a href="https://www.wiliot.com/wiliot-unveils-next-generation-iot-pixel">Wiliot</a>).</p></div>
+  </div>
+  <div class="note"><b>A tener en cuenta:</b> no se encontraron mediciones independientes de BLE ni de IoT Pixels sobre metal. Hay que probar con el activo real.</div>
+</div></article>
+
+<!-- ===== Casos ===== -->
+</section>
+
+<section class="sec" id="s7" data-name="Casos">
+<header class="sec-h"><h2>Casos</h2><p>Acero, aviación, petróleo e izaje</p></header>
+<article class="slide" data-sec="7"><div class="in">
+  <p class="kicker">Casos</p>
+  <h2>Casos <em>con metal</em></h2>
+  <div class="grid">
+    <div class="box case"><h3><a href="https://www.rfidjournal.com/?p=79871">ThyssenKrupp</a></h3><span class="loc">Brasil y Alemania</span><p>Piloto con 1.000 planchas de acero con etiquetas de bandera de SATO, compradas en Brasil y enviadas a Alemania, leídas desde grúas en el puerto (<a href="https://www.steelorbis.com/steel-news/latest-news/thyssenkrupp-perfects-rfid-technology-for-tracking-slabs-400037.htm">SteelOrbis</a>, 2007).</p></div>
+    <div class="box case"><h3><a href="https://www.globenewswire.com/news-release/2014/05/19/637586/25922/en/Fujitsu-Wins-RFID-Integrated-Label-Project-From-Airbus.html">Airbus</a></h3><span class="loc">Europa · 2014</span><p>Eligió etiquetas RFID de Fujitsu para la trazabilidad de los componentes principales de sus aviones.</p></div>
+    <div class="box case"><h3><a href="https://www.offshore-mag.com/business-briefs/equipment-engineering/article/16755015/rfid-drill-pipe-heads-offshore">Petrobras y Weatherford</a></h3><span class="loc">Brasil · 2011</span><p>Más de 7.500 tubos de perforación con tag, unidos a un registro de inspecciones y mantenimiento.</p></div>
+    <div class="box case"><h3><a href="https://www.cranebriefing.com/news/rfid-tags-tracks-lifting-gear/8016895.article">Rope and Sling Specialists</a></h3><span class="loc">Londres · 2021</span><p>Grilletes, ganchos, eslingas y arneses con tag en una obra de siete sedes, leídos con un dispositivo móvil para registrar inspecciones.</p></div>
+  </div>
+  <div class="note"><b>A tener en cuenta:</b> no se encontraron casos publicados en Argentina centrados en tags para metal. La presentación de RFID por rubro cita casos locales donde hay metal, como Renault en Córdoba.</div>
+</div></article>
+
+<!-- ===== Cómo elegir ===== -->
+</section>
+
+<section class="sec" id="s8" data-name="Cómo elegir">
+<header class="sec-h"><h2>Cómo elegir</h2><p>Preguntas, pruebas y próximos pasos</p></header>
+<article class="slide" data-sec="8"><div class="in">
+  <p class="kicker">Cómo elegir</p>
+  <h2>Cuatro preguntas para <em>elegir tecnología</em></h2>
+  <div class="grid qs">
+    <div class="box"><span class="qn">1</span><p class="q">¿Se leen muchas piezas juntas o de a una?</p><p>Muchas juntas: UHF. De a una: NFC o código grabado.</p></div>
+    <div class="box"><span class="qn">2</span><p class="q">¿Hace falta saber dónde está todo el tiempo?</p><p>Sí: BLE u otro tag activo. No: RFID pasivo en puntos de paso.</p></div>
+    <div class="box"><span class="qn">3</span><p class="q">¿A qué está expuesta la pieza?</p><p>Calor, esterilización, golpes o químicos definen la carcasa y la forma de fijarlo.</p></div>
+    <div class="box"><span class="qn">4</span><p class="q">¿Cuánto vale el activo y cuánto dura?</p><p>Un tag para metal cuesta más que una etiqueta común: rinde en activos que se reutilizan durante años.</p></div>
+  </div>
+</div></article>
+
+<article class="slide" data-sec="8"><div class="in">
+  <p class="kicker">Cómo elegir</p>
+  <h2>Próximos <em>pasos</em></h2>
+  <div class="grid">
+    <div class="box hl"><h3>Pruebas a hacer</h3><ul class="list">
+      <li>Leer tags de dos o tres fabricantes sobre la pieza real.</li>
+      <li>Medir la distancia con el lector y la antena que se usarían.</li>
+      <li>Probar con piezas amontonadas, por ejemplo en cajones o racks.</li>
+      <li>Repetir después de golpes, lavado o calor, según el uso.</li></ul></div>
+    <div class="box"><h3>Falta investigar</h3><ul class="list">
+      <li>Proveedores con stock en Argentina y precios: no se encontraron fuentes públicas.</li>
+      <li>Hojas técnicas vigentes, porque varios modelos se discontinuaron.</li>
+      <li>Si los IoT Pixels tienen una versión para metal.</li>
+      <li>Casos en Argentina y resultados medidos.</li></ul></div>
+  </div>
+</div></article>
+
+<!-- ===== Fuentes ===== -->
+</section>
+
+<section class="sec" id="s9" data-name="Fuentes">
+<header class="sec-h"><h2>Fuentes</h2><p>Hojas técnicas, normas y casos</p></header>
+<article class="slide" data-sec="9"><div class="in">
+  <p class="kicker">Fuentes</p>
+  <h2>Fuentes <em>consultadas</em></h2>
+  <p class="muted">Búsqueda inicial del 5 de noviembre de 2026. Muchas fuentes son de fabricantes o revendedores y se indican como tales. Las notas de RFID Journal no se pudieron abrir completas; se citan por su título y resumen.</p>
+  <div class="srcgroups">
+    <section><h3>Cómo funciona</h3><ul>
+      <li><a href="https://rfid4ustore.com/rfid-blog/metal-environment-rfid-tags/">RFID4U: tags para entornos con metal</a></li>
+      <li><a href="https://www.taoglas.com/datasheets/FXR.06.A.dg.pdf">Taoglas: NFC con ferrita</a></li>
+      <li><a href="https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/10020571">Patente US 10.020.571: antenas sobre metal</a></li>
+      <li><a href="https://test-devzone.nordicsemi.com/f/nordic-q-a/85665/query-on-the-ble-signal-penetration-through-metal-sheet">Nordic: BLE y chapas metálicas</a></li></ul></section>
+    <section><h3>Tags y fabricantes</h3><ul>
+      <li><a href="https://rfid4ustore.com/content/data_sheet/Ironside_Slim_UCODE_7xm_Datasheet.pdf">Confidex: hoja técnica de Ironside Slim</a></li>
+      <li><a href="https://atlasrfidstore.com/confidex-ironside-flag-rfid-tag">atlasRFIDstore: Ironside Flag</a></li>
+      <li><a href="https://www.atlasrfidstore.com/beontag-ironside-classic-rfid-tag-monza-r6-p">atlasRFIDstore: Beontag Ironside Classic</a></li>
+      <li><a href="https://therainalliance.org/xerafy-announces-xplorer-screw-availability-for-octg-and-tubular-lifecycle-tracking/">RAIN Alliance: Xerafy XPLORER Screw</a></li>
+      <li><a href="https://www.hidglobal.com/es/solutions/metal-rfid-tags">HID: tags RFID para metal</a></li>
+      <li><a href="https://rfid.averydennison.com/en/home/news-insights/press-releases/smartrac-launches-block-on-metal-nfc-tags-with-excellent-performance-on-metallic-objects.html">Avery Dennison: NFC para metal</a></li>
+      <li><a href="https://www.wiliot.com/wiliot-unveils-next-generation-iot-pixel">Wiliot: nueva generación de IoT Pixel</a></li></ul></section>
+    <section><h3>Entornos extremos y normas</h3><ul>
+      <li><a href="https://www.rfidjournal.com/xerafy-releases-its-smallest-on-metal-rfid-tags">RFID Journal: tags chicos de Xerafy</a></li>
+      <li><a href="https://www.atlasrfidstore.com/xerafy-micro-medical-rfid-tag-nxp-ucode-9">atlasRFIDstore: Xerafy MICRO Medical</a></li>
+      <li><a href="https://www.go2partners.com/high-temp-tracking-solutions">GO2 Partners: alta temperatura</a></li>
+      <li><a href="https://connect.snv.ch/en/sae-as5678">SNV: norma SAE AS5678</a></li>
+      <li><a href="https://ntrs.nasa.gov/api/citations/20080023311/downloads/20080023311.pdf">NASA: marcado directo de piezas</a></li>
+      <li><a href="https://Www.wikipedia.org/wiki/Direct_part_marking">Wikipedia: marcado directo de piezas</a></li></ul></section>
+    <section><h3>Casos</h3><ul>
+      <li><a href="https://www.rfidjournal.com/?p=79871">RFID Journal: ThyssenKrupp</a></li>
+      <li><a href="https://www.steelorbis.com/steel-news/latest-news/thyssenkrupp-perfects-rfid-technology-for-tracking-slabs-400037.htm">SteelOrbis: ThyssenKrupp</a></li>
+      <li><a href="https://www.globenewswire.com/news-release/2014/05/19/637586/25922/en/Fujitsu-Wins-RFID-Integrated-Label-Project-From-Airbus.html">Fujitsu: Airbus</a></li>
+      <li><a href="https://www.offshore-mag.com/business-briefs/equipment-engineering/article/16755015/rfid-drill-pipe-heads-offshore">Offshore: Petrobras y Weatherford</a></li>
+      <li><a href="https://www.cranebriefing.com/news/rfid-tags-tracks-lifting-gear/8016895.article">Crane Briefing: Rope and Sling Specialists</a></li></ul></section>
+  </div>
+</div></article>
+
+</section>
+
+<footer class="doc-end">
+  <a href="index.html">← Volver al resumen</a>
+  <a href="rfid-rubros.html">Siguiente tema: RFID: aplicaciones por rubro →</a>
+</footer>
+</main>
+</div>
+
+<script src="assets/deck.js"></script>
+</body>
+</html>
